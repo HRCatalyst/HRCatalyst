@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "projects": {
+    "feedback-tracker": {
+      "projectType": "application",
+      "root": "apps/feedback-tracker",
+      "sourceRoot": "apps/feedback-tracker/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/feedback-tracker",
+            "index": "apps/feedback-tracker/src/index.html",
+            "main": "apps/feedback-tracker/src/main.ts",
+            "polyfills": "apps/feedback-tracker/src/polyfills.ts",
+            "tsConfig": "apps/feedback-tracker/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "apps/feedback-tracker/src/favicon.ico",
+              "apps/feedback-tracker/src/assets"
+            ],
+            "styles": ["apps/feedback-tracker/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/feedback-tracker/src/environments/environment.ts",
+                  "with": "apps/feedback-tracker/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "feedback-tracker:build:production"
+            },
+            "development": {
+              "browserTarget": "feedback-tracker:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "feedback-tracker:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/feedback-tracker/src/**/*.ts",
+              "apps/feedback-tracker/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/feedback-tracker"],
+          "options": {
+            "jestConfig": "apps/feedback-tracker/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "feedback-tracker-e2e": {
+      "root": "apps/feedback-tracker-e2e",
+      "sourceRoot": "apps/feedback-tracker-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/feedback-tracker-e2e/cypress.json",
+            "tsConfig": "apps/feedback-tracker-e2e/tsconfig.e2e.json",
+            "devServerTarget": "feedback-tracker:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "feedback-tracker:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/feedback-tracker-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "defaultProject": "feedback-tracker"
+}
