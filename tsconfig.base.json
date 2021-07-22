@@ -14,7 +14,24 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@hrcatalyst/associate-feature": ["libs/associate-feature/src/index.ts"],
+      "@hrcatalyst/auth-feature": ["libs/auth-feature/src/index.ts"],
+      "@hrcatalyst/campaign-feature": ["libs/campaign-feature/src/index.ts"],
+      "@hrcatalyst/client-feature": ["libs/client-feature/src/index.ts"],
+      "@hrcatalyst/company-feature": ["libs/company-feature/src/index.ts"],
+      "@hrcatalyst/feedback-feature": ["libs/feedback-feature/src/index.ts"],
+      "@hrcatalyst/home-feature": ["libs/home-feature/src/index.ts"],
+      "@hrcatalyst/import-feature": ["libs/import-feature/src/index.ts"],
+      "@hrcatalyst/interview-feature": ["libs/interview-feature/src/index.ts"],
+      "@hrcatalyst/participant-feature": [
+        "libs/participant-feature/src/index.ts"
+      ],
+      "@hrcatalyst/question-feature": ["libs/question-feature/src/index.ts"],
+      "@hrcatalyst/rater-feature": ["libs/rater-feature/src/index.ts"],
+      "@hrcatalyst/shared-feature": ["libs/shared-feature/src/index.ts"],
+      "@hrcatalyst/user-feature": ["libs/user-feature/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

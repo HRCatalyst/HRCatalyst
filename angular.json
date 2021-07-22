@@ -1,6 +1,156 @@
 {
   "version": 1,
   "projects": {
+    "associate-feature": {
+      "projectType": "library",
+      "root": "libs/associate-feature",
+      "sourceRoot": "libs/associate-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/associate-feature"],
+          "options": {
+            "jestConfig": "libs/associate-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/associate-feature/src/**/*.ts",
+              "libs/associate-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "auth-feature": {
+      "projectType": "library",
+      "root": "libs/auth-feature",
+      "sourceRoot": "libs/auth-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/auth-feature"],
+          "options": {
+            "jestConfig": "libs/auth-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/auth-feature/src/**/*.ts",
+              "libs/auth-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "campaign-feature": {
+      "projectType": "library",
+      "root": "libs/campaign-feature",
+      "sourceRoot": "libs/campaign-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/campaign-feature"],
+          "options": {
+            "jestConfig": "libs/campaign-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/campaign-feature/src/**/*.ts",
+              "libs/campaign-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "client-feature": {
+      "projectType": "library",
+      "root": "libs/client-feature",
+      "sourceRoot": "libs/client-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/client-feature"],
+          "options": {
+            "jestConfig": "libs/client-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/client-feature/src/**/*.ts",
+              "libs/client-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "company-feature": {
+      "projectType": "library",
+      "root": "libs/company-feature",
+      "sourceRoot": "libs/company-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/company-feature"],
+          "options": {
+            "jestConfig": "libs/company-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/company-feature/src/**/*.ts",
+              "libs/company-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "feedback-feature": {
+      "projectType": "library",
+      "root": "libs/feedback-feature",
+      "sourceRoot": "libs/feedback-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/feedback-feature"],
+          "options": {
+            "jestConfig": "libs/feedback-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/feedback-feature/src/**/*.ts",
+              "libs/feedback-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "feedback-tracker": {
       "projectType": "application",
       "root": "apps/feedback-tracker",
@@ -21,7 +171,10 @@
               "apps/feedback-tracker/src/favicon.ico",
               "apps/feedback-tracker/src/assets"
             ],
-            "styles": ["apps/feedback-tracker/src/styles.scss"],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "apps/feedback-tracker/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -119,9 +272,210 @@
           }
         }
       }
+    },
+    "home-feature": {
+      "projectType": "library",
+      "root": "libs/home-feature",
+      "sourceRoot": "libs/home-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/home-feature"],
+          "options": {
+            "jestConfig": "libs/home-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/home-feature/src/**/*.ts",
+              "libs/home-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "import-feature": {
+      "projectType": "library",
+      "root": "libs/import-feature",
+      "sourceRoot": "libs/import-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/import-feature"],
+          "options": {
+            "jestConfig": "libs/import-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/import-feature/src/**/*.ts",
+              "libs/import-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "interview-feature": {
+      "projectType": "library",
+      "root": "libs/interview-feature",
+      "sourceRoot": "libs/interview-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/interview-feature"],
+          "options": {
+            "jestConfig": "libs/interview-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/interview-feature/src/**/*.ts",
+              "libs/interview-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "participant-feature": {
+      "projectType": "library",
+      "root": "libs/participant-feature",
+      "sourceRoot": "libs/participant-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/participant-feature"],
+          "options": {
+            "jestConfig": "libs/participant-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/participant-feature/src/**/*.ts",
+              "libs/participant-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "question-feature": {
+      "projectType": "library",
+      "root": "libs/question-feature",
+      "sourceRoot": "libs/question-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/question-feature"],
+          "options": {
+            "jestConfig": "libs/question-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/question-feature/src/**/*.ts",
+              "libs/question-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "rater-feature": {
+      "projectType": "library",
+      "root": "libs/rater-feature",
+      "sourceRoot": "libs/rater-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/rater-feature"],
+          "options": {
+            "jestConfig": "libs/rater-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/rater-feature/src/**/*.ts",
+              "libs/rater-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "shared-feature": {
+      "projectType": "library",
+      "root": "libs/shared-feature",
+      "sourceRoot": "libs/shared-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared-feature"],
+          "options": {
+            "jestConfig": "libs/shared-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared-feature/src/**/*.ts",
+              "libs/shared-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "user-feature": {
+      "projectType": "library",
+      "root": "libs/user-feature",
+      "sourceRoot": "libs/user-feature/src",
+      "prefix": "hrcatalyst",
+      "architect": {
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/user-feature"],
+          "options": {
+            "jestConfig": "libs/user-feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/user-feature/src/**/*.ts",
+              "libs/user-feature/src/**/*.html"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
+    "analytics": false,
     "defaultCollection": "@nrwl/angular"
   },
   "schematics": {

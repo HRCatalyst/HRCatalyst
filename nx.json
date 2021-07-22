@@ -27,12 +27,54 @@
     ]
   },
   "projects": {
+    "associate-feature": {
+      "tags": []
+    },
+    "auth-feature": {
+      "tags": []
+    },
+    "campaign-feature": {
+      "tags": []
+    },
+    "client-feature": {
+      "tags": []
+    },
+    "company-feature": {
+      "tags": []
+    },
+    "feedback-feature": {
+      "tags": []
+    },
     "feedback-tracker": {
       "tags": []
     },
     "feedback-tracker-e2e": {
       "tags": [],
       "implicitDependencies": ["feedback-tracker"]
+    },
+    "home-feature": {
+      "tags": []
+    },
+    "import-feature": {
+      "tags": []
+    },
+    "interview-feature": {
+      "tags": []
+    },
+    "participant-feature": {
+      "tags": []
+    },
+    "question-feature": {
+      "tags": []
+    },
+    "rater-feature": {
+      "tags": []
+    },
+    "shared-feature": {
+      "tags": []
+    },
+    "user-feature": {
+      "tags": []
     }
   }
 }
