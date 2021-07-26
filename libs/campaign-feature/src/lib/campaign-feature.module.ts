@@ -7,7 +7,10 @@ import { CampaignComponent } from './campaign/campaign.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
+      {
+        path: '',
+        component: CampaignComponent
+      }
     ]),
   ],
   declarations: [

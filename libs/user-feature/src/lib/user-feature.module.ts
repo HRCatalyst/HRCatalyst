@@ -7,7 +7,10 @@ import { UserComponent } from './user/user.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
+      {
+        path: '',
+        component: UserComponent
+      }
     ]),
   ],
   declarations: [

@@ -24,9 +24,7 @@
       "@hrcatalyst/home-feature": ["libs/home-feature/src/index.ts"],
       "@hrcatalyst/import-feature": ["libs/import-feature/src/index.ts"],
       "@hrcatalyst/interview-feature": ["libs/interview-feature/src/index.ts"],
-      "@hrcatalyst/participant-feature": [
-        "libs/participant-feature/src/index.ts"
-      ],
+      "@hrcatalyst/participant-feature": ["libs/participant-feature/src/index.ts"],
       "@hrcatalyst/question-feature": ["libs/question-feature/src/index.ts"],
       "@hrcatalyst/rater-feature": ["libs/rater-feature/src/index.ts"],
       "@hrcatalyst/shared-feature": ["libs/shared-feature/src/index.ts"],

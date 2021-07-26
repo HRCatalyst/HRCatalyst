@@ -7,7 +7,10 @@ import { RaterComponent } from './rater/rater.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
+      {
+        path: '',
+        component: RaterComponent
+      }
     ]),
   ],
   declarations: [

@@ -7,7 +7,10 @@ import { ClientComponent } from './client/client.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
+      {
+        path: '',
+        component: ClientComponent
+      }
     ]),
   ],
   declarations: [

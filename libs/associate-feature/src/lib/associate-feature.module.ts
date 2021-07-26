@@ -7,7 +7,10 @@ import { AssociateComponent } from './associate/associate.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
+      {
+        path: '',
+        component: AssociateComponent
+      }
     ]),
   ],
   declarations: [

@@ -7,7 +7,10 @@ import { InterviewComponent } from './interview/interview.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
+      {
+        path: '',
+        component: InterviewComponent
+      }
     ]),
   ],
   declarations: [

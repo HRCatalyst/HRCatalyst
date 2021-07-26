@@ -7,7 +7,10 @@ import { ImportComponent } from './import/import.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
+      {
+        path: '',
+        component: ImportComponent
+      }
     ]),
   ],
   declarations: [

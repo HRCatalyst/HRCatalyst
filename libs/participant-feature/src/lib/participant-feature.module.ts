@@ -7,7 +7,10 @@ import { ParticipantComponent } from './participant/participant.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
+      {
+        path: '',
+        component: ParticipantComponent
+      }
     ]),
   ],
   declarations: [

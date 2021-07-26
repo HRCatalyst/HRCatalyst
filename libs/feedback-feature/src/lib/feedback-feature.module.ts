@@ -7,7 +7,10 @@ import { FeedbackComponent } from './feedback/feedback.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
+      {
+        path: '',
+        component: FeedbackComponent
+      }
     ]),
   ],
   declarations: [

@@ -7,7 +7,10 @@ import { LoginComponent } from './login/login.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
+      {
+        path: '',
+        component: LoginComponent
+      }
     ]),
   ],
   declarations: [
