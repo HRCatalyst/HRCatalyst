@@ -2,6 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ParticipantComponent } from './participant/participant.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { reducer } from './+state/participant.reducer';
+import { ParticipantEffects } from './+state/participant.effects';
 
 @NgModule({
   imports: [
@@ -12,6 +16,8 @@ import { ParticipantComponent } from './participant/participant.component';
         component: ParticipantComponent
       }
     ]),
+    StoreModule.forFeature('participant', reducer),
+    EffectsModule.forFeature([ParticipantEffects]),
   ],
   declarations: [
     ParticipantComponent

@@ -2,6 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ImportComponent } from './import/import.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { reducer } from './+state/import.reducer';
+import { ImportEffects } from './+state/import.effects';
 
 @NgModule({
   imports: [
@@ -12,6 +16,8 @@ import { ImportComponent } from './import/import.component';
         component: ImportComponent
       }
     ]),
+    StoreModule.forFeature('import', reducer),
+    EffectsModule.forFeature([ImportEffects]),
   ],
   declarations: [
     ImportComponent
