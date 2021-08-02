@@ -4,6 +4,14 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'login', pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('@hrcatalyst/auth-feature').then(m => m.AuthFeatureModule)
+  },
+  {
     path: 'associate',
     loadChildren: () => import('@hrcatalyst/associate-feature').then(m => m.AssociateFeatureModule)
   },
@@ -50,6 +58,10 @@ const routes: Routes = [
   {
     path: 'user',
     loadChildren: () => import('@hrcatalyst/user-feature').then(m => m.UserFeatureModule)
+  },
+  {
+    path: '**',
+    redirectTo: ''
   }
 ];
 
