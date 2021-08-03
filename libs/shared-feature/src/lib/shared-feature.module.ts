@@ -5,6 +5,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/shared.reducer';
 import { SharedEffects } from './+state/shared.effects';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 @NgModule({
   imports: [
@@ -14,6 +15,12 @@ import { SharedEffects } from './+state/shared.effects';
     ]),
     StoreModule.forFeature('shared', reducer),
     EffectsModule.forFeature([SharedEffects]),
+  ],
+  declarations: [
+    ConfirmationComponent
+  ],
+  exports: [
+    ConfirmationComponent
   ],
 })
 export class SharedFeatureModule {}
