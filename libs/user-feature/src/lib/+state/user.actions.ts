@@ -1,10 +1,9 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-
-import { User } from './user.model';
+import { User } from '@hrcatalyst/shared-feature';
 
 export const loadUsers = createAction(
-  '[User/API] Load Users', 
+  '[User/API] Load Users',
   props<{ users: User[] }>()
 );
 

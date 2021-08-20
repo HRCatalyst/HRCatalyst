@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Campaign } from './campaign.model';
+import { Campaign } from '@hrcatalyst/shared-feature';
 
 export const loadCampaigns = createAction(
-  '[Campaign/API] Load Campaigns', 
+  '[Campaign/API] Load Campaigns',
   props<{ campaigns: Campaign[] }>()
 );
 

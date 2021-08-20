@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Rater } from './rater.model';
+import { Rater } from '@hrcatalyst/shared-feature';
 import * as RaterActions from './rater.actions';
 
 export const ratersFeatureKey = 'raters';

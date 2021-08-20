@@ -1,10 +1,9 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-
-import { Rater } from './rater.model';
+import { Rater } from '@hrcatalyst/shared-feature';
 
 export const loadRaters = createAction(
-  '[Rater/API] Load Raters', 
+  '[Rater/API] Load Raters',
   props<{ raters: Rater[] }>()
 );
 

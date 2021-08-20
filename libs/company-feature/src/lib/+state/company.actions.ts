@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Company } from './company.model';
+import { Company } from '@hrcatalyst/shared-feature';
 
 export const loadCompanys = createAction(
-  '[Company/API] Load Companys', 
+  '[Company/API] Load Companys',
   props<{ companys: Company[] }>()
 );
 

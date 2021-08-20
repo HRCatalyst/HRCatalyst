@@ -6,6 +6,8 @@ import { reducer } from './+state/associate.reducer';
 import { AssociateEffects } from './+state/associate.effects';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
@@ -16,6 +18,7 @@ import { EffectsModule } from '@ngrx/effects';
         component: AssociateComponent
       }
     ]),
+    SharedFeatureModule,
     StoreModule.forFeature('associate', reducer),
     EffectsModule.forFeature([AssociateEffects]),
   ],
@@ -25,5 +28,8 @@ import { EffectsModule } from '@ngrx/effects';
   exports: [
     AssociateComponent
   ],
+  providers: [
+    AngularFirestore
+  ]
 })
 export class AssociateFeatureModule {}

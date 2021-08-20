@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Question } from './question.model';
+import { Question } from '@hrcatalyst/shared-feature';
 
 export const loadQuestions = createAction(
-  '[Question/API] Load Questions', 
+  '[Question/API] Load Questions',
   props<{ questions: Question[] }>()
 );
 

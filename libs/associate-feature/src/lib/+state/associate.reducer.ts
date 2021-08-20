@@ -1,20 +1,6 @@
-import { Action, createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Associate } from './associate.model';
+import { createReducer, on } from '@ngrx/store';
 import * as AssociateActions from './associate.actions';
-
-export const associatesFeatureKey = 'associates';
-
-export interface State extends EntityState<Associate> {
-  // additional entities state properties
-}
-
-export const adapter: EntityAdapter<Associate> = createEntityAdapter<Associate>();
-
-export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
-});
-
+import { adapter, initialState } from './associate.entity';
 
 export const reducer = createReducer(
   initialState,
@@ -48,6 +34,64 @@ export const reducer = createReducer(
   on(AssociateActions.clearAssociates,
     state => adapter.removeAll(state)
   ),
+
+  on(AssociateActions.loadAssociate, state => {
+    return state;
+  }),
+  on(AssociateActions.loadAssociateSuccess, (state, action) => {
+    return state;
+  }),
+  on(AssociateActions.loadAssociateFailure, (state, error) => {
+    return state;
+  }),
+  on(AssociateActions.loadCompanyAssociates, state => {
+    return state;
+  }),
+  on(AssociateActions.loadCompanyAssociatesInprogress, state => {
+    return state;
+  }),
+  on(AssociateActions.loadCompanyAssociatesSuccess, (state, action) => {
+    return state;
+  }),
+  on(AssociateActions.loadCompanyAssociatesFailure, (state, error) => {
+    return state;
+  }),
+  on(AssociateActions.searchAssociates, state => {
+    return state;
+  }),
+  on(AssociateActions.searchAssociatesInprogress, (state, action) => {
+    return state;
+  }),
+  on(AssociateActions.searchAssociatesSuccess, (state, action) => {
+    return state;
+  }),
+  on(AssociateActions.searchAssociatesFailure, (state, error) => {
+    return state;
+  }),
+  on(AssociateActions.selectAssociate, state => {
+    return state;
+  }),
+  on(AssociateActions.createAssociate, state => {
+    return state;
+  }),
+  on(AssociateActions.createAssociateSuccess, (state, action) => {
+    return state;
+  }),
+  on(AssociateActions.createAssociateFailire, (state, error) => {
+    return state;
+  }),
+  on(AssociateActions.updateAssociateSuccess, (state, action) => {
+    return state;
+  }),
+  on(AssociateActions.updateAssociateFailure, (state, error) => {
+    return state;
+  }),
+  on(AssociateActions.deleteAssociateSuccess, (state, action) => {
+    return state;
+  }),
+  on(AssociateActions.deleteAssociateFailure, (state, error) => {
+    return state;
+  })
 );
 
 

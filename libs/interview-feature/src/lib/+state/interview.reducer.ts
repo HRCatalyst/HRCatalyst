@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Interview } from './interview.model';
+import { Interview } from '@hrcatalyst/shared-feature';
 import * as InterviewActions from './interview.actions';
 
 export const interviewsFeatureKey = 'interviews';

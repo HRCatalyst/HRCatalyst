@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { User } from './user.model';
 import * as UserActions from './user.actions';
+import { User } from '@hrcatalyst/shared-feature';
 
 export const usersFeatureKey = 'users';
 

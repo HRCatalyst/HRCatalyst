@@ -1,3 +1,5 @@
+import { User } from "./user.model";
+
 export interface Auth {
   id: string;
 }
@@ -9,16 +11,16 @@ export class LoginModel {
 }
 
 export class RegistrationModel extends User {
-  userName: string;
-  password: string;
-  confirm: string;
+  userName = '';
+  password = '';
+  confirm = '';
   constructor() {
       super();
   }
 }
 
 export interface IAuth {
-  user?: firebase.User;
+  user?: unknown; // firebase.User
   settings?: User;
   loading?: boolean;
   error?: string;
@@ -26,7 +28,7 @@ export interface IAuth {
 }
 
 export class AuthState implements IAuth {
-  user?: firebase.User;
+  user?: unknown; // firebase.User
   settings?: User;
   loading?: boolean;
   error?: string;

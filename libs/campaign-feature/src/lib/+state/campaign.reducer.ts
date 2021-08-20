@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Campaign } from './campaign.model';
+import { Campaign } from '@hrcatalyst/shared-feature';
 import * as CampaignActions from './campaign.actions';
 
 export const campaignsFeatureKey = 'campaigns';

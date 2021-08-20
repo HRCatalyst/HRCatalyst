@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Interview } from './interview.model';
+import { Interview } from '@hrcatalyst/shared-feature';
 
 export const loadInterviews = createAction(
-  '[Interview/API] Load Interviews', 
+  '[Interview/API] Load Interviews',
   props<{ interviews: Interview[] }>()
 );
 

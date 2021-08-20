@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Home } from './home.model';
+import { Home } from '@hrcatalyst/shared-feature';
 
 export const loadHomes = createAction(
-  '[Home/API] Load Homes', 
+  '[Home/API] Load Homes',
   props<{ homes: Home[] }>()
 );
 

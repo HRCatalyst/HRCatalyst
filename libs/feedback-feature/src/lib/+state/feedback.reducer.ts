@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Feedback } from './feedback.model';
+import { Feedback } from '@hrcatalyst/shared-feature';
 import * as FeedbackActions from './feedback.actions';
 
 export const feedbacksFeatureKey = 'feedbacks';

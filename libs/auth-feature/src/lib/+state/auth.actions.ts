@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Auth } from './auth.model';
+import { Auth } from '@hrcatalyst/shared-feature';
 
 export const loadAuths = createAction(
-  '[Auth/API] Load Auths', 
+  '[Auth/API] Load Auths',
   props<{ auths: Auth[] }>()
 );
 

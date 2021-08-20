@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Import } from './import.model';
+import { Import } from '@hrcatalyst/shared-feature';
 
 export const loadImports = createAction(
-  '[Import/API] Load Imports', 
+  '[Import/API] Load Imports',
   props<{ imports: Import[] }>()
 );
 

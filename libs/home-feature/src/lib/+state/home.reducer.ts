@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Home } from './home.model';
+import { Home } from '@hrcatalyst/shared-feature';
 import * as HomeActions from './home.actions';
 
 export const homesFeatureKey = 'homes';

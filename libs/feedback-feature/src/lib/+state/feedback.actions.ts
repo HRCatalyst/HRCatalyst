@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Feedback } from './feedback.model';
+import { Feedback } from '@hrcatalyst/shared-feature';
 
 export const loadFeedbacks = createAction(
-  '[Feedback/API] Load Feedbacks', 
+  '[Feedback/API] Load Feedbacks',
   props<{ feedbacks: Feedback[] }>()
 );
 
