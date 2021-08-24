@@ -1,1 +1,13 @@
-<p>login works!</p>
+<section class="login-form">
+  <form [formGroup]="loginForm" fxLayout="column" fxLayoutAlign="center center" (ngSubmit)="onSubmit()">
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="Username" type="text" formControlName="userName" required>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+          <input matInput placeholder="Password" type="password" formControlName="userPassword" required>
+      </mat-form-field>
+      <div fxLayout="row" fxLayoutGap="10px">
+          <button fxLayout="column" type="submit" mat-raised-button color="primary" [disabled]="!loginForm.valid">Login</button>
+      </div>
+  </form>
+</section>

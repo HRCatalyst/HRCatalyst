@@ -4,7 +4,7 @@ import { Actions } from '@ngrx/effects';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { Associate, IAssociate } from './associate.model';
+import { Associate, IAssociate } from '@hrcatalyst/shared-feature';
 import { select, Store } from '@ngrx/store';
 import { LoaderService } from '@hrcatalyst/shared-feature';
 import { AssociateState } from './associate.entity';
@@ -28,17 +28,17 @@ export class AssociateEffects {
   //     )
   //   );
   // });
-  constructor(private actions$: Actions<associateActions.AssociateActions>, private firestore: AngularFirestore,
-    private loader: LoaderService, private store: Store<IAssociate>) {
-      this.campaignYear = '';
-      this.store.pipe(select((state: AssociateState) => state))
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((state) => {
-        if (state.campaign.activeYear) {
-          this.campaignYear = state.campaign.activeYear.suffix;
-        }
-      });
-  }
+  // constructor(private actions$: Actions<associateActions.AssociateActions>, private firestore: AngularFirestore,
+  //   private loader: LoaderService, private store: Store<IAssociate>) {
+  //     this.campaignYear = '';
+  //     this.store.pipe(select((state: AssociateState) => state))
+  //     .pipe(takeUntil(this.onDestroy$))
+  //     .subscribe((state) => {
+  //       if (state.campaign.activeYear) {
+  //         this.campaignYear = state.campaign.activeYear.suffix;
+  //       }
+  //     });
+  // }
 
   // @Effect()
   // loadAssociate$: Observable<Action> = this.actions$.pipe(
@@ -169,37 +169,37 @@ export class AssociateEffects {
   //     }
   // ));
 
-  get() {
-    const query = `associates${this.campaignYear}`;
-    return this.firestore.collection<Associate>(query).snapshotChanges();
-  }
+  // get() {
+  //   const query = `associates${this.campaignYear}`;
+  //   return this.firestore.collection<Associate>(query).snapshotChanges();
+  // }
 
-  getById(id: string) {
-    const query = `associates${this.campaignYear}/${id}`;
-    return this.firestore.doc(query).get();
-  }
+  // getById(id: string) {
+  //   const query = `associates${this.campaignYear}/${id}`;
+  //   return this.firestore.doc(query).get();
+  // }
 
-  getAssociates(id: string) {
-      const query = `associates${this.campaignYear}`;
-      return this.firestore.collection<Associate>(query).ref.where('companyId', '==', id).get();
-  }
+  // getAssociates(id: string) {
+  //     const query = `associates${this.campaignYear}`;
+  //     return this.firestore.collection<Associate>(query).ref.where('companyId', '==', id).get();
+  // }
 
-  create(associate: Associate) {
-    delete associate.id;
-    const g = Object.assign({}, associate);
-    const query = `associates${this.campaignYear}`;
-    return this.firestore.collection<Associate>(query).add(g);
-  }
+  // create(associate: Associate) {
+  //   delete associate.id;
+  //   const g = Object.assign({}, associate);
+  //   const query = `associates${this.campaignYear}`;
+  //   return this.firestore.collection<Associate>(query).add(g);
+  // }
 
-  update(associate: Associate) {
-    const g = Object.assign({}, associate);
-    const query = `associates${this.campaignYear}/${associate.id}`;
-    return this.firestore.doc(query).update(g);
-  }
+  // update(associate: Associate) {
+  //   const g = Object.assign({}, associate);
+  //   const query = `associates${this.campaignYear}/${associate.id}`;
+  //   return this.firestore.doc(query).update(g);
+  // }
 
-  delete(id: string) {
-    const query = `associates${this.campaignYear}/${id}`;
-    return this.firestore.doc(query).delete();
-  }
+  // delete(id: string) {
+  //   const query = `associates${this.campaignYear}/${id}`;
+  //   return this.firestore.doc(query).delete();
+  // }
 
 }

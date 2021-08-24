@@ -29,12 +29,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   imports: [
     CommonModule,
     MatCardModule,
     MatDialogModule,
+    MatFormFieldModule,
     MatTableModule,
     MatToolbarModule,
     MatMenuModule,
@@ -51,6 +54,7 @@ import { AmazingTimePickerModule } from 'amazing-time-picker';
     AmazingTimePickerModule,
     MatSlideToggleModule,
     MatTooltipModule,
+    FlexLayoutModule,
     RouterModule.forChild([
       /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
     ]),
@@ -65,6 +69,7 @@ import { AmazingTimePickerModule } from 'amazing-time-picker';
     ConfirmationComponent,
     LoaderComponent,
     MatCardModule,
+    MatFormFieldModule,
     MatDialogModule,
     MatTableModule,
     MatToolbarModule,
@@ -81,7 +86,8 @@ import { AmazingTimePickerModule } from 'amazing-time-picker';
     MatSelectModule,
     AmazingTimePickerModule,
     MatSlideToggleModule,
-    MatTooltipModule
+    MatTooltipModule,
+    FlexLayoutModule,
   ],
   providers: [
     LoaderService,

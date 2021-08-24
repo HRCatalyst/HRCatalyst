@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Associate } from './associate.model';
+import { Associate } from '@hrcatalyst/shared-feature';
 
 export const loadAssociates = createAction(
   '[Associate] Load Associates',
