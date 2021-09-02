@@ -1,0 +1,34 @@
+<div>
+    <section fxLayout="column" fxLayoutAlign="center center">
+        <p>Campaign Year</p>
+    </section>
+    <section fxLayout="column" fxLayoutAlign="center center">
+        <div>
+            <button color="primary" mat-icon-button matTooltip="Add Year" (click)="addYear()">
+                <mat-icon aria-label="Add Year">note_add</mat-icon>
+            </button>
+            <button color="primary" mat-icon-button matTooltip="Edit Year" (click)="editYear()" [disabled]="!hasYear">
+                <mat-icon aria-label="Edit Year">edit</mat-icon>
+            </button>                
+            <button color="primary" mat-icon-button matTooltip="Delete Year" (click)="deleteYear()" [disabled]="!hasYear">
+                <mat-icon aria-label="Delete Year">delete</mat-icon>
+            </button>                     
+        </div>
+        <div>
+            <ag-grid-angular 
+                #agGrid
+                id="myGrid"
+                style="height: 300px; width: 550px" 
+                class="ag-theme-balham"
+                [rowData]="years" 
+                [columnDefs]="yearsDefs"
+                rowSelection="single"
+                (selectionChanged)="onSelectionChanged($event)"
+                (rowDoubleClicked)="onRowDoubleClicked($event)"
+                (gridReady)="onGridReady($event)"            
+                >
+            </ag-grid-angular>          
+        </div>
+    </section>
+</div>
+

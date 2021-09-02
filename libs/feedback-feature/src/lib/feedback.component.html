@@ -1,0 +1,53 @@
+<mat-card-header>
+    <mat-card-title>
+        <p>Rater Feedback</p>
+    </mat-card-title>
+</mat-card-header>
+<mat-card>
+    <section fxLayout="column" fxLayoutAlign="center center">
+        <div>
+            Company: <span [textContent]="selectedCompany!.name"></span>
+        </div>
+        <div>
+            Client: <span [textContent]="selectedClient!.name"></span>
+        </div> 
+        <div>
+            Campaign: {{ selectedCampaign!.name }}
+        </div>
+        <div>
+            Participant: {{ selectedAssociate!.firstName }} {{ selectedAssociate!.lastName }}
+        </div>    
+        <div>
+            Rater: {{ selectedRater!.firstName }} {{ selectedRater!.lastName }}
+        </div>        
+        <div>
+            <button color="primary" mat-icon-button matTooltip="Backspace" (click)="onBackClicked()">
+                <mat-icon aria-label="Backspace">backspace</mat-icon>
+            </button>         
+            <button color="primary" mat-icon-button matTooltip="Add Feedback" (click)="addFeedback()">
+                <mat-icon aria-label="Add Feedback">add_box</mat-icon>
+            </button>
+            <button color="primary" mat-icon-button matTooltip="Edit Feedback" (click)="editFeedback()" [disabled]="!hasFeedback">
+                <mat-icon aria-label="Edit Feedback">edit</mat-icon>
+            </button>                            
+            <button color="primary" mat-icon-button matTooltip="Delete Feedback" (click)="deleteFeedback()" [disabled]="!hasFeedback">
+                <mat-icon aria-label="Delete Feedback">delete</mat-icon>
+            </button>                    
+        </div>
+        <div>
+            <ag-grid-angular 
+                #agGrid
+                id="myGrid"
+                style="height: 300px; width: 1200px;" 
+                class="ag-theme-balham"
+                [rowData]="feedbacks" 
+                [columnDefs]="feedbacksDefs"
+                rowSelection="single"
+                (selectionChanged)="onSelectionChanged($event)"
+                (rowDoubleClicked)="onRowDoubleClicked($event)"
+                (gridReady)="onGridReady($event)"            
+                >
+            </ag-grid-angular>          
+        </div>
+    </section>
+</mat-card>

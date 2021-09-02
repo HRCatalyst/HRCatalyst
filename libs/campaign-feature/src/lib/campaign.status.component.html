@@ -1,0 +1,74 @@
+<section fxLayout="column" fxLayoutAlign="center center">
+    <div>
+        Company: <span [textContent]="selectedCompany!.name"></span>
+    </div>
+    <div>
+        Client: <span [textContent]="selectedClient!.name"></span>
+    </div>
+    <div>
+        Campaign: <span [textContent]="selectedCampaign!.name"></span>
+    </div>       
+    <div>
+        <button color="primary" mat-icon-button matTooltip="Backspace" (click)="onBackClicked()">
+            <mat-icon aria-label="Backspace">backspace</mat-icon>
+        </button>                       
+    </div>
+</section>
+<mat-card-header>
+    <mat-card-title>
+        <p>Campaign Report</p>
+    </mat-card-title>
+</mat-card-header>
+<mat-card>
+    <div class="container">
+        <div fxLayout="row" fxLayAlign="center center">
+            <div>
+                <button mat-icon-button (click)="onDownload()"><mat-icon>cloud_download</mat-icon></button>              
+            </div>
+        </div>
+    </div>  
+    <div class="container">
+        <div fxLayout="column" fxLayoutAlign="space-between none">  
+        <div *ngFor="let p of reportData">
+            <p><span style="font-weight:bold">{{p.firstName}} {{p.lastName}}</span></p>
+            <table>
+                <tr>
+                    <td>Total Raters:</td>
+                    <td>{{p.raters}}</td>   
+                    <td></td>
+                    <td></td>                 
+                </tr>
+                <tr>
+                    <td>Total Feedback:</td>
+                    <td>{{p.feedback}}</td>                     
+                    <td>Total Pending:</td>
+                    <td>{{p.pending}}</td>                 
+                </tr>    
+                <tr>
+                    <td>Total Unsolicited:</td> 
+                    <td>{{p.unsolicited}}</td> 
+                    <td>Total Declined:</td>
+                    <td>{{p.declined}}</td>                    
+                </tr>
+            </table>
+            <br />
+            <table class="mat-elevation-z8">
+                <thead>
+                    <tr>
+                    <th>Name</th>
+                    <th>Relationship</th>
+                    <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let r of p.data">
+                        <td>{{r.firstName}} {{r.lastName}}</td>
+                        <td>{{r.relationship}}</td>
+                        <td>{{r.status}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>    
+</mat-card>

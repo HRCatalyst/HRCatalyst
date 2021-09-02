@@ -1,0 +1,31 @@
+<div>
+<h2 mat-dialog-title>Associate</h2>
+<div mat-dialog-content>
+  <form class="example-form" [formGroup]="form" fxLayout="column" (ngSubmit)="onSubmit()"> 
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="First Name" type="text" formControlName="first_name" [ngClass]="displayFieldCss('first_name')">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Last Name" type="text" formControlName="last_name" [ngClass]="displayFieldCss('last_name')">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Email Address" type="text" formControlName="email_address" [ngClass]="displayFieldCss('email_address')">
+      </mat-form-field> 
+      <mat-form-field>  
+        <input matInput placeholder="Title" type="text" formControlName="title" [ngClass]="displayFieldCss('title')">
+      </mat-form-field>
+      <mat-form-field>  
+        <textarea matInput placeholder="Notes" type="text" rows="5" formControlName="notes" [ngClass]="displayFieldCss('notes')"></textarea>
+      </mat-form-field>                   
+      <div>
+        <br />
+      </div>  
+      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+        <button fxLayout="column" mat-raised-button [mat-dialog-close]="false">Cancel</button>    
+        <button fxLayout="column" type="submit" mat-raised-button color="primary" [disabled]="!form.valid">Save</button>      
+      </div>
+      <div>
+        <br />
+      </div>    
+  </form> 
+</div>

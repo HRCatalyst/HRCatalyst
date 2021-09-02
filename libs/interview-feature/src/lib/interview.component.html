@@ -1,0 +1,41 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>Interview</mat-card-title>      
+    </mat-card-header>
+    <mat-card-content>
+        <div>
+          <p>Campaign: {{ data.campaignName }}</p>
+      </div>
+      <div>
+          <p>Participant: {{ data.participantFirst }} {{ data.participantLast }} - {{ data.participantEmail }}</p>
+          <p>Title: {{ data.participantTitle }}</p> 
+          <p>Notes: {{ data.participantNotes }}</p>
+          <br />
+      </div>    
+      <div>
+          <p>Rater: {{ data.raterFirst }} {{ data.raterLast }} - {{ data.raterEmail }}</p>
+          <p>Title: {{ data.raterTitle }}</p>
+          <p>Notes: {{ data.raterNotes }}</p>
+          <br />
+      </div>
+      <div>
+          <p>Relationship: {{ data.relationship }}</p>
+      </div>
+      <form class="example-form" [formGroup]="form" fxLayout="column" >  
+          <mat-form-field  *ngFor="let question of questions"class="example-full-width">
+            <mat-label>{{question.reference}}</mat-label>
+            <textarea matInput placeholder="{{question.content}}" type="text" rows="4" formControlName="{{question.reference}}"></textarea>
+          </mat-form-field> 
+        <mat-card-actions fxLayout="row">
+          <div fxFlex="20">
+            <button mat-raised-button color="warn" (click)="onDecline()">Decline</button>            
+          </div>
+          <div fxFlex="80" fxLayoutGap="10" fxLayoutAlign="end center">
+            <button mat-raised-button [mat-dialog-close]="false">Cancel</button>   
+            <button mat-raised-button color="primary" (click)="onDraft()" [disabled]="!form.valid">Save Draft</button>
+            <button type="submit" mat-raised-button class="success" (click)="onSubmit()" [disabled]="!form.valid">Submit</button>             
+          </div>
+        </mat-card-actions>   
+      </form>
+    </mat-card-content> 
+</mat-card>

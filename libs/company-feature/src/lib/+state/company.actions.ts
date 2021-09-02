@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-
 import { Company } from '@hrcatalyst/shared-feature';
+import { DocumentReference } from '@angular/fire/firestore';
 
 export const loadCompanys = createAction(
   '[Company/API] Load Companys',
@@ -28,7 +28,7 @@ export const upsertCompanys = createAction(
   props<{ companys: Company[] }>()
 );
 
-export const updateCompany = createAction(
+export const updateCompanyEntity = createAction(
   '[Company/API] Update Company',
   props<{ company: Update<Company> }>()
 );
@@ -38,7 +38,7 @@ export const updateCompanys = createAction(
   props<{ companys: Update<Company>[] }>()
 );
 
-export const deleteCompany = createAction(
+export const deleteCompanyEntity = createAction(
   '[Company/API] Delete Company',
   props<{ id: string }>()
 );
@@ -50,4 +50,72 @@ export const deleteCompanys = createAction(
 
 export const clearCompanys = createAction(
   '[Company/API] Clear Companys'
+);
+
+export const loadCompany = createAction(
+  '[Company/API] Load Company'
+);
+
+export const selectCompany = createAction(
+  '[Company/API] Select Company',
+    props<{ payload: unknown }>()
+);
+
+export const loadAllCompanys = createAction(
+  '[Company/API] Load All Companys'
+);
+
+export const loadAllCompanysSuccess = createAction(
+  '[Company/API] Load All Companys Success',
+    props<{ payload: unknown }>()
+);
+
+export const loadAllCompanysFailure = createAction(
+  '[Company/API] Load All Companys Failure',
+    props<{ error: unknown }>()
+);
+
+export const createCompany = createAction(
+ '[Company/API] Create Company',
+ props<{ payload: Company }>()
+);
+
+export const createCompanySuccess = createAction(
+  '[Company/API] Create Company Success',
+  props<{ payload: DocumentReference }>()
+);
+
+export const createCompanyFailire = createAction(
+  '[Company/API] Create Company Failure',
+    props<{ error: unknown }>()
+);
+
+export const updateCompany = createAction(
+  '[Company/API] Update Company',
+  props<{ payload: Company }>()
+);
+
+export const updateCompanySuccess = createAction(
+  '[Company/API] Update Company Success',
+    props<{ payload: unknown }>()
+);
+
+export const updateCompanyFailure = createAction(
+  '[Company/API] Update Company Failure',
+    props<{ error: unknown }>()
+);
+
+export const deleteCompany = createAction(
+  '[Company/API] Delete Company',
+  props<{ payload: Company }>()
+);
+
+export const deleteCompanySuccess = createAction(
+  '[Company/API] Delete Company Success',
+    props<{ payload: unknown }>()
+);
+
+export const deleteCompanyFailure = createAction(
+  '[Company/API] Delete Company Failure',
+    props<{ error: unknown }>()
 );

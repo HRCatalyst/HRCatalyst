@@ -1,205 +1,193 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Actions } from '@ngrx/effects';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, debounceTime, distinctUntilChanged, map, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
 
-import { Associate, IAssociate } from '@hrcatalyst/shared-feature';
-import { select, Store } from '@ngrx/store';
+import { Associate } from '@hrcatalyst/shared-feature';
+import { Store } from '@ngrx/store';
 import { LoaderService } from '@hrcatalyst/shared-feature';
 import { AssociateState } from './associate.entity';
-
-
+import { createAssociate, createAssociateFailire, createAssociateSuccess, deleteAssociate, deleteAssociateFailure, deleteAssociateSuccess, loadAssociate, loadAssociateFailure, loadAssociateSuccess, loadCompanyAssociates, loadCompanyAssociatesFailure, loadCompanyAssociatesInprogress, loadCompanyAssociatesSuccess, searchAssociates, searchAssociatesFailure, searchAssociatesSuccess, updateAssociate, updateAssociateFailure, updateAssociateSuccess } from './associate.actions';
 
 @Injectable()
 export class AssociateEffects {
   campaignYear: string = Date.now.toString();
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  // loadAssociates$ = createEffect(() => {
-  //   return this.actions$.pipe(
+  constructor(private actions$: Actions,
+              private store: Store<AssociateState>,
+              private firestore: AngularFirestore,
+              private loader: LoaderService) {
+      this.campaignYear = '2021';
+  };
 
-  //     ofType(AssociateActions.loadAssociates),
-  //     concatMap(() =>
-  //       /** An EMPTY observable only emits completion. Replace with your own observable API request */
-  //       EMPTY.pipe(
-  //         map(data => AssociateActions.loadAssociatesSuccess({ data })),
-  //         catchError(error => of(AssociateActions.loadAssociatesFailure({ error }))))
-  //     )
-  //   );
-  // });
-  // constructor(private actions$: Actions<associateActions.AssociateActions>, private firestore: AngularFirestore,
-  //   private loader: LoaderService, private store: Store<IAssociate>) {
-  //     this.campaignYear = '';
-  //     this.store.pipe(select((state: AssociateState) => state))
-  //     .pipe(takeUntil(this.onDestroy$))
-  //     .subscribe((state) => {
-  //       if (state.campaign.activeYear) {
-  //         this.campaignYear = state.campaign.activeYear.suffix;
-  //       }
-  //     });
-  // }
+  loadAssociate$ = createEffect(() => {
+    return this.actions$.pipe(
+    ofType(loadAssociate),
+    mergeMap(x => {
+        this.loader.isLoading.next(true);
+        this.getById(x.payload)
+          .pipe(
+            map(aoc => {
+              this.loader.isLoading.next(false);
+              return loadAssociateSuccess({ payload: aoc.data() });
+            }),
+            catchError((err, caught) => {
+              this.store.dispatch(loadAssociateFailure(err));
+              this.loader.isLoading.next(false);
+              return caught;
+            }));
+        return of(x);
+    }))
+  });
 
-  // @Effect()
-  // loadAssociate$: Observable<Action> = this.actions$.pipe(
-  //   ofType(associateActions.AssociateActionTypes.LOAD_ASSOCIATE),
-  //   mergeMap(x => {
-  //       this.loader.isLoading.next(true);
-  //       return this.getById(x.payload)
-  //         .pipe(
-  //           map(aoc => {
-  //             this.loader.isLoading.next(false);
-  //             return new associateActions.LoadAssociateSuccessAction(aoc.data());
-  //           }),
-  //           catchError((err, caught) => {
-  //             this.store.dispatch(new associateActions.LoadAssociateFailureAction(err));
-  //             this.loader.isLoading.next(false);
-  //             return caught;
-  //           }));
-  // }));
+  loadCompanyAssociates$ = createEffect(() => {
+    return this.actions$.pipe(
+    ofType(loadCompanyAssociates),
+    mergeMap(x => {
+       this.loader.isLoading.next(true);
+       this.getAssociates(x.payload)
+        .then((data) => {
+          const result = new Array<unknown>();
+          data.docs.forEach(d => {
+              result.push({...d.data(), id: d.id});
+          });
 
-  // @Effect()
-  // loadAssociates$: Observable<Action> = this.actions$.pipe(
-  //   ofType(associateActions.AssociateActionTypes.LOAD_COMPANY_ASSOCIATES),
-  //   mergeMap(x => {
-  //       this.loader.isLoading.next(true);
-  //       this.getAssociates(x.payload).then((data) => {
-  //         const result = new Array();
-  //         data.docs.forEach(d => {
-  //             return result.push({...d.data(), id: d.id});
-  //         });
+          this.store.dispatch(loadCompanyAssociatesSuccess({payload: result}));
+          this.loader.isLoading.next(false);
+          return of(loadCompanyAssociatesSuccess({payload: result}));
+        })
+        .catch(err => {
+          this.loader.isLoading.next(false);
+          return of(loadCompanyAssociatesFailure({error: err}));
+        });
+        return of(loadCompanyAssociatesInprogress());
+      })
+    )
+  });
 
-  //       this.store.dispatch(new associateActions.LoadCompanyAssociatesSuccessAction(result));
-  //       this.loader.isLoading.next(false);
-  //     })
-  //     .catch(error => {
-  //       this.loader.isLoading.next(false);
-  //       return of(new associateActions.LoadCompanyAssociatesFailureAction(error));
-  //     });
+  searchAssociates$ = createEffect(() => {
+    return this.actions$.pipe(
+    ofType(searchAssociates),
+     mergeMap(x => {
+       this.loader.isLoading.next(true);
+       return this.get()
+        .pipe(
+          debounceTime(250),
+          distinctUntilChanged(),
+          switchMap(associates => {
+            const assoc = associates.filter(a =>
+              x.payload.length > 0 &&
+              (a.payload.doc.id === x.payload
+              || a.payload.doc.data().lastName.toLowerCase().startsWith(x.payload.toLowerCase())
+              || a.payload.doc.data().firstName.toLowerCase().startsWith(x.payload.toLowerCase())
+              || a.payload.doc.data().emailAddress.toLowerCase().startsWith(x.payload.toLowerCase())));
 
-  //     return of(x);
-  //   }),
-  //   map((credentials) => {
-  //       return new associateActions.LoadCompanyAssociatesInprogressAction();
-  //   }),
-  //   catchError((err, caught) => {
-  //     this.store.dispatch(new associateActions.LoadCompanyAssociatesFailureAction(err));
-  //     this.loader.isLoading.next(false);
-  //     return caught;
-  //   }
-  // ));
+            this.loader.isLoading.next(false);
+            return of(searchAssociatesSuccess({ payload: assoc}));
+          }),
+          catchError((err, caught) => {
+            this.store.dispatch(searchAssociatesFailure(err));
+            this.loader.isLoading.next(false);
+            return caught;
+          }));
+        return of(x);
+      })
+    )}
+  );
 
-  // @Effect()
-  // searchAssociates$: Observable<Action> = this.actions$.pipe(
-  //   ofType(associateActions.AssociateActionTypes.SEARCH_ASSOCIATES),
-  //   mergeMap(x => {
-  //     this.loader.isLoading.next(true);
-  //     return this.get()
-  //       .pipe(
-  //         debounceTime(250),
-  //         distinctUntilChanged(),
-  //         switchMap(associates => {
-  //           const assoc = associates.filter(a =>
-  //             x.payload.length > 0 &&
-  //             (a.payload.doc.id === x.payload
-  //             || a.payload.doc.data().lastName.toLowerCase().startsWith(x.payload.toLowerCase())
-  //             || a.payload.doc.data().firstName.toLowerCase().startsWith(x.payload.toLowerCase())
-  //             || a.payload.doc.data().emailAddress.toLowerCase().startsWith(x.payload.toLowerCase())));
+  create$ = createEffect(() => {
+    return this.actions$.pipe(
+    ofType(createAssociate),
+    mergeMap(x => {
+      this.loader.isLoading.next(true);
+      this.create(x.payload)
+        .then(data => {
+          this.loader.isLoading.next(false);
+          this.store.dispatch(loadCompanyAssociates({payload: x.payload.companyId}));
+          return createAssociateSuccess({payload: data});
+        })
+        .catch(err => {
+          this.loader.isLoading.next(false);
+          return createAssociateFailire({ error: err });
+        })
+        return of(x);
+      })
+    )
+  });
 
-  //           this.loader.isLoading.next(false);
-  //           return of(new associateActions.SearchAssociatesSuccessAction(assoc));
-  //         }),
-  //         catchError((err, caught) => {
-  //           this.store.dispatch(new associateActions.SearchAssociatesFailureAction(err));
-  //           this.loader.isLoading.next(false);
-  //           return caught;
-  //         })
-  //     );
-  //   })
-  // );
+  update$ = createEffect(() => {
+    return this.actions$.pipe(
+    ofType(updateAssociate),
+    mergeMap(x => {
+      this.loader.isLoading.next(true);
+        this.update(x.payload)
+          .then(() => {
+            this.loader.isLoading.next(false);
+            this.store.dispatch(loadCompanyAssociates({payload: x.payload.companyId}));
+            return updateAssociateSuccess({payload: x.payload});
+          })
+          .catch(err => {
+            this.loader.isLoading.next(false);
+            return updateAssociateFailure({error: err });
+          })
+          return of(x);
+      })
+    )
+  });
 
-  // @Effect()
-  // create$: Observable<Action> = this.actions$.pipe(
-  //   ofType(associateActions.AssociateActionTypes.CREATE_ASSOCIATE),
-  //   mergeMap(x => {
-  //       this.loader.isLoading.next(true);
-  //       return this.create(x.payload).then(data => {
-  //             this.loader.isLoading.next(false);
-  //             this.store.dispatch(new associateActions.LoadCompanyAssociatesAction(x.payload.companyId));
-  //             return new associateActions.CreateAssociateSuccessAction(data);
-  //         },
-  //         error => {
-  //             this.loader.isLoading.next(false);
-  //             return new associateActions.CreateAssociateFailireAction(error);
-  //         });
-  //     }
-  // ));
+  delete$ = createEffect(() => {
+      return this.actions$.pipe(
+      ofType(deleteAssociate),
+      mergeMap(x => {
+        this.loader.isLoading.next(true);
+        this.delete(x.payload.id ?? '')
+          .then(() => {
+            this.loader.isLoading.next(false);
+            this.store.dispatch(loadCompanyAssociates({payload: x.payload.companyId}));
+            return deleteAssociateSuccess({payload: x.payload});
+          })
+          .catch(err => {
+            this.loader.isLoading.next(false);
+            return deleteAssociateFailure({error: err});
+          })
+          return of(x);
+        })
+    )
+  });
 
-  // @Effect()
-  // update$: Observable<Action> = this.actions$.pipe(
-  //   ofType(associateActions.AssociateActionTypes.UPDATE_ASSOCIATE),
-  //   mergeMap(x => {
-  //     this.loader.isLoading.next(true);
-  //       return this.update(x.payload).then(data => {
-  //         this.loader.isLoading.next(false);
-  //         this.store.dispatch(new associateActions.LoadCompanyAssociatesAction(x.payload.companyId));
-  //         return new associateActions.UpdateAssociateSuccessAction(data);
-  //     },
-  //     error => {
-  //         this.loader.isLoading.next(false);
-  //         return new associateActions.UpdateAssociateFailureAction(error);
-  //     });
-  //   }
-  // ));
+  get() {
+    const query = `associates${this.campaignYear}`;
+    return this.firestore.collection<Associate>(query).snapshotChanges();
+  };
 
-  // @Effect()
-  // delete$: Observable<Action> = this.actions$.pipe(
-  //     ofType(associateActions.AssociateActionTypes.DELETE_ASSOCIATE),
-  //     mergeMap(x => {
-  //       this.loader.isLoading.next(true);
-  //       return this.delete(x.payload.id).then(() => {
-  //           this.loader.isLoading.next(false);
-  //           this.store.dispatch(new associateActions.LoadCompanyAssociatesAction(x.payload.companyId));
-  //           return new associateActions.DeleteAssociateSuccessAction(0);
-  //       },
-  //       error => {
-  //           this.loader.isLoading.next(false);
-  //           return new associateActions.DeleteAssociateFailureAction(error);
-  //       });
-  //     }
-  // ));
+  getById(id: string) {
+    const query = `associates${this.campaignYear}/${id}`;
+    return this.firestore.doc(query).get();
+  };
 
-  // get() {
-  //   const query = `associates${this.campaignYear}`;
-  //   return this.firestore.collection<Associate>(query).snapshotChanges();
-  // }
+  getAssociates(id: string) {
+      const query = `associates${this.campaignYear}`;
+      return this.firestore.collection<Associate>(query).ref.where('companyId', '==', id).get();
+  };
 
-  // getById(id: string) {
-  //   const query = `associates${this.campaignYear}/${id}`;
-  //   return this.firestore.doc(query).get();
-  // }
+  create(associate: Associate) {
+    delete associate.id;
+    const g = Object.assign({}, associate);
+    const query = `associates${this.campaignYear}`;
+    return this.firestore.collection<Associate>(query).add(g);
+  };
 
-  // getAssociates(id: string) {
-  //     const query = `associates${this.campaignYear}`;
-  //     return this.firestore.collection<Associate>(query).ref.where('companyId', '==', id).get();
-  // }
+  update(associate: Associate) {
+    const g = Object.assign({}, associate);
+    const query = `associates${this.campaignYear}/${associate.id}`;
+    return this.firestore.doc(query).update(g);
+  };
 
-  // create(associate: Associate) {
-  //   delete associate.id;
-  //   const g = Object.assign({}, associate);
-  //   const query = `associates${this.campaignYear}`;
-  //   return this.firestore.collection<Associate>(query).add(g);
-  // }
-
-  // update(associate: Associate) {
-  //   const g = Object.assign({}, associate);
-  //   const query = `associates${this.campaignYear}/${associate.id}`;
-  //   return this.firestore.doc(query).update(g);
-  // }
-
-  // delete(id: string) {
-  //   const query = `associates${this.campaignYear}/${id}`;
-  //   return this.firestore.doc(query).delete();
-  // }
+  delete(id: string) {
+    const query = `associates${this.campaignYear}/${id}`;
+    return this.firestore.doc(query).delete();
+  };
 
 }

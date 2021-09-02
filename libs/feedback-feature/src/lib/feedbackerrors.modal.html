@@ -1,0 +1,53 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>Feedback Error</mat-card-title>      
+    </mat-card-header>
+    <mat-card-content>
+      <form class="example-form" [formGroup]="form" fxLayout="column" (ngSubmit)="onSubmit()">
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Participant Email" type="text" formControlName="participant_email" [ngClass]="displayFieldCss('participant_email')">
+        </mat-form-field> 
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Rater Email" type="text" formControlName="rater_email" [ngClass]="displayFieldCss('rater_email')">
+        </mat-form-field>     
+        <mat-form-field class="example-full-width">
+          <mat-select placeholder="Relationship" formControlName="relationship" name="relationship">
+            <mat-option *ngFor="let r of relationships" [value]="r.name">
+              {{r.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>        
+        <mat-form-field class="example-full-width">  
+          <mat-label>Status</mat-label>   
+          <mat-select placeholder="Status" formControlName="status" name="status">
+            <mat-option *ngFor="let s of statuses" [value]="s.name">
+              {{s.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">  
+          <mat-label>Type</mat-label>   
+          <mat-select placeholder="Type" formControlName="type" name="type">
+            <mat-option *ngFor="let t of types" [value]="t.name">
+              {{t.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">  
+          <mat-label>Question</mat-label>   
+          <mat-select placeholder="Question" formControlName="question" name="question">
+            <mat-option *ngFor="let q of questions" [value]="q.reference">
+              {{q.content}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>    
+        <mat-form-field class="example-full-width">
+          <textarea matInput placeholder="Answer" type="text" rows="5" formControlName="answer" [ngClass]="displayFieldCss('answer')"></textarea>
+        </mat-form-field>    
+        <mat-card-actions fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+          <button mat-raised-button [mat-dialog-close]="false">Cancel</button>  
+          <button type="submit" mat-raised-button color="primary" (click)="onSave()" [disabled]="!form.valid">Save</button>      
+        </mat-card-actions>   
+      </form>
+    </mat-card-content> 
+</mat-card>

@@ -1,0 +1,26 @@
+<div>
+    <h2 mat-dialog-title>Campaign Year</h2>
+    <div mat-dialog-content>
+      <form class="example-form" [formGroup]="form" fxLayout="column" (ngSubmit)="onSubmit()"> 
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Year" type="text" formControlName="year" [ngClass]="displayFieldCss('year')">
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Suffix" type="text" formControlName="suffix" [ngClass]="displayFieldCss('suffix')">
+          </mat-form-field>
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">     
+            <mat-slide-toggle #toggle [checked]="active" (change)="changed()">Active</mat-slide-toggle>
+          </div>         
+          <div>
+            <br />
+          </div>  
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+            <button fxLayout="column" mat-raised-button [mat-dialog-close]="false">Cancel</button>    
+            <button fxLayout="column" type="submit" mat-raised-button color="primary" [disabled]="!form.valid">Save</button>      
+          </div>
+          <div>
+            <br />
+          </div>    
+      </form> 
+    </div>
+    

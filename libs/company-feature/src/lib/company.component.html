@@ -1,0 +1,25 @@
+<mat-card-header>
+  <mat-card-title>
+    <p>Company</p>
+  </mat-card-title>
+</mat-card-header>
+<mat-card>
+  <section fxLayout="column" fxLayoutAlign="center center">
+      <div>
+      Company : <span [textContent]="selectedCompany!.name"></span>      
+      </div>           
+  </section>
+  <section fxLayout="column" fxLayoutAlign="center center">
+    <app-client></app-client>
+   </section>
+  <section fxLayout="column" fxLayoutAlign="center center">
+    <app-associate></app-associate>
+  </section>
+  <section fxLayout="column" fxLayoutAlign="center center">
+    <app-feedbackerrors></app-feedbackerrors>     
+  </section>
+</mat-card>
+
+
+
+

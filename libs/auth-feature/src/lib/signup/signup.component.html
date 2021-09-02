@@ -1,0 +1,68 @@
+<h2 mat-dialog-title>Register User</h2>
+<div mat-dialog-content>
+  <form class="example-form" [formGroup]="form" fxLayout="column" (ngSubmit)="onSubmit()">
+      <div fxLayout="row" fxLayoutGap="10px">
+        <div fxLayout="column">
+          <mat-form-field>  
+          <mat-label>Role</mat-label>   
+          <mat-select placeholder="Role" formControlName="selected_role" name="selected_role">
+            <mat-option *ngFor="let r of roles" [value]="r.id">
+              {{r.name}}
+            </mat-option>
+          </mat-select>
+          </mat-form-field>
+        </div>      
+        <div fxLayout="column">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Username" type="text" formControlName="userName" required>
+          </mat-form-field>          
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="10px">
+        <div fxLayout="column">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Password" type="password" formControlName="userPassword" required>
+        </mat-form-field>           
+        </div>
+        <div fxLayout="column">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Confirm Password" type="password" formControlName="userConfirm" required>
+          </mat-form-field>             
+        </div>        
+      </div>
+      <div fxLayout="row" fxLayoutGap="10px">
+        <div fxLayout="column">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="First Name" type="text" formControlName="first_name" [ngClass]="displayFieldCss('first_name')">
+          </mat-form-field>
+        </div>
+        <div fxLayout="column">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Last Name" type="text" formControlName="last_name" [ngClass]="displayFieldCss('last_name')">
+          </mat-form-field>          
+        </div>        
+      </div>
+      <div fxLayout="row" fxLayoutGap="10px">
+        <div fxLayout="column">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Email Address" type="text" formControlName="email_address" [ngClass]="displayFieldCss('email_address')">
+          </mat-form-field>  
+        </div>
+        <div fxLayout="column">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Phone Number" type="tel" formControlName="phone_number" [ngClass]="displayFieldCss('phone_number')">
+          </mat-form-field>           
+        </div>        
+      </div>                  
+      <div>
+        <br />
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+        <button fxLayout="column" mat-raised-button [mat-dialog-close]="false">Cancel</button>    
+        <button fxLayout="column" type="submit" mat-raised-button color="primary" [disabled]="!form.valid">Save</button>      
+      </div>
+      <div>
+        <br />
+      </div>    
+  </form> 
+</div>

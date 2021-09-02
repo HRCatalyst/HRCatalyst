@@ -1,0 +1,35 @@
+<mat-card-header>
+    <mat-card-title>
+        <p>Interviews</p>
+    </mat-card-title>
+</mat-card-header>
+<mat-card>
+    <section fxLayout="column">
+        <button color="primary" mat-icon-button matTooltip="Go Back" (click)="onBackClicked()">
+            <mat-icon aria-label="Backspace">backspace</mat-icon>
+        </button>    
+        <br />
+        <div>
+            Interviewer: <span [textContent]="user$!.first_name + ' ' + user$!.last_name"></span>
+        </div>    
+        <br />
+        <div>
+            Rater: <span [textContent]="selectedAssociate!.firstName"></span>&nbsp;<span [textContent]="selectedAssociate!.lastName"></span>
+        </div>
+        <br />   
+        <br /> 
+        <ag-grid-angular 
+            #agGrid
+            id="myGrid"
+            style="height: 300px; width: 1200px;" 
+            class="ag-theme-balham"
+            [rowData]="participants" 
+            [columnDefs]="participantsDefs"
+            rowSelection="single"
+            (selectionChanged)="onSelectionChanged($event)"
+            (rowDoubleClicked)="onRowDoubleClicked($event)"
+            (gridReady)="onGridReady($event)"            
+            >
+        </ag-grid-angular>  
+    </section>
+</mat-card>        

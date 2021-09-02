@@ -1,0 +1,23 @@
+<section fxLayout="column" fxLayoutAlign="center center">
+    <div>
+        <span [textContent]="welcomeUser"></span>
+        <br />
+    </div>
+    <div>
+        <button mat-icon-button matTooltip="Upload Feedback" (click)="onUpload()"><mat-icon>cloud_upload</mat-icon></button>
+        <button mat-icon-button matTooltip="Interview" (click)="onInterview()"><mat-icon>forum</mat-icon></button>
+        <button mat-icon-button matTooltip="Registration" (click)="onRegister()"><mat-icon>person_add</mat-icon></button> 
+    </div>
+</section>
+<mat-card-header>
+    <mat-card-title>Home</mat-card-title>
+</mat-card-header>
+<mat-card>
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px"> 
+        <div><app-company-list></app-company-list></div>
+        <div><app-campaign-year></app-campaign-year></div>
+    </div>
+    <br />
+    <app-question></app-question>             
+</mat-card>
+

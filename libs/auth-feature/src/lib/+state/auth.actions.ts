@@ -1,6 +1,5 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-
 import { IFirebaseUser, LoginModel, RegistrationModel, User } from '@hrcatalyst/shared-feature';
 import { Auth } from './auth.reducer';
 

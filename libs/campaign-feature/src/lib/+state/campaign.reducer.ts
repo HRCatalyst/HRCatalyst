@@ -5,16 +5,15 @@ import * as CampaignActions from './campaign.actions';
 
 export const campaignsFeatureKey = 'campaigns';
 
-export interface State extends EntityState<Campaign> {
-  // additional entities state properties
+export interface CampaignState extends EntityState<Campaign> {
+  selectedCampaign?: Campaign;
 }
 
 export const adapter: EntityAdapter<Campaign> = createEntityAdapter<Campaign>();
 
-export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
+export const initialState: CampaignState = adapter.getInitialState({
+  selectedCampaign: undefined
 });
-
 
 export const reducer = createReducer(
   initialState,
@@ -30,13 +29,13 @@ export const reducer = createReducer(
   on(CampaignActions.upsertCampaigns,
     (state, action) => adapter.upsertMany(action.campaigns, state)
   ),
-  on(CampaignActions.updateCampaign,
+  on(CampaignActions.updateCampaignEntity,
     (state, action) => adapter.updateOne(action.campaign, state)
   ),
   on(CampaignActions.updateCampaigns,
     (state, action) => adapter.updateMany(action.campaigns, state)
   ),
-  on(CampaignActions.deleteCampaign,
+  on(CampaignActions.deleteCampaignEntity,
     (state, action) => adapter.removeOne(action.id, state)
   ),
   on(CampaignActions.deleteCampaigns,
@@ -47,6 +46,134 @@ export const reducer = createReducer(
   ),
   on(CampaignActions.clearCampaigns,
     state => adapter.removeAll(state)
+  ),
+  on(CampaignActions.loadCampaign, state => {
+    return {...state, selectedCampaign: null};
+  }),
+  on(CampaignActions.loadCampaignSuccess, (state, action) => {
+    return {...state, selectedCampaign: action.payload};
+  }),
+  on(CampaignActions.loadCampaignFailure,
+    state => { return state; }
+  ),
+  on(CampaignActions.loadAllCampaigns,
+    state => { return state; }
+  ),
+// on(CampaignActions.loadAllCampaignsSuccess,
+//     const campaigns = action.payload.map(e => {
+//         return {
+//         id: e.payload.doc.id,
+//         ...e.payload.doc.data()
+//         } as Campaign;
+//     });
+//     state = campaignEntity.adapter.removeAll(state);
+//     return campaignEntity.adapter.addMany(campaigns, state);
+//     ),
+on(CampaignActions.loadAllCampaignsFailure,
+      state => { return state; }
+    ),
+on(CampaignActions.loadCampaignYears,
+      state => { return state; }
+    ),
+// on(CampaignActions.loadCampaignYearsSuccess,
+//     const years = action.payload.map(e => {
+//         return {
+//             id: e.payload.doc.id,
+//             year: e.payload.doc.data().year,
+//             suffix: e.payload.doc.data().suffix,
+//             active: e.payload.doc.data().active
+//         } as CampaignYear;
+//     });
+//     return {...state, campaignYears: years};
+//     ),
+on(CampaignActions.loadCampaignYearsFailure,
+      state => { return state; }
+    ),
+on(CampaignActions.loadClientCampaigns,
+//    (state) = campaignEntity.adapter.removeAll(state);
+      state => { return state; }
+    ),
+on(CampaignActions.loadClientCampaignsInprogress,
+      state => { return state; }
+    ),
+// on(CampaignActions.LOAD_CLIENT_CAMPAIGNS_SUCCESS,
+//     if (action.payload.length === 0) {
+//           state => { return state; }
+//     }
+
+//     const campaigns = action.payload.map(e => {
+//         return {
+//             id: e.id, ...e
+//         } as Campaign;
+//     });
+//     state = campaignEntity.adapter.removeAll(state);
+//     return campaignEntity.adapter.addMany(campaigns, state);
+//     ),
+on(CampaignActions.loadClientCampaignsFailure,
+      state => { return state;
+}),
+on(CampaignActions.selectCampaign, (state, action) => {
+    return {...state, selectedCampaign: action.payload};
+}),
+on(CampaignActions.selectCampaignYear, (state, action) => {
+    return {...state, selectedYear: action.payload};
+}),
+on(CampaignActions.setActiveCampaign, (state, action) => {
+    return {...state, activeYear: action.payload};
+}),
+on(CampaignActions.createCampaign,
+      state => { return state; }
+    ),
+on(CampaignActions.createCampaignSuccess,
+      state => { return state; }
+    ),
+on(CampaignActions.createCampaignFailire,
+  state => { return state; }
+),
+on(CampaignActions.updateCampaign,
+  state => { return state; }
+    ),
+on(CampaignActions.updateCampaignSuccess, (state, action) => {
+    return adapter.updateOne({ id: action.payload.id ?? '', changes: action.payload }, state);
+}),
+on(CampaignActions.updateCampaignFailure,
+      state => { return state; }
+    ),
+// on(CampaignActions.deleteCampaign, (state, action) => {
+//     return adapter.removeOne(action.payload.id, state);
+// }),
+on(CampaignActions.deleteCampaignSuccess,
+      state => { return state; }
+    ),
+on(CampaignActions.deleteCampaignFailure,
+      state => {  return state; }
+    ),
+on(CampaignActions.createCampaignYear,
+      state => {  return state; }
+    ),
+on(CampaignActions.createCampaignYearSuccess,
+      state => {  return state; }
+    ),
+  on(CampaignActions.createCampaignYearFailire,
+      state => {  return state; }
+  ),
+  on(CampaignActions.updateCampaignYear,
+    state => { return state; }
+  ),
+  on(CampaignActions.updateCampaignYearSuccess,
+    state => { return state; }
+  ),
+  on(CampaignActions.updateCampaignFailure,
+    state => { return state; }
+  ),
+  on(CampaignActions.deleteCampaignYear,
+    state => { return state; }
+  ),
+  on(CampaignActions.deleteCampaignYearSuccess,
+    state => { return state; }
+  ),
+  on(CampaignActions.deleteCampaignFailure,
+    state => {  return state; }
   ),
 );
 

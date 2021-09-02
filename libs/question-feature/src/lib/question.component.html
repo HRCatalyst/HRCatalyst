@@ -1,0 +1,33 @@
+<div>
+    <section fxLayout="column" fxLayoutAlign="center center">
+        <p>Questions</p>
+    </section>
+    <section fxLayout="column" fxLayoutAlign="center center">
+        <div>
+            <button color="primary" mat-icon-button matTooltip="Add Question" (click)="addQuestion()">
+                <mat-icon aria-label="Add Question">add_box</mat-icon>
+            </button>
+            <button color="primary" mat-icon-button matTooltip="Edit Question" (click)="editQuestion()" [disabled]="!hasQuestion">
+                <mat-icon aria-label="Edit Question">edit</mat-icon>
+            </button>                
+            <button color="primary" mat-icon-button matTooltip="Delete Question" (click)="deleteQuestion()" [disabled]="!hasQuestion">
+                <mat-icon aria-label="Delete Question">delete</mat-icon>
+            </button>         
+        </div>
+        <div>
+            <ag-grid-angular 
+                #agGrid
+                id="myGrid"
+                style="height: 300px; width: 1200px;" 
+                class="ag-theme-balham"
+                [rowData]="questions" 
+                [columnDefs]="questionsDefs"
+                rowSelection="single"
+                (selectionChanged)="onSelectionChanged($event)"
+                (rowDoubleClicked)="onRowDoubleClicked($event)"
+                (gridReady)="onGridReady($event)"            
+                >
+            </ag-grid-angular>          
+        </div>
+    </section>
+</div>

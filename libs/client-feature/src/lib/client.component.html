@@ -1,0 +1,31 @@
+<section fxLayout="column" fxLayoutAlign="center center">
+    <div>
+        <button color="primary" mat-icon-button matTooltip="Backspace" (click)="onBackClicked()">
+            <mat-icon aria-label="Backspace">backspace</mat-icon>
+        </button>          
+        <button color="primary" mat-icon-button matTooltip="Add Client" (click)="addClient()">
+            <mat-icon aria-label="Add Client">add_box</mat-icon>
+        </button>       
+        <button color="primary" mat-icon-button matTooltip="Edit Client" (click)="editClient()" [disabled]="!hasClient">
+            <mat-icon aria-label="Edit Client">edit</mat-icon>
+        </button>                
+        <button color="primary" mat-icon-button matTooltip="Delete Client" (click)="deleteClient()" [disabled]="!hasClient">
+            <mat-icon aria-label="Delete Client">delete</mat-icon>
+        </button>             
+    </div>
+    <div>
+        <ag-grid-angular 
+            #agGrid
+            id="myGrid"
+            style="height: 300px; width: 300px" 
+            class="ag-theme-balham"
+            [rowData]="clients" 
+            [columnDefs]="clientsDefs"
+            rowSelection="single"
+            (selectionChanged)="onSelectionChanged($event)"
+            (rowDoubleClicked)="onRowDoubleClicked($event)"
+            (gridReady)="onGridReady($event)"            
+            >
+        </ag-grid-angular>          
+    </div>
+</section>

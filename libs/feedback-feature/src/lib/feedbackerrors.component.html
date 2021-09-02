@@ -1,0 +1,37 @@
+<mat-card-header>
+    <mat-card-title>
+        <p>Feedback Errors</p>
+    </mat-card-title>
+</mat-card-header>
+<mat-card>
+    <section fxLayout="column" fxLayoutAlign="center center">
+        <div>
+            <button color="primary" mat-icon-button matTooltip="Fix Feedback" (click)="fixFeedback()" [disabled]="!hasErrors">
+                <mat-icon aria-label="Fix Feedback">build</mat-icon>                
+            </button>
+            <button color="primary" mat-icon-button matTooltip="Edit Feedback" (click)="editFeedback()" [disabled]="!hasErrors">
+                <mat-icon aria-label="Edit Feedback">edit</mat-icon>
+            </button>                            
+            <button color="primary" mat-icon-button matTooltip="Delete Feedback" (click)="deleteFeedback()" [disabled]="!hasErrors">
+                <mat-icon aria-label="Delete Feedback">delete</mat-icon>
+            </button>
+        </div>        
+    </section>
+    <section fxLayout="column" fxLayoutAlign="center center">       
+        <div>
+            <ag-grid-angular 
+                #agGrid
+                id="myGrid"
+                style="height: 300px; width: 1200px;" 
+                class="ag-theme-balham"
+                [rowData]="errors" 
+                [columnDefs]="feedbacksDefs"
+                rowSelection="single"
+                (selectionChanged)="onSelectionChanged($event)"
+                (rowDoubleClicked)="onRowDoubleClicked($event)"
+                (gridReady)="onGridReady($event)"            
+            >
+            </ag-grid-angular>          
+        </div>
+    </section>
+</mat-card>

@@ -1,0 +1,28 @@
+<mat-card-header>
+    <mat-card-title>
+        <p>Feedback</p>
+    </mat-card-title>
+</mat-card-header>
+<mat-card>
+    <section fxLayout="column" fxLayoutAlign="center center">
+        <div>
+            <button mat-icon-button matTooltip="Download Feedback" (click)="onDownload()"><mat-icon>cloud_download</mat-icon></button>              
+        </div>
+        <div>
+            <ag-grid-angular 
+                #agGrid
+                id="myGrid"
+                style="height: 300px; width: 1200px;" 
+                class="ag-theme-balham"
+                [rowData]="feedbacks" 
+                [columnDefs]="feedbacksDefs"
+                rowSelection="single"
+                (selectionChanged)="onSelectionChanged($event)"
+                (rowDoubleClicked)="onRowDoubleClicked($event)"
+                (gridReady)="onGridReady($event)"            
+                >
+            </ag-grid-angular>          
+        </div>
+    </section>
+</mat-card>
+

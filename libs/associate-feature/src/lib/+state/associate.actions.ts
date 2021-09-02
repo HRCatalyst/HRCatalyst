@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-
 import { Associate } from '@hrcatalyst/shared-feature';
+import { DocumentReference } from '@angular/fire/firestore';
 
 export const loadAssociates = createAction(
   '[Associate] Load Associates',
@@ -28,20 +28,20 @@ export const upsertAssociates = createAction(
   props<{ associates: Associate[] }>()
 );
 
-export const updateAssociate = createAction(
-  '[Associate] Update Associate',
-  props<{ associate: Update<Associate> }>()
-);
+// export const updateAssociate = createAction(
+//   '[Associate] Update Associate',
+//   props<{ associate: Update<Associate> }>()
+// );
 
 export const updateAssociates = createAction(
   '[Associate] Update Associates',
   props<{ associates: Update<Associate>[] }>()
 );
 
-export const deleteAssociate = createAction(
-  '[Associate] Delete Associate',
-  props<{ id: string }>()
-);
+// export const deleteAssociate = createAction(
+//   '[Associate] Delete Associate',
+//   props<{ id: string }>()
+// );
 
 export const deleteAssociates = createAction(
   '[Associate] Delete Associates',
@@ -64,7 +64,7 @@ export const loadAssociateSuccess = createAction(
 
 export const loadAssociateFailure = createAction(
   '[Associate] Load Associate Failure',
-  props<{ payload: unknown }>()
+  props<{ error: unknown }>()
 );
 
 export const loadCompanyAssociates = createAction(
@@ -83,64 +83,74 @@ export const loadCompanyAssociatesSuccess = createAction(
 
 export const loadCompanyAssociatesFailure = createAction(
   '[Associate] Load Company Associate Failure',
-  props<{ payload: string }>()
+  props<{ error: string }>()
 );
 
 export const searchAssociates = createAction(
-  '[Associate] SEARCH_ASSOCIATES',
+  '[Associate] Search Associates',
   props<{ payload: string }>()
 );
 
 export const searchAssociatesInprogress = createAction(
-  '[Associate] SEARCH_ASSOCIATES_INPROGRESS',
+  '[Associate] Search Associate Inprogress',
 );
 
 export const searchAssociatesSuccess = createAction(
-  '[Associate] SEARCH_ASSOCIATES_SUCCESS',
+  '[Associate] Search Associate Success',
   props<{ payload: unknown }>()
 );
 
 export const searchAssociatesFailure = createAction(
-  '[Associate] SEARCH_ASSOCIATES_FAILURE',
-  props<{ payload: unknown }>()
+  '[Associate] Search Associate Failure',
+  props<{ error: unknown }>()
 );
 
 export const selectAssociate = createAction(
-  '[Associate] SELECT_ASSOCIATE',
+  '[Associate] Select Associate',
   props<{ payload: unknown }>()
 );
 
 export const createAssociate = createAction(
-  '[Associate] CREATE_ASSOCIATE',
+  '[Associate] Create Associate',
   props<{ payload: Associate }>()
 );
 
 export const createAssociateSuccess = createAction(
-  '[Associate] CREATE_ASSOCIATE_SUCCESS',
-//  props<{ payload: DocumentReference }>()
+  '[Associate] Create Associate Success',
+  props<{ payload: DocumentReference }>()
 );
 
 export const createAssociateFailire = createAction(
-  '[Associate] CREATE_ASSOCIATE_FAILURE',
-    props<{ payload: string }>()
+  '[Associate] Create Associate Failure',
+    props<{ error: unknown }>()
+);
+
+export const updateAssociate = createAction(
+  '[Associate] Update Associate',
+    props<{ payload: Associate }>()
 );
 
 export const updateAssociateSuccess = createAction(
-  '[Associate] UPDATE_ASSOCIATE_SUCCESS',
-    props<{ payload: string }>()
+  '[Associate] Update Associate Success',
+    props<{ payload: Associate }>()
 );
 
 export const updateAssociateFailure = createAction(
-  '[Associate] UPDATE_ASSOCIATE_FAILURE',
-  props<{ payload: unknown }>()
+  '[Associate] Update Associate Failure',
+  props<{ error: unknown }>()
+);
+
+export const deleteAssociate = createAction(
+  '[Associate] Delete Associate',
+    props<{ payload: Associate }>()
 );
 
 export const deleteAssociateSuccess = createAction(
-  '[Associate] DELETE_ASSOCIATE_SUCCESS',
-  props<{ payload: unknown }>()
+  '[Associate] Delete Associate Success',
+  props<{ payload: Associate }>()
 );
 
 export const deleteAssociateFailure = createAction(
   '[Associate] Delete Associate Failure',
-  props<{ payload: unknown }>()
+  props<{ error: unknown }>()
 );

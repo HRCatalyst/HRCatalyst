@@ -1,18 +1,18 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Company } from '@hrcatalyst/shared-feature';
 import * as CompanyActions from './company.actions';
 
 export const companiesFeatureKey = 'companies';
 
-export interface State extends EntityState<Company> {
-  // additional entities state properties
+export interface CompanyState extends EntityState<Company> {
+  selectedCompany?: Company;
 }
 
 export const adapter: EntityAdapter<Company> = createEntityAdapter<Company>();
 
-export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
+export const initialState: CompanyState = adapter.getInitialState({
+  selectedCompany: undefined,
 });
 
 
@@ -30,13 +30,13 @@ export const reducer = createReducer(
   on(CompanyActions.upsertCompanys,
     (state, action) => adapter.upsertMany(action.companys, state)
   ),
-  on(CompanyActions.updateCompany,
+  on(CompanyActions.updateCompanyEntity,
     (state, action) => adapter.updateOne(action.company, state)
   ),
   on(CompanyActions.updateCompanys,
     (state, action) => adapter.updateMany(action.companys, state)
   ),
-  on(CompanyActions.deleteCompany,
+  on(CompanyActions.deleteCompanyEntity,
     (state, action) => adapter.removeOne(action.id, state)
   ),
   on(CompanyActions.deleteCompanys,
@@ -48,8 +48,50 @@ export const reducer = createReducer(
   on(CompanyActions.clearCompanys,
     state => adapter.removeAll(state)
   ),
-);
+   on(CompanyActions.loadCompany,
+    state => { return state; }
+  ),
+   on(CompanyActions.selectCompany,
+    state => { return state; }
+  ),
+  on(CompanyActions.loadAllCompanys,
+    state => { return state; }
+  ),
+  on(CompanyActions.loadAllCompanysSuccess,
+    state => { return state; }
+  ),
+  on(CompanyActions.loadAllCompanysFailure,
+    state => { return state; }
+  ),
+  on(CompanyActions.createCompany,
+    state => { return state; }
+  ),
+  on(CompanyActions.createCompanySuccess,
+    state => { return state; }
+  ),
+  on(CompanyActions.createCompanyFailire,
+    state => { return state; }
+  ),
+  on(CompanyActions.updateCompany,
+    state => { return state; }
+  ),
+  on(CompanyActions.updateCompanySuccess,
+    state => { return state; }
+  ),
+  on(CompanyActions.updateCompanyFailure,
+    state => { return state; }
+  ),
+  on(CompanyActions.deleteCompany,
+    state => { return state; }
+  ),
+  on(CompanyActions.deleteCompanySuccess,
+    state => { return state; }
+  ),
+  on(CompanyActions.deleteCompanyFailure,
+    state => { return state; }
+  ),
 
+);
 
 export const {
   selectIds,
