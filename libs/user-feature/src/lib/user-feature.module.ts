@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { UserComponent } from './user/user.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { UserEffects } from './+state/user.effects';
 import { reducer } from './+state/user.reducer';
+import { UserComponent } from './user.component';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
@@ -25,5 +26,8 @@ import { reducer } from './+state/user.reducer';
   exports: [
     UserComponent
   ],
+  providers: [
+    AngularFirestore
+  ]
 })
 export class UserFeatureModule {}

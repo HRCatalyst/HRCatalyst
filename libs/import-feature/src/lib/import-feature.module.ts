@@ -6,6 +6,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/import.reducer';
 import { ImportEffects } from './+state/import.effects';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
@@ -25,5 +26,8 @@ import { ImportEffects } from './+state/import.effects';
   exports: [
     ImportComponent
   ],
+  providers: [
+    AngularFirestore
+  ]
 })
 export class ImportFeatureModule {}

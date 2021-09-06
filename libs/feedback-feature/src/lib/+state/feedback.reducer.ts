@@ -1,18 +1,18 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Feedback } from '@hrcatalyst/shared-feature';
 import * as FeedbackActions from './feedback.actions';
 
 export const feedbacksFeatureKey = 'feedbacks';
 
-export interface State extends EntityState<Feedback> {
-  // additional entities state properties
+export interface FeedbackState extends EntityState<Feedback> {
+  selectedFeedback?: Feedback;
 }
 
 export const adapter: EntityAdapter<Feedback> = createEntityAdapter<Feedback>();
 
-export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
+export const initialState: FeedbackState = adapter.getInitialState({
+  selectedFeedback: undefined
 });
 
 
@@ -48,8 +48,85 @@ export const reducer = createReducer(
   on(FeedbackActions.clearFeedbacks,
     state => adapter.removeAll(state)
   ),
+  on(FeedbackActions.loadFeedbackAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.loadFeedbackSuccessAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.loadFeedbackFailureAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.loadFeedbackErrorsAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.loadFeedbackErrorsSuccessAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.loadFeedbackErrorsFailureAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.loadParticipantFeedbackAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.loadParticipantFeedbackInprogressAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.loadParticipantFeedbackSuccessAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.loadParticipantFeedbackFailureAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.loadParticipantAssociatesSuccessAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.createFeedbackAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.createFeedbackSuccessAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.createFeedbackFailireAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.updateFeedbackAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.updateFeedbackSuccessAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.updateFeedbackFailureAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.deleteFeedbackAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.deleteFeedbackSuccessAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.deleteFeedbackFailureAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.changePendingToReceivedAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.changePendingToReceivedSuccessAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.changePendingToReceivedFailureAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.changeColleagueToPeerAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.changeColleagueToPeerSuccessAction,
+    state => { return state; }
+  ),
+  on(FeedbackActions.changeColleagueToPeerFailureAction,
+    state => { return state; }
+  ),
 );
-
 
 export const {
   selectIds,

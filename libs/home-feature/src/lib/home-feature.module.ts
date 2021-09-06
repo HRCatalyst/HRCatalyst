@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/home.reducer';
 import { HomeEffects } from './+state/home.effects';
+import { HomeComponent } from './home.component';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
@@ -25,5 +26,8 @@ import { HomeEffects } from './+state/home.effects';
   exports: [
     HomeComponent
   ],
+  providers: [
+    AngularFirestore
+  ]
 })
 export class HomeFeatureModule {}

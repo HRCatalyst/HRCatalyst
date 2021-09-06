@@ -5,14 +5,14 @@ import * as ParticipantActions from './participant.actions';
 
 export const participantsFeatureKey = 'participants';
 
-export interface State extends EntityState<Participant> {
-  // additional entities state properties
+export interface ParticipantState extends EntityState<Participant> {
+  selectedParticipant?: Participant;
 }
 
 export const adapter: EntityAdapter<Participant> = createEntityAdapter<Participant>();
 
-export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
+export const initialState: ParticipantState = adapter.getInitialState({
+  selectedParticipant: undefined,
 });
 
 
@@ -30,13 +30,13 @@ export const reducer = createReducer(
   on(ParticipantActions.upsertParticipants,
     (state, action) => adapter.upsertMany(action.participants, state)
   ),
-  on(ParticipantActions.updateParticipant,
+  on(ParticipantActions.updateParticipantEntity,
     (state, action) => adapter.updateOne(action.participant, state)
   ),
   on(ParticipantActions.updateParticipants,
     (state, action) => adapter.updateMany(action.participants, state)
   ),
-  on(ParticipantActions.deleteParticipant,
+  on(ParticipantActions.deleteParticipantEntity,
     (state, action) => adapter.removeOne(action.id, state)
   ),
   on(ParticipantActions.deleteParticipants,
@@ -47,6 +47,66 @@ export const reducer = createReducer(
   ),
   on(ParticipantActions.clearParticipants,
     state => adapter.removeAll(state)
+  ),
+  on(ParticipantActions.loadParticipant,
+    state => { return state; }
+  ),
+  on(ParticipantActions.loadParticipantCampaign,
+    state => { return state; }
+  ),
+  on(ParticipantActions.loadParticipantCampaignInprogress,
+    state => { return state; }
+  ),
+  on(ParticipantActions.loadParticipantCampaignSuccess,
+    state => { return state; }
+  ),
+  on(ParticipantActions.loadParticipantCampaignFailure,
+    state => { return state; }
+  ),
+  on(ParticipantActions.loadCampaignParticipants,
+    state => { return state; }
+  ),
+  on(ParticipantActions.loadCampaignParticipantsInprogress,
+    state => { return state; }
+  ),
+  on(ParticipantActions.loadCampaignParticipantsSuccess,
+    state => { return state; }
+    ),
+  on(ParticipantActions.loadCampaignParticipantsFailure,
+    state => { return state; }
+  ),
+  on(ParticipantActions.loadCampaignAssociatesSuccess,
+    state => { return state; }
+  ),
+  on(ParticipantActions.selectParticipant,
+    state => { return state; }
+  ),
+  on(ParticipantActions.createParticipant,
+    state => { return state; }
+  ),
+  on(ParticipantActions.createParticipantSuccess,
+    state => { return state; }
+  ),
+  on(ParticipantActions.createParticipantFailire,
+    state => { return state; }
+  ),
+  on(ParticipantActions.updateParticipant,
+    state => { return state; }
+  ),
+  on(ParticipantActions.updateParticipantSuccess,
+    state => { return state; }
+  ),
+  on(ParticipantActions.updateParticipantFailure,
+    state => { return state; }
+  ),
+  on(ParticipantActions.deleteParticipant,
+    state => { return state; }
+  ),
+  on(ParticipantActions.deleteParticipantSuccess,
+    state => { return state; }
+  ),
+  on(ParticipantActions.deleteParticipantFailure,
+    state => { return state; }
   ),
 );
 

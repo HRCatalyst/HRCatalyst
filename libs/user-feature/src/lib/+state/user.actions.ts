@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { User } from '@hrcatalyst/shared-feature';
+import { IUser, User } from '@hrcatalyst/shared-feature';
+import { DocumentReference } from '@angular/fire/firestore';
 
 export const loadUsers = createAction(
   '[User/API] Load Users',
@@ -27,7 +28,7 @@ export const upsertUsers = createAction(
   props<{ users: User[] }>()
 );
 
-export const updateUser = createAction(
+export const updateUserEntity = createAction(
   '[User/API] Update User',
   props<{ user: Update<User> }>()
 );
@@ -37,7 +38,7 @@ export const updateUsers = createAction(
   props<{ users: Update<User>[] }>()
 );
 
-export const deleteUser = createAction(
+export const deleteUserEntity = createAction(
   '[User/API] Delete User',
   props<{ id: string }>()
 );
@@ -49,4 +50,63 @@ export const deleteUsers = createAction(
 
 export const clearUsers = createAction(
   '[User/API] Clear Users'
+);
+
+export const loadAllUsers = createAction(
+  '[User/API] LOAD_ALL_USERS'
+);
+
+export const loadAllUsersSuccess = createAction(
+  '[User/API] LOAD_ALL_USERS_SUCCESS',
+  props<{ payload:  unknown}>()
+);
+
+export const loadAllUsersFailure = createAction(
+  '[User/API] LOAD_ALL_USERS_FAILURE',
+  props<{ error:  string}>()
+);
+
+export const createUser = createAction(
+  '[User/API] CREATE_USER',
+  props<{ payload:  IUser}>()
+);
+
+export const createUserSuccess = createAction(
+  '[User/API] CREATE_USER_SUCCESS',
+  props<{ payload:  DocumentReference}>()
+);
+
+export const createUserFailure = createAction(
+  '[User/API] CREATE_USER_FAILURE',
+  props<{ error:  unknown}>()
+);
+
+export const updateUser = createAction(
+  '[User/API] UPDATE_USER',
+  props<{ payload:  IUser}>()
+);
+
+export const updateUserSuccess = createAction(
+  '[User/API] UPDATE_USER_SUCCESS',
+  props<{ payload:  unknown}>()
+);
+
+export const updateUserFailure = createAction(
+  '[User/API] UPDATE_USER_FAILURE',
+  props<{ error:  unknown}>()
+);
+
+export const deleteUser = createAction(
+  '[User/API] DELETE_USER',
+  props<{ payload:  IUser}>()
+);
+
+export const deleteUserSuccess = createAction(
+  '[User/API] DELETE_USER_SUCCESS',
+  props<{ payload:  unknown}>()
+);
+
+export const deleteUserFailure = createAction(
+  '[User/API] DELETE_USER_FAILURE',
+  props<{ error:  unknown}>()
 );

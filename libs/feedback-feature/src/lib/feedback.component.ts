@@ -1,21 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Feedback, } from 'src/app/feedback/feedback.interface';
 import { Router } from '@angular/router';
 import { FeedbackModalComponent } from './feedback.modal';
-import * as feedbackEntity from 'src/app/feedback/feedback.entity';
-import * as raterEntity from 'src/app/rater/rater.entity';
-import { MatDialog } from '@angular/material';
 import { Store, select } from '@ngrx/store';
-import { CreateFeedbackAction, DeleteFeedbackAction, UpdateFeedbackAction } from 'src/app/feedback/feedback.action';
-import { Campaign } from 'src/app/campaign/campaign.interface';
 import { Observable, Subscription } from 'rxjs';
-import { Associate } from 'src/app/associate/associate.interface';
-import { IRater } from 'src/app/rater/rater.interface';
-import { SelectRaterParams, LoadRaterFeedbackAction, SelectRaterAction } from 'src/app/rater/rater.action';
-import { Company } from 'src/app/company/company.interface';
-import { Client } from 'src/app/client/client.interface';
-import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
-import { Participant } from 'src/app/participant/participant.interface';
+import { Associate, Campaign, Client, Company, IRater, Participant } from '@hrcatalyst/shared-feature';
+
 
 @Component({
   selector: 'hrcatalyst-feedback',
@@ -32,22 +21,22 @@ export class FeedbackComponent implements OnDestroy, OnInit {
     { headerName: 'Status', field: 'status', sortable: true }
   ];
 
-  selectedCompany: Company;
-  selectedClient: Client;
-  selectedCampaign: Campaign;
-  selectedParticipant: Participant;
-  selectedAssociate: Associate;
-  selectedRater: Associate;
+  selectedCompany?: Company;
+  selectedClient?: Client;
+  selectedCampaign?: Campaign;
+  selectedParticipant?: Participant;
+  selectedAssociate?: Associate;
+  selectedRater?: Associate;
   hasFeedback = false;
 
-  private gridApi;
+  private gridApi: any;
 
-  raterState$: Observable<IRater[]>;
+  raterState$?: Observable<IRater[]>;
   raterSubscription$: Subscription;
   feedbacks: Feedback[] = null;
 
   constructor(private dialog: MatDialog, private feedbackStore: Store<feedbackEntity.FeedbackState>,
-     private raterStore: Store<raterEntity.RaterState>, private router: Router) {
+     private raterStore: Store<RaterState>, private router: Router) {
       const xtra = this.router.getCurrentNavigation().extras.state;
 
       if (xtra != null) {

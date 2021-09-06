@@ -1,18 +1,18 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Interview } from '@hrcatalyst/shared-feature';
 import * as InterviewActions from './interview.actions';
 
 export const interviewsFeatureKey = 'interviews';
 
-export interface State extends EntityState<Interview> {
-  // additional entities state properties
+export interface InterviewState extends EntityState<Interview> {
+  selectedInterview?: Interview;
 }
 
 export const adapter: EntityAdapter<Interview> = createEntityAdapter<Interview>();
 
-export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
+export const initialState: InterviewState = adapter.getInitialState({
+  selectedInterview: undefined
 });
 
 
@@ -30,7 +30,7 @@ export const reducer = createReducer(
   on(InterviewActions.upsertInterviews,
     (state, action) => adapter.upsertMany(action.interviews, state)
   ),
-  on(InterviewActions.updateInterview,
+  on(InterviewActions.updateInterviewEntity,
     (state, action) => adapter.updateOne(action.interview, state)
   ),
   on(InterviewActions.updateInterviews,
@@ -46,6 +46,54 @@ export const reducer = createReducer(
     (state, action) => adapter.setAll(action.interviews, state)
   ),
   on(InterviewActions.clearInterviews,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.loadInterview,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.loadInterviewSuccess,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.loadInterviewFailure,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.loadInterviewParticipants,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.loadInterviewParticipantsInprogress,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.loadInterviewParticipantsSuccess,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.loadInterviewParticipantsFailure,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.createInterview,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.createInterviewSuccess,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.createInterviewFailire,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.updateInterview,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.updateInterviewSuccess,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.updateInterviewFailure,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.deleteInterviewEntity,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.deleteInterviewSuccess,
+    state => adapter.removeAll(state)
+  ),
+  on(InterviewActions.deleteInterviewFailure,
     state => adapter.removeAll(state)
   ),
 );

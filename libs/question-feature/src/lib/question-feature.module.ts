@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { QuestionComponent } from './question/question.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/question.reducer';
 import { QuestionEffects } from './+state/question.effects';
+import { QuestionComponent } from './question.component';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
@@ -25,5 +26,8 @@ import { QuestionEffects } from './+state/question.effects';
   exports: [
     QuestionComponent
   ],
+  providers: [
+    AngularFirestore
+  ]
 })
 export class QuestionFeatureModule {}

@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { CompanyComponent } from './company/company.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/company.reducer';
 import { CompanyEffects } from './+state/company.effects';
+import { CompanyComponent } from './company.component';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
@@ -25,5 +26,8 @@ import { CompanyEffects } from './+state/company.effects';
   exports: [
     CompanyComponent
   ],
+  providers: [
+    AngularFirestore
+  ]
 })
 export class CompanyFeatureModule {}

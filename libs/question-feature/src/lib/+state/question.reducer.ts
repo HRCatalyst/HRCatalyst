@@ -1,18 +1,18 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Question } from '@hrcatalyst/shared-feature';
 import * as QuestionActions from './question.actions';
 
 export const questionsFeatureKey = 'questions';
 
-export interface State extends EntityState<Question> {
-  // additional entities state properties
+export interface QuestionState extends EntityState<Question> {
+  selectedQuestion?: Question;
 }
 
 export const adapter: EntityAdapter<Question> = createEntityAdapter<Question>();
 
-export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
+export const initialState: QuestionState = adapter.getInitialState({
+  selectedQuestion: undefined,
 });
 
 
@@ -30,13 +30,13 @@ export const reducer = createReducer(
   on(QuestionActions.upsertQuestions,
     (state, action) => adapter.upsertMany(action.questions, state)
   ),
-  on(QuestionActions.updateQuestion,
+  on(QuestionActions.updateQuestionEntity,
     (state, action) => adapter.updateOne(action.question, state)
   ),
   on(QuestionActions.updateQuestions,
     (state, action) => adapter.updateMany(action.questions, state)
   ),
-  on(QuestionActions.deleteQuestion,
+  on(QuestionActions.deleteQuestionEntity,
     (state, action) => adapter.removeOne(action.id, state)
   ),
   on(QuestionActions.deleteQuestions,
@@ -48,6 +48,48 @@ export const reducer = createReducer(
   on(QuestionActions.clearQuestions,
     state => adapter.removeAll(state)
   ),
+  on(QuestionActions.loadQuestion,
+    state => { return state; }
+  ),
+  on(QuestionActions.selectQuestion,
+    state => { return state; }
+  ),
+  on(QuestionActions.loadAllQuestions,
+    state => { return state; }
+  ),
+  on(QuestionActions.loadAllQuestionsSuccess,
+    state => { return state; }
+  ),
+  on(QuestionActions.loadAllQuestionsFailure,
+    state => { return state; }
+  ),
+  on(QuestionActions.createQuestion,
+    state => { return state; }
+  ),
+  on(QuestionActions.createQuestionSuccess,
+    state => { return state; }
+  ),
+  on(QuestionActions.createQuestionFailire,
+    state => { return state; }
+  ),
+  on(QuestionActions.updateQuestion,
+    state => { return state; }
+  ),
+  on(QuestionActions.updateQuestionSuccess,
+    state => { return state; }
+  ),
+  on(QuestionActions.updateQuestionFailure,
+    state => { return state; }
+  ),
+  on(QuestionActions.deleteQuestion,
+    state => { return state; }
+  ),
+  on(QuestionActions.deleteQuestionSuccess,
+    state => { return state; }
+  ),
+  on(QuestionActions.deleteQuestionFailure,
+    state => { return state; }
+  )
 );
 
 

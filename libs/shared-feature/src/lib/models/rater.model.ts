@@ -1,3 +1,6 @@
+import { Associate } from "./associate.model";
+import { Campaign } from "./campaign.model";
+
 export interface IRater {
   id?: string;
   participantId: string;
@@ -17,4 +20,11 @@ export class Rater implements IRater {
 export class Relationship {
   id = 0;
   name = '';
+}
+
+export class SelectRaterParams {
+  constructor(
+  public campaign: Campaign,
+  public participant: Associate,
+  public rater: Associate) {}
 }

@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { Rater } from '@hrcatalyst/shared-feature';
+import { IRater, Rater, SelectParticipantParams, SelectRaterParams } from '@hrcatalyst/shared-feature';
+import { DocumentReference } from '@angular/fire/firestore';
 
 export const loadRaters = createAction(
   '[Rater/API] Load Raters',
@@ -27,7 +28,7 @@ export const upsertRaters = createAction(
   props<{ raters: Rater[] }>()
 );
 
-export const updateRater = createAction(
+export const updateRaterEntity = createAction(
   '[Rater/API] Update Rater',
   props<{ rater: Update<Rater> }>()
 );
@@ -37,7 +38,7 @@ export const updateRaters = createAction(
   props<{ raters: Update<Rater>[] }>()
 );
 
-export const deleteRater = createAction(
+export const deleteRaterEntity = createAction(
   '[Rater/API] Delete Rater',
   props<{ id: string }>()
 );
@@ -49,4 +50,140 @@ export const deleteRaters = createAction(
 
 export const clearRaters = createAction(
   '[Rater/API] Clear Raters'
+);
+
+export const loadRater = createAction(
+  '[Rater/API] LOAD_RATER'
+);
+
+export const loadAllRaters = createAction(
+  '[Rater/API] LOAD_ALL_RATERS'
+);
+
+export const loadAllRatersSuccess = createAction(
+  '[Rater/API] LOAD_ALL_RATERS_SUCCESS',
+  props<{ payload:  unknown}>()
+);
+
+export const loadAllRatersFailure = createAction(
+  '[Rater/API] LOAD_ALL_RATERS_FAILURE',
+  props<{ error:  unknown}>()
+);
+
+export const loadParticipantRaters = createAction(
+  '[Rater/API] LOAD_PARTICIPANT_RATERS',
+  props<{ payload: SelectParticipantParams}>()
+
+);
+
+export const loadParticipantRatersInprogress = createAction(
+  '[Rater/API] LOAD_PARTICIPANT_RATERS_INPROGRESS'
+);
+
+export const loadParticipantRatersSuccess = createAction(
+  '[Rater/API] LOAD_PARTICIPANT_RATERS_SUCCESS',
+  props<{ payload:  unknown}>()
+);
+
+export const loadParticipantRatersFailure = createAction(
+  '[Rater/API] LOAD_PARTICIPANT_RATERS_FAILURE',
+  props<{ error:  unknown}>()
+);
+
+export const loadParticipantAssociatesSuccess = createAction(
+  '[Rater/API] LOAD_PARTICIPANT_ASSOCIATES_SUCCESS',
+  props<{ payload:  unknown}>()
+);
+
+export const selectRater = createAction(
+  '[Rater/API] SELECT_RATER',
+  props<{ payload: SelectRaterParams}>()
+);
+
+export const createRater = createAction(
+  '[Rater/API] CREATE_RATER',
+  props<{ payload: IRater}>()
+);
+
+export const createRaterSuccess = createAction(
+  '[Rater/API] CREATE_RATER_SUCCESS',
+  props<{ payload: DocumentReference}>()
+);
+
+export const createRaterFailire = createAction(
+  '[Rater/API] CREATE_RATER_FAILURE',
+  props<{ error:  unknown}>()
+);
+
+export const updateRater = createAction(
+  '[Rater/API] UPDATE_RATER',
+  props<{ payload: IRater}>()
+);
+
+export const updateRaterSuccess = createAction(
+  '[Rater/API] UPDATE_RATER_SUCCESS',
+  props<{ payload:  unknown}>()
+);
+
+export const updateRaterFailure = createAction(
+  '[Rater/API] UPDATE_RATER_FAILURE',
+  props<{ error:  unknown}>()
+);
+
+export const deleteRater = createAction(
+  '[Rater/API] DELETE_RATER',
+  props<{ payload: IRater}>()
+);
+
+export const deleteRaterSuccess = createAction(
+  '[Rater/API] DELETE_RATER_SUCCESS',
+  props<{ payload:  unknown}>()
+);
+
+export const deleteRaterFailure = createAction(
+  '[Rater/API] DELETE_RATER_FAILURE',
+  props<{ error:  unknown}>()
+);
+
+export const loadRaterFeedback = createAction(
+  '[Rater/API] LOAD_RATER_FEEDBACK',
+  props<{ payload: SelectRaterParams}>()
+);
+
+export const loadRaterFeedbackInprogress = createAction(
+  '[Rater/API] LOAD_RATER_FEEDBACK_INPROGRESS',
+);
+
+export const loadRaterFeedbackSuccess = createAction(
+  '[Rater/API] LOAD_RATER_FEEDBACK_SUCCESS',
+  props<{ payload:  unknown}>()
+);
+
+export const loadRaterFeedbackFailure = createAction(
+  '[Rater/API] LOAD_RATER_FEEDBACK_FAILURE',
+  props<{ error:  unknown}>()
+);
+
+export const changeColleagueToPeer = createAction(
+  '[Rater/API] CHANGE_COLLEAGUE_TO_PEER'
+);
+
+export const changeColleagueToPeerSuccess = createAction(
+  '[Rater/API] CHANGE_COLLEAGUE_TO_PEER_SUCCESS'
+);
+
+export const changeColleagueToPeerFailure = createAction(
+  '[Rater/API] CHANGE_COLLEAGUE_TO_PEER_FAILURE'
+);
+
+export const dedupRaters = createAction(
+  '[Rater/API] DEDUP_RATERS'
+);
+
+export const dedupRatersSuccess = createAction(
+  '[Rater/API] DEDUP_RATERS_SUCCESS'
+);
+
+export const dedupRatersFailure = createAction(
+  '[Rater/API] DEDUP_RATERS_FAILURE'
 );

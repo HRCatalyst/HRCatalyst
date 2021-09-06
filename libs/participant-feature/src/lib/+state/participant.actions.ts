@@ -1,7 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Participant } from '@hrcatalyst/shared-feature';
+import { CampaignParticipantsParams, IParticipant, Participant, SelectParticipantParams } from '@hrcatalyst/shared-feature';
+import { DocumentReference } from '@angular/fire/firestore';
 
 export const loadParticipants = createAction(
   '[Participant/API] Load Participants',
@@ -28,7 +29,7 @@ export const upsertParticipants = createAction(
   props<{ participants: Participant[] }>()
 );
 
-export const updateParticipant = createAction(
+export const updateParticipantEntity = createAction(
   '[Participant/API] Update Participant',
   props<{ participant: Update<Participant> }>()
 );
@@ -38,7 +39,7 @@ export const updateParticipants = createAction(
   props<{ participants: Update<Participant>[] }>()
 );
 
-export const deleteParticipant = createAction(
+export const deleteParticipantEntity = createAction(
   '[Participant/API] Delete Participant',
   props<{ id: string }>()
 );
@@ -50,4 +51,100 @@ export const deleteParticipants = createAction(
 
 export const clearParticipants = createAction(
   '[Participant/API] Clear Participants'
+);
+export const loadParticipant = createAction(
+  '[Participant/API] LOAD_PARTICIPANT'
+);
+
+export const loadParticipantCampaign = createAction(
+  '[Participant/API] LOAD_PARTICIPANT_CAMPAIGN',
+  props<{ payload: string}>()
+);
+
+export const loadParticipantCampaignInprogress = createAction(
+  '[Participant/API] LOAD_PARTICIPANT_CAMPAIGN_INPROGRESS'
+);
+
+export const loadParticipantCampaignSuccess = createAction(
+  '[Participant/API] LOAD_PARTICIPANT_CAMPAIGN_SUCCESS',
+  props<{ payload: unknown}>()
+);
+
+export const loadParticipantCampaignFailure = createAction(
+  '[Participant/API] LOAD_PARTICIPANT_CAMPAIGN_FAILURE',
+  props<{ error: unknown}>()
+)
+
+export const loadCampaignParticipants = createAction(
+  '[Participant/API] LOAD_CAMPAIGN_PARTICIPANTS',
+  props<{ payload: CampaignParticipantsParams}>()
+);
+
+export const loadCampaignParticipantsInprogress = createAction(
+  '[Participant/API] LOAD_CAMPAIGN_PARTICIPANTS_INPROGRESS'
+)
+
+export const loadCampaignParticipantsSuccess = createAction(
+  '[Participant/API] LOAD_CAMPAIGN_PARTICIPANTS_SUCCESS',
+  props<{ payload: unknown}>()
+);
+
+export const loadCampaignParticipantsFailure = createAction(
+  '[Participant/API] LOAD_CAMPAIGN_PARTICIPANTS_FAILURE',
+  props<{ error: unknown}>()
+);
+
+export const loadCampaignAssociatesSuccess = createAction(
+  '[Participant/API] LOAD_CAMPAIGN_ASSOCIATES_SUCCESS',
+  props<{ payload: unknown}>()
+);
+
+export const selectParticipant = createAction(
+  '[Participant/API] SELECT_PARTICIPANT',
+  props<{ payload: SelectParticipantParams}>()
+);
+
+export const createParticipant = createAction(
+  '[Participant/API] CREATE_PARTICIPANT',
+  props<{ payload: IParticipant}>()
+);
+
+export const createParticipantSuccess = createAction(
+  '[Participant/API] CREATE_PARTICIPANT_SUCCESS',
+  props<{ payload: DocumentReference}>()
+);
+
+export const createParticipantFailire = createAction(
+  '[Participant/API] CREATE_PARTICIPANT_FAILURE',
+  props<{ error: unknown}>()
+);
+
+export const updateParticipant = createAction(
+  '[Participant/API] UPDATE_PARTICIPANT',
+  props<{ payload: IParticipant}>()
+);
+
+export const updateParticipantSuccess = createAction(
+  '[Participant/API] UPDATE_PARTICIPANT_SUCCESS',
+  props<{ payload: unknown}>()
+);
+
+export const updateParticipantFailure = createAction(
+  '[Participant/API] UPDATE_PARTICIPANT_FAILURE',
+  props<{ error: unknown}>()
+);
+
+export const deleteParticipant = createAction(
+  '[Participant/API] DELETE_PARTICIPANT',
+  props<{ payload: IParticipant}>()
+);
+
+export const deleteParticipantSuccess = createAction(
+  '[Participant/API] DELETE_PARTICIPANT_SUCCESS',
+  props<{ payload: unknown}>()
+);
+
+export const deleteParticipantFailure = createAction(
+  '[Participant/API] DELETE_PARTICIPANT_FAILURE',
+  props<{ error: unknown}>()
 );

@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { RaterComponent } from './rater/rater.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/rater.reducer';
 import { RaterEffects } from './+state/rater.effects';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { RaterComponent } from './rater.component';
 
 @NgModule({
   imports: [
@@ -25,5 +26,8 @@ import { RaterEffects } from './+state/rater.effects';
   exports: [
     RaterComponent
   ],
+  providers: [
+    AngularFirestore
+  ]
 })
 export class RaterFeatureModule {}
