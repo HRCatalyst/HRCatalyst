@@ -7,6 +7,8 @@ import { reducer } from './+state/campaign.reducer';
 import { CampaignEffects } from './+state/campaign.effects';
 import { CampaignComponent } from './campaign.component';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { CompanyFeatureModule } from '@hrcatalyst/company-feature';
+import { ClientFeatureModule } from '@hrcatalyst/client-feature';
 
 @NgModule({
   imports: [
@@ -17,6 +19,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
         component: CampaignComponent
       }
     ]),
+    CompanyFeatureModule,
+    ClientFeatureModule,
     StoreModule.forFeature('campaign', reducer),
     EffectsModule.forFeature([CampaignEffects]),
   ],

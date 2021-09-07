@@ -1,19 +1,6 @@
-import { Action, createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Campaign } from '@hrcatalyst/shared-feature';
+import { createReducer, on } from '@ngrx/store';
 import * as CampaignActions from './campaign.actions';
-
-export const campaignsFeatureKey = 'campaigns';
-
-export interface CampaignState extends EntityState<Campaign> {
-  selectedCampaign?: Campaign;
-}
-
-export const adapter: EntityAdapter<Campaign> = createEntityAdapter<Campaign>();
-
-export const initialState: CampaignState = adapter.getInitialState({
-  selectedCampaign: undefined
-});
+import { adapter, initialState } from './campaign.entity';
 
 export const reducer = createReducer(
   initialState,
@@ -47,12 +34,12 @@ export const reducer = createReducer(
   on(CampaignActions.clearCampaigns,
     state => adapter.removeAll(state)
   ),
-  on(CampaignActions.loadCampaign, state => {
-    return {...state, selectedCampaign: null};
-  }),
-  on(CampaignActions.loadCampaignSuccess, (state, action) => {
-    return {...state, selectedCampaign: action.payload};
-  }),
+  // on(CampaignActions.loadCampaign, (state, action) => {
+  //   return {...state, selectedCampaign: null};
+  // }),
+  // on(CampaignActions.loadCampaignSuccess, (state, action) => {
+  //   return {...state, selectedCampaign: action.payload};
+  // }),
   on(CampaignActions.loadCampaignFailure,
     state => { return state; }
   ),
@@ -115,9 +102,9 @@ on(CampaignActions.loadClientCampaignsFailure,
 on(CampaignActions.selectCampaign, (state, action) => {
     return {...state, selectedCampaign: action.payload};
 }),
-on(CampaignActions.selectCampaignYear, (state, action) => {
-    return {...state, selectedYear: action.payload};
-}),
+// on(CampaignActions.selectCampaignYear, (state, action) => {
+//     return {...state, selectedYear: action.payload};
+// }),
 on(CampaignActions.setActiveCampaign, (state, action) => {
     return {...state, activeYear: action.payload};
 }),

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormBase } from 'src/app/shared/form.base';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import readXlsxFile from 'read-excel-file';
+//import readXlsxFile from 'read-excel-file';
 import { schemaImportParticipant, enumImportParticipant } from './participant.schema';
 import { Observable, Subscription } from 'rxjs';
 import { Associate, IAssociate } from 'src/app/associate/associate.interface';
@@ -89,30 +89,30 @@ export class ParticipantImportComponent extends FormBase implements OnDestroy, O
 
     if (event.target.files && event.target.files.length) {
 
-      readXlsxFile(event.target.files[0], schemaImportParticipant).then((rows) => {
-        // `rows` is an array of rows
-        // each row being an array of cells.
-        rows.forEach(r => {
-            const campaign = r[enumImportParticipant.CAMPAIGN].toString();
-            const participantEmail = r[enumImportParticipant.PARTICIPANT_EMAIL].toString();
-            if (participantEmail !== 'participant email') {
-              const p = new Participant();
+      // readXlsxFile(event.target.files[0], schemaImportParticipant).then((rows) => {
+      //   // `rows` is an array of rows
+      //   // each row being an array of cells.
+      //   rows.forEach(r => {
+      //       const campaign = r[enumImportParticipant.CAMPAIGN].toString();
+      //       const participantEmail = r[enumImportParticipant.PARTICIPANT_EMAIL].toString();
+      //       if (participantEmail !== 'participant email') {
+      //         const p = new Participant();
 
-              const cam = this.campaigns.find(ca => ca.name === campaign);
+      //         const cam = this.campaigns.find(ca => ca.name === campaign);
 
-              const associate = this.associates.find(a => a.emailAddress === participantEmail);
-              if (associate === undefined) {
-                console.log(participantEmail);
-              }
-              if (cam !== undefined && associate !== undefined) {
-                p.associateId = associate.id;
-                p.campaignId = cam.id;
-                this.participants.push(p);
-              } else {
-                console.log(r);
-              }
-            }
-        });
+      //         const associate = this.associates.find(a => a.emailAddress === participantEmail);
+      //         if (associate === undefined) {
+      //           console.log(participantEmail);
+      //         }
+      //         if (cam !== undefined && associate !== undefined) {
+      //           p.associateId = associate.id;
+      //           p.campaignId = cam.id;
+      //           this.participants.push(p);
+      //         } else {
+      //           console.log(r);
+      //         }
+      //       }
+      //   });
       });
     }
   }

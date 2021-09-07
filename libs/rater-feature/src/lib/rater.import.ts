@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, ChangeDetectorRef, OnDestroy } from '@angula
 import { FormBase } from 'src/app/shared/form.base';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import readXlsxFile from 'read-excel-file';
+//import readXlsxFile from 'read-excel-file';
 import { schemaImportRater, enumImportRater } from './rater.schema';
 import { Observable, Subscription } from 'rxjs';
 import { Associate, IAssociate } from 'src/app/associate/associate.interface';
@@ -89,33 +89,33 @@ export class RaterImportComponent extends FormBase implements OnDestroy, OnInit 
 
     if (event.target.files && event.target.files.length) {
 
-      readXlsxFile(event.target.files[0], schemaImportRater).then((rows) => {
-        // `rows` is an array of rows
-        // each row being an array of cells.
-        rows.forEach(r => {
-            const participantEmail = r[enumImportRater.PARTICIPANT_EMAIL].toString().toLowerCase();
-            const respondentEmail = r[enumImportRater.RESPONDENT_EMAIL].toString().toLowerCase();
-            const relationship = r[enumImportRater.RELATIONSHIP].toString().toLowerCase();
-            if (participantEmail !== 'participant email') {
-              const p = new Rater();
+      // readXlsxFile(event.target.files[0], schemaImportRater).then((rows) => {
+      //   // `rows` is an array of rows
+      //   // each row being an array of cells.
+      //   rows.forEach(r => {
+      //       const participantEmail = r[enumImportRater.PARTICIPANT_EMAIL].toString().toLowerCase();
+      //       const respondentEmail = r[enumImportRater.RESPONDENT_EMAIL].toString().toLowerCase();
+      //       const relationship = r[enumImportRater.RELATIONSHIP].toString().toLowerCase();
+      //       if (participantEmail !== 'participant email') {
+      //         const p = new Rater();
 
-              const participant = this.associates.filter(a => a.emailAddress.toLocaleLowerCase() === participantEmail);
-              const rater = this.associates.filter(x => x.emailAddress.toLocaleLowerCase() === respondentEmail);
-              const relate = RELATIONSHIP_DATA.filter(y => y.name.toLocaleLowerCase() === relationship);
+      //         const participant = this.associates.filter(a => a.emailAddress.toLocaleLowerCase() === participantEmail);
+      //         const rater = this.associates.filter(x => x.emailAddress.toLocaleLowerCase() === respondentEmail);
+      //         const relate = RELATIONSHIP_DATA.filter(y => y.name.toLocaleLowerCase() === relationship);
 
-              if (participant.length > 0 && rater.length > 0 && relate.length > 0) {
-                p.participantId = participant[0].id;
-                p.associateId = rater[0].id;
-                p.relationship = relate[0].id;
+      //         if (participant.length > 0 && rater.length > 0 && relate.length > 0) {
+      //           p.participantId = participant[0].id;
+      //           p.associateId = rater[0].id;
+      //           p.relationship = relate[0].id;
 
-                this.raters.push(p);
-              } else {
-                console.log(r);
-              }
-            }
-        });
+      //           this.raters.push(p);
+      //         } else {
+      //           console.log(r);
+      //         }
+      //       }
+      //   });
 
-      });
+      // });
     }
   }
 }

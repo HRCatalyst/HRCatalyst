@@ -1,19 +1,6 @@
-import { Action, createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Shared } from './shared.model';
+import { createReducer, on } from '@ngrx/store';
 import * as SharedActions from './shared.actions';
-
-export const sharedsFeatureKey = 'shareds';
-
-export interface State extends EntityState<Shared> {
-  // additional entities state properties
-}
-
-export const adapter: EntityAdapter<Shared> = createEntityAdapter<Shared>();
-
-export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
-});
+import { adapter, initialState } from './shared.entity';
 
 
 export const reducer = createReducer(

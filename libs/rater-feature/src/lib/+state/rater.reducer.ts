@@ -1,19 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Rater } from '@hrcatalyst/shared-feature';
+import { adapter, initialState } from './rate.entity';
 import * as RaterActions from './rater.actions';
 
-export const ratersFeatureKey = 'raters';
-
-export interface RaterState extends EntityState<Rater> {
-  selectedRater?: Rater;
-}
-
-export const adapter: EntityAdapter<Rater> = createEntityAdapter<Rater>();
-
-export const initialState: RaterState = adapter.getInitialState({
-  selectedRate: undefined,
-});
 
 export const reducer = createReducer(
   initialState,

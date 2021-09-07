@@ -3,9 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IFirebaseUser, LoginModel, User } from '@hrcatalyst/shared-feature';
 import { select, Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { loadSettings, loginAttempt } from '../+state/auth.actions';
 import { Auth } from '../+state/auth.reducer';
+import { selectAuthState } from '../+state/auth.selectors';
 
 @Component({
   selector: 'hrcatalyst-login',
@@ -15,33 +16,32 @@ import { Auth } from '../+state/auth.reducer';
 export class LoginComponent implements OnDestroy {
   currentUser?: IFirebaseUser = undefined;
   settings?: User = undefined;
-  rootSubscription$: Subscription = new Subscription();
+  private onDestroy$: Subject<void> = new Subject<void>();
 
   loginForm = new FormGroup({
     'userName': new FormControl('', [Validators.required, Validators.minLength(4)]),
     'userPassword': new FormControl('', [Validators.required, Validators.minLength(4)])
   });
   constructor(private store: Store<Auth>, private router: Router) {
-    this.store.pipe(select((state: any) => state)).subscribe((state) => {
-      if (state.auth.user != null && this.currentUser !== state.auth.user) {
-        this.currentUser = state.auth.user;
-        this.store.dispatch(loadSettings({ id: state.auth.user.uid }));
+    this.store.pipe(select(selectAuthState))
+      .subscribe((state) => {
+      if (state.user != null && this.currentUser !== state.user) {
+        this.currentUser = state.user;
+        this.store.dispatch(loadSettings({ id: state.user.uid }));
       }
-      if (state.auth.settings != null && this.settings !== state.auth.settings) {
-        this.settings = state.auth.settings;
+      if (state.settings != null && this.settings !== state.settings) {
+        this.settings = state.settings;
         // if (state.auth.settings.role === 1) {
         this.router.navigate(['/home']);
         // } else {
         //   this.router.navigate(['/associate']);
         // }
       }
-   });
+      });
   }
 
   ngOnDestroy() {
-    if (this.rootSubscription$ != null) {
-      this.rootSubscription$.unsubscribe();
-    }
+    this.onDestroy$.next();
   }
 
   onSubmit() {

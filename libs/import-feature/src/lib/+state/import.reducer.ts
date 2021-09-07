@@ -1,19 +1,6 @@
-import { Action, createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Import } from '@hrcatalyst/shared-feature';
+import { createReducer, on } from '@ngrx/store';
 import * as ImportActions from './import.actions';
-
-export const importsFeatureKey = 'imports';
-
-export interface State extends EntityState<Import> {
-  // additional entities state properties
-}
-
-export const adapter: EntityAdapter<Import> = createEntityAdapter<Import>();
-
-export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
-});
+import { adapter, initialState } from './import.entity';
 
 
 export const reducer = createReducer(

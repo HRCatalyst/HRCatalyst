@@ -9,7 +9,7 @@ export interface AssociateState  extends EntityState<Associate> {
 
 export function selectassociateId(a: Associate): string {
     // In this case this would be optional since primary key is id
-    return a.id;
+    return a.id ?? '';
 }
 
 export const adapter: EntityAdapter<Associate> = createEntityAdapter<Associate>({

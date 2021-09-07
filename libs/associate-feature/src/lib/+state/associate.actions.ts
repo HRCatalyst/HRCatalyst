@@ -28,20 +28,20 @@ export const upsertAssociates = createAction(
   props<{ associates: Associate[] }>()
 );
 
-// export const updateAssociate = createAction(
-//   '[Associate] Update Associate',
-//   props<{ associate: Update<Associate> }>()
-// );
+export const updateAssociateEntity = createAction(
+  '[Associate] Update Associate',
+  props<{ associate: Update<Associate> }>()
+);
 
 export const updateAssociates = createAction(
   '[Associate] Update Associates',
   props<{ associates: Update<Associate>[] }>()
 );
 
-// export const deleteAssociate = createAction(
-//   '[Associate] Delete Associate',
-//   props<{ id: string }>()
-// );
+export const deleteAssociateEntity = createAction(
+  '[Associate] Delete Associate',
+  props<{ id: string }>()
+);
 
 export const deleteAssociates = createAction(
   '[Associate] Delete Associates',

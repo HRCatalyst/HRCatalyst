@@ -1,14 +1,15 @@
+import { Company } from '@hrcatalyst/shared-feature';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Company } from './company.interface';
 import { createFeatureSelector } from '@ngrx/store';
 
+export const companiesFeatureKey = 'companies';
 export interface CompanyState  extends EntityState<Company> {
     selectedCompany?: Company;
 }
 
 export function selectcompanyId(a: Company): string {
     // In this case this would be optional since primary key is id
-    return a.id;
+    return a.id ?? '';
 }
 
 export function sortByName(a: Company, b: Company): number {
@@ -22,7 +23,7 @@ export const adapter: EntityAdapter<Company> = createEntityAdapter<Company>({
 
 export const initialState: CompanyState = adapter.getInitialState({
     // additional entity state properties
-    selectedCompany: null
+    selectedCompany: undefined
 });
 
 // Create the default selectors

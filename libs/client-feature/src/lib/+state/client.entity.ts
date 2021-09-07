@@ -1,14 +1,15 @@
+import { Client } from '@hrcatalyst/shared-feature';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Client } from './client.interface';
 import { createFeatureSelector } from '@ngrx/store';
+
+export const clientsFeatureKey = 'clients';
 
 export interface ClientState  extends EntityState<Client> {
     selectedClient?: Client;
 }
 
 export function selectclientId(a: Client): string {
-    // In this case this would be optional since primary key is id
-    return a.id;
+    return a.id ?? '';
 }
 
 export function sortByName(a: Client, b: Client): number {
@@ -21,8 +22,7 @@ export const adapter: EntityAdapter<Client> = createEntityAdapter<Client>({
 });
 
 export const initialState: ClientState = adapter.getInitialState({
-    // additional entity state properties
-    selectedClient: null
+    selectedClient: undefined
 });
 
 // Create the default selectors

@@ -94,9 +94,10 @@ export const reducer = createReducer(
   on(AuthActions.registrationAttempt, state => {
     return state;
   }),
-  // on(AuthActions.registrationSuccess, (state, action) => {
-  //   return {...state, user: action.payload, loading: false };
-  // }),
+  on(AuthActions.registrationSuccess, (state, action) => {
+    //return {...state, user: action.payload, loading: false };
+    return state;
+  }),
   on(AuthActions.registrationFailure, state => {
     return {...state, user: undefined, loading: false };
   })

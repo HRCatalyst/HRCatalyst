@@ -1,19 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Feedback } from '@hrcatalyst/shared-feature';
 import * as FeedbackActions from './feedback.actions';
-
-export const feedbacksFeatureKey = 'feedbacks';
-
-export interface FeedbackState extends EntityState<Feedback> {
-  selectedFeedback?: Feedback;
-}
-
-export const adapter: EntityAdapter<Feedback> = createEntityAdapter<Feedback>();
-
-export const initialState: FeedbackState = adapter.getInitialState({
-  selectedFeedback: undefined
-});
+import { adapter, initialState } from './feedback.entity';
 
 
 export const reducer = createReducer(
@@ -30,13 +17,13 @@ export const reducer = createReducer(
   on(FeedbackActions.upsertFeedbacks,
     (state, action) => adapter.upsertMany(action.feedbacks, state)
   ),
-  on(FeedbackActions.updateFeedback,
+  on(FeedbackActions.updateFeedbackEntity,
     (state, action) => adapter.updateOne(action.feedback, state)
   ),
   on(FeedbackActions.updateFeedbacks,
     (state, action) => adapter.updateMany(action.feedbacks, state)
   ),
-  on(FeedbackActions.deleteFeedback,
+  on(FeedbackActions.deleteFeedbackEntity,
     (state, action) => adapter.removeOne(action.id, state)
   ),
   on(FeedbackActions.deleteFeedbacks,
@@ -48,82 +35,82 @@ export const reducer = createReducer(
   on(FeedbackActions.clearFeedbacks,
     state => adapter.removeAll(state)
   ),
-  on(FeedbackActions.loadFeedbackAction,
+  on(FeedbackActions.loadFeedback,
     state => { return state; }
   ),
-  on(FeedbackActions.loadFeedbackSuccessAction,
+  on(FeedbackActions.loadFeedbackSuccess,
     state => { return state; }
   ),
-  on(FeedbackActions.loadFeedbackFailureAction,
+  on(FeedbackActions.loadFeedbackFailure,
     state => { return state; }
   ),
-  on(FeedbackActions.loadFeedbackErrorsAction,
+  on(FeedbackActions.loadFeedbackErrors,
     state => { return state; }
   ),
-  on(FeedbackActions.loadFeedbackErrorsSuccessAction,
+  on(FeedbackActions.loadFeedbackErrorsSuccess,
     state => { return state; }
   ),
-  on(FeedbackActions.loadFeedbackErrorsFailureAction,
+  on(FeedbackActions.loadFeedbackErrorsFailure,
     state => { return state; }
   ),
-  on(FeedbackActions.loadParticipantFeedbackAction,
+  on(FeedbackActions.loadParticipantFeedback,
     state => { return state; }
   ),
-  on(FeedbackActions.loadParticipantFeedbackInprogressAction,
+  on(FeedbackActions.loadParticipantFeedbackInprogress,
     state => { return state; }
   ),
-  on(FeedbackActions.loadParticipantFeedbackSuccessAction,
+  on(FeedbackActions.loadParticipantFeedbackSuccess,
     state => { return state; }
   ),
-  on(FeedbackActions.loadParticipantFeedbackFailureAction,
+  on(FeedbackActions.loadParticipantFeedbackFailure,
     state => { return state; }
   ),
-  on(FeedbackActions.loadParticipantAssociatesSuccessAction,
+  on(FeedbackActions.loadParticipantAssociatesSuccess,
     state => { return state; }
   ),
-  on(FeedbackActions.createFeedbackAction,
+  on(FeedbackActions.createFeedback,
     state => { return state; }
   ),
-  on(FeedbackActions.createFeedbackSuccessAction,
+  on(FeedbackActions.createFeedbackSuccess,
     state => { return state; }
   ),
-  on(FeedbackActions.createFeedbackFailireAction,
+  on(FeedbackActions.createFeedbackFailire,
     state => { return state; }
   ),
-  on(FeedbackActions.updateFeedbackAction,
+  on(FeedbackActions.updateFeedback,
     state => { return state; }
   ),
-  on(FeedbackActions.updateFeedbackSuccessAction,
+  on(FeedbackActions.updateFeedbackSuccess,
     state => { return state; }
   ),
-  on(FeedbackActions.updateFeedbackFailureAction,
+  on(FeedbackActions.updateFeedbackFailure,
     state => { return state; }
   ),
-  on(FeedbackActions.deleteFeedbackAction,
+  on(FeedbackActions.deleteFeedback,
     state => { return state; }
   ),
-  on(FeedbackActions.deleteFeedbackSuccessAction,
+  on(FeedbackActions.deleteFeedbackSuccess,
     state => { return state; }
   ),
-  on(FeedbackActions.deleteFeedbackFailureAction,
+  on(FeedbackActions.deleteFeedbackFailure,
     state => { return state; }
   ),
-  on(FeedbackActions.changePendingToReceivedAction,
+  on(FeedbackActions.changePendingToReceived,
     state => { return state; }
   ),
-  on(FeedbackActions.changePendingToReceivedSuccessAction,
+  on(FeedbackActions.changePendingToReceivedSuccess,
     state => { return state; }
   ),
-  on(FeedbackActions.changePendingToReceivedFailureAction,
+  on(FeedbackActions.changePendingToReceivedFailure,
     state => { return state; }
   ),
-  on(FeedbackActions.changeColleagueToPeerAction,
+  on(FeedbackActions.changeColleagueToPeer,
     state => { return state; }
   ),
-  on(FeedbackActions.changeColleagueToPeerSuccessAction,
+  on(FeedbackActions.changeColleagueToPeerSuccess,
     state => { return state; }
   ),
-  on(FeedbackActions.changeColleagueToPeerFailureAction,
+  on(FeedbackActions.changeColleagueToPeerFailure,
     state => { return state; }
   ),
 );

@@ -1,19 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Client } from './client.model';
 import * as ClientActions from './client.actions';
-
-export const clientsFeatureKey = 'clients';
-
-export interface ClientState extends EntityState<Client> {
-  selectClient?: Client;
-}
-
-export const adapter: EntityAdapter<Client> = createEntityAdapter<Client>();
-
-export const initialState: ClientState = adapter.getInitialState({
-  selectClient: undefined,
-});
+import { adapter, initialState } from './client.entity';
 
 
 export const reducer = createReducer(

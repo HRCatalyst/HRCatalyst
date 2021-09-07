@@ -16,13 +16,13 @@ export const reducer = createReducer(
   on(AssociateActions.upsertAssociates,
     (state, action) => adapter.upsertMany(action.associates, state)
   ),
-  on(AssociateActions.updateAssociate,
+  on(AssociateActions.updateAssociateEntity,
     (state, action) => adapter.updateOne(action.associate, state)
   ),
   on(AssociateActions.updateAssociates,
     (state, action) => adapter.updateMany(action.associates, state)
   ),
-  on(AssociateActions.deleteAssociate,
+  on(AssociateActions.deleteAssociateEntity,
     (state, action) => adapter.removeOne(action.id, state)
   ),
   on(AssociateActions.deleteAssociates,

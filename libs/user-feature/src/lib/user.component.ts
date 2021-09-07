@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { User } from '@hrcatalyst/shared-feature';
+import { Dictionary } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import * as userEntity from 'src/app/user/user.entity';
-import { User, IUser } from 'src/app/user/user.interface';
-import { LoadAllUsersAction } from 'src/app/user/user.action';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { loadAllUsers } from './+state/user.actions';
+import { UserState } from './+state/user.reducer';
+import { selectUserState } from './+state/user.selectors';
 
 @Component({
   selector: 'hrcatalyst-user',
@@ -19,27 +22,22 @@ export class UserComponent implements OnDestroy, OnInit {
     { headerName: 'Role', field: 'role' },
   ];
 
-  userState$: Observable<IUser[]>;
-  userSubscription$: Subscription;
-  users: User[];
+  users?: Dictionary<User>;
+  private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private store: Store<userEntity.UserState>) {
-    this.userState$ = this.store.select(userEntity.selectAll);
-
-    this.userSubscription$ = this.userState$.subscribe((state) => {
-      if (state.length > 0) {
-        this.users = state;
-      }
+  constructor(private store: Store<UserState>) {
+    this.store.select(selectUserState)
+    .pipe(takeUntil(this.onDestroy$))
+    .subscribe((state) => {
+      this.users = state.entities;
     });
   }
 
   ngOnInit() {
-    this.store.dispatch(new LoadAllUsersAction());
+    this.store.dispatch(loadAllUsers());
   }
 
   ngOnDestroy() {
-    if (this.userSubscription$ != null) {
-      this.userSubscription$.unsubscribe();
-    }
+    this.onDestroy$.next();
   }
 }

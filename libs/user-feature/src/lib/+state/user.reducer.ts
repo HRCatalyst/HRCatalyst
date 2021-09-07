@@ -1,19 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as UserActions from './user.actions';
-import { User } from '@hrcatalyst/shared-feature';
-
-export const usersFeatureKey = 'users';
-
-export interface UserState extends EntityState<User> {
-  selectedUser?: User;
-}
-
-export const adapter: EntityAdapter<User> = createEntityAdapter<User>();
-
-export const initialState: UserState = adapter.getInitialState({
-  selectedUser: undefined,
-});
+import { adapter, initialState } from './user.entity';
 
 
 export const reducer = createReducer(

@@ -1,6 +1,6 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import * as fromAssociate from './associate.reducer';
+import { createFeatureSelector } from '@ngrx/store';
+import { associatesFeatureKey, AssociateState } from './associate.entity';
 
-export const selectAssociateState = createFeatureSelector<fromAssociate.State>(
-  fromAssociate.associateFeatureKey
+export const selectAssociateState = createFeatureSelector<AssociateState>(
+  associatesFeatureKey
 );

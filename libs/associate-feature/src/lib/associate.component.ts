@@ -1,22 +1,26 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Company } from 'src/app/company/company.interface';
-import * as associateEntity from 'src/app/associate/associate.entity';
-import { Associate, IAssociate } from 'src/app/associate/associate.interface';
-import { Observable, Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material';
-import { Store } from '@ngrx/store';
+// import { Company } from 'src/app/company/company.interface';
+// import * as associateEntity from 'src/app/associate/associate.entity';
+// import { Associate, IAssociate } from 'src/app/associate/associate.interface';
+import { Subject } from 'rxjs';
+import { select, Store } from '@ngrx/store';
 import { AssociateModalComponent } from './associate.modal';
-import { CreateAssociateAction, SelectAssociateAction, LoadCompanyAssociatesAction, UpdateAssociateAction, DeleteAssociateAction } from 'src/app/associate/associate.action';
 import { Router } from '@angular/router';
 import { AssociateImportModalComponent } from './associate.import.modal';
-import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
+import { Associate, Company, ConfirmationComponent } from '@hrcatalyst/shared-feature';
+import { MatDialog } from '@angular/material/dialog';
+import { AssociateState } from './+state/associate.entity';
+import { createAssociate, deleteAssociate, loadCompanyAssociates, selectAssociate, updateAssociate } from './+state/associate.actions';
+import { takeUntil } from 'rxjs/operators';
+import { selectAssociateState } from './+state/associate.selectors';
+import { Dictionary } from '@ngrx/entity';
 
 @Component({
   selector: 'hrcatalyst-associate',
   templateUrl: './associate.component.html',
   styleUrls: ['./associate.component.css']
 })
-export class AssociateComponent implements OnDestroy, OnInit {
+export class AssociateComponent implements OnDestroy {
   associatesDefs = [
     { headerName: 'First Name', field: 'firstName', sortable: true },
     { headerName: 'Last Name', field: 'lastName', sortable: true },
@@ -25,41 +29,37 @@ export class AssociateComponent implements OnDestroy, OnInit {
     { headerName: 'Notes', field: 'notes', sortable: true },
   ];
 
-  selectedCompany: Company;
-  selectedAssociate: Associate;
+  selectedCompany?: Company;
+  selectedAssociate?: Associate;
   hasAssociate = false;
 
-  private gridApi;
+  private onDestroy$: Subject<void> = new Subject<void>();
+  private gridApi: any;
 
-  associateState$: Observable<IAssociate[]>;
-  associateSubscription$: Subscription;
-  associates: Associate[];
+  //associateState$: Observable<Associate[]>;
+  //associateSubscription$: Subscription;
+  associates?: Dictionary<Associate>;
 
-  constructor(private dialog: MatDialog, private associateStore: Store<associateEntity.AssociateState>, private router: Router) {
+  constructor(private dialog: MatDialog, private associateStore: Store<AssociateState>, private router: Router) {
       const nav = this.router.getCurrentNavigation();
 
       if (nav != null) {
-        this.selectedCompany = nav.extras.state.payload;
-        this.associateStore.dispatch(new LoadCompanyAssociatesAction(this.selectedCompany.id));
+        this.selectedCompany = nav.extras.state?.payload;
+        this.associateStore.dispatch(loadCompanyAssociates({payload: this.selectedCompany?.id ?? ''}));
       }
 
-      this.associateState$ = this.associateStore.select(associateEntity.selectAll);
-      this.associateSubscription$ = this.associateState$.subscribe((state) => {
-          this.associates = state;
+      this.associateStore.pipe(select(selectAssociateState))
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((state) => {
+        this.associates = state.entities;
       });
     }
 
-    ngOnInit() {
-
-    }
-
     ngOnDestroy() {
-      if (this.associateSubscription$ != null) {
-        this.associateSubscription$.unsubscribe();
-      }
+      this.onDestroy$.next();
     }
 
-    openAssociateModal(associate) {
+    openAssociateModal(associate: Associate) {
       const dialogRef = this.dialog.open(AssociateModalComponent, {
         width: '450px',
         height: '550px',
@@ -69,18 +69,18 @@ export class AssociateComponent implements OnDestroy, OnInit {
       dialogRef.afterClosed().subscribe(result => {
         console.log('The associate dialog was closed.');
         if (result instanceof Associate) {
-          result.companyId = this.selectedCompany.id;
+          result.companyId = this.selectedCompany?.id ?? '';
 
           if (result.id !== undefined) {
-            this.associateStore.dispatch(new UpdateAssociateAction(result));
+            this.associateStore.dispatch(updateAssociate({payload: result}));
           } else {
-            this.associateStore.dispatch(new CreateAssociateAction(result));
+            this.associateStore.dispatch(createAssociate({payload: result}));
           }
         }
       });
     }
 
-    openConfirmationModal(title, message) {
+    openConfirmationModal(title: string, message: string) {
       const dialogRef = this.dialog.open(ConfirmationComponent, {
         width: '450px',
         data: { title: title, message: message }
@@ -90,7 +90,7 @@ export class AssociateComponent implements OnDestroy, OnInit {
         console.log('The confirmation dialog was closed');
         if (result === true) {
           const selectedRows = this.gridApi.getSelectedRows();
-          this.associateStore.dispatch(new DeleteAssociateAction(selectedRows[0]));
+          this.associateStore.dispatch(deleteAssociate(selectedRows[0]));
         }
       });
     }
@@ -119,7 +119,7 @@ export class AssociateComponent implements OnDestroy, OnInit {
       }
     }
 
-    onGridReady(params) {
+    onGridReady(params: any) {
       this.gridApi = params.api;
       this.gridApi.sizeColumnsToFit();
     }
@@ -130,18 +130,18 @@ export class AssociateComponent implements OnDestroy, OnInit {
       this.hasAssociate = selectedRows.length > 0;
     }
 
-    onRowDoubleClicked(row) {
-      this.associateStore.dispatch(new SelectAssociateAction(row.data));
+    onRowDoubleClicked(row: any) {
+      this.associateStore.dispatch(selectAssociate({payload: row.data}));
     }
 
     onUpload() {
       const dialogRef = this.dialog.open(AssociateImportModalComponent, {
         width: '450px',
-        data: this.selectedCompany.id
+        data: this.selectedCompany?.id
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The associate import dialog was closed');
+        console.log(`The associate import dialog was closed ${result}`);
       });
     }
 }

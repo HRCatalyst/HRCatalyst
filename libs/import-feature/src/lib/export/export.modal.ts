@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormBase } from 'src/app/shared/form.base';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import readXlsxFile from 'read-excel-file';
+//import readXlsxFile from 'read-excel-file';
 import { schemaExportFeedback, enumExportFeedback } from './export.schema';
 import { Feedback } from 'src/app/feedback/feedback.interface';
 import { Observable } from 'rxjs';

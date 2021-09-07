@@ -1,7 +1,8 @@
+import { Campaign, ICampaignYear } from '@hrcatalyst/shared-feature';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Campaign, ICampaign, ICampaignYear } from './campaign.interface';
 import { createFeatureSelector } from '@ngrx/store';
 
+export const campaignsFeatureKey = 'campaigns';
 export interface CampaignState  extends EntityState<Campaign> {
     selectedCampaign?: Campaign;
     campaignYears?: ICampaignYear[];
@@ -11,7 +12,7 @@ export interface CampaignState  extends EntityState<Campaign> {
 
 export function selectcampaignId(a: Campaign): string {
     // In this case this would be optional since primary key is id
-    return a.id;
+    return a.id ?? '';
 }
 
 export function sortByName(a: Campaign, b: Campaign): number {
@@ -25,10 +26,10 @@ export const adapter: EntityAdapter<Campaign> = createEntityAdapter<Campaign>({
 
 export const initialState: CampaignState = adapter.getInitialState({
     // additional entity state properties
-    selectedCampaign: null,
-    campaignYears: null,
-    selectedYear: null,
-    activeYear: null
+    selectedCampaign: undefined,
+    campaignYears: undefined,
+    selectedYear: undefined,
+    activeYear: undefined
 });
 
 // Create the default selectors

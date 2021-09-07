@@ -1,15 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { AssociateSearchResult } from 'src/app/associate/associate.interface';
-import * as associateEntity from 'src/app/associate/associate.entity';
-import { select, Store } from '@ngrx/store';
-import { takeUntil } from 'rxjs/operators';
-import { SearchAssociatesAction, SelectAssociateAction, LoadAssociateAction } from 'src/app/associate/associate.action';
-import { LoadInterviewParticipantsAction } from 'src/app/interview/interview.action';
 import { Router } from '@angular/router';
-import { IUser } from 'src/app/user/user.interface';
-import { IAuth } from 'src/app/auth/auth.interface';
-import { LoadCampaignYearsAction } from 'src/app/campaign/campaign.action';
+import { AssociateSearchResult, User } from '@hrcatalyst/shared-feature';
+import { select, Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AssociateState } from './+state/associate.entity';
+// import { AssociateSearchResult } from 'src/app/associate/associate.interface';
+// import * as associateEntity from 'src/app/associate/associate.entity';
+// import { select, Store } from '@ngrx/store';
+// import { takeUntil } from 'rxjs/operators';
+// import { SearchAssociatesAction, SelectAssociateAction, LoadAssociateAction } from 'src/app/associate/associate.action';
+// import { LoadInterviewParticipantsAction } from 'src/app/interview/interview.action';
+// import { Router } from '@angular/router';
+// import { IUser } from 'src/app/user/user.interface';
+// import { IAuth } from 'src/app/auth/auth.interface';
+// import { LoadCampaignYearsAction } from 'src/app/campaign/campaign.action';
 
 @Component({
   selector: 'hrcatalyst-associate-search',
@@ -18,7 +23,7 @@ import { LoadCampaignYearsAction } from 'src/app/campaign/campaign.action';
 })
 export class AssociateSearchComponent implements OnDestroy, OnInit {
   private onDestroy$: Subject<void> = new Subject<void>();
-  user$: IUser;
+  user$?: User;
   searchResults: AssociateSearchResult[] = new Array<AssociateSearchResult>();
 
   searchDefs = [
@@ -27,13 +32,13 @@ export class AssociateSearchComponent implements OnDestroy, OnInit {
     { headerName: 'Email Address', field: 'email', sortable: true },
   ];
 
-  private gridApi;
+  private gridApi?: unknown;
 
-  constructor(private associateStore: Store<associateEntity.AssociateState>, private store: Store<IAuth>, private router: Router) {
-    this.store.pipe(select((state: any) => state))
+  constructor(private associateStore: Store<AssociateState>, private store: Store<AuthState>, private router: Router) {
+    this.store.pipe(select((state: unknown) => state))
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {
-        if (state.auth.settings != null) {
+        if (state.auth.settings != undefined) {
           this.user$ = state.auth.settings;
         }
     });
@@ -53,7 +58,7 @@ export class AssociateSearchComponent implements OnDestroy, OnInit {
 
   searchAssociates(criteria: string) {
     if (criteria.length > 2) {
-      this.associateStore.dispatch(new SearchAssociatesAction(criteria));
+      this.associateStore.dispatch(searchAssociates(criteria));
     } else {
       this.searchResults = new Array<AssociateSearchResult>();
     }

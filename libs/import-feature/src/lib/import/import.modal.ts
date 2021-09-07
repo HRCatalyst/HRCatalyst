@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, ChangeDetectorRef, OnDestroy } from '@angula
 import { FormBase } from 'src/app/shared/form.base';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import readXlsxFile from 'read-excel-file';
+//import readXlsxFile from 'read-excel-file';
 import { schemaImportFeedback, enumImportFeedback } from './import.schema';
 import { Feedback } from 'src/app/feedback/feedback.interface';
 import { Observable, Subscription } from 'rxjs';
@@ -200,26 +200,26 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
     if (event.target.files && event.target.files.length) {
       const name = event.target.files[0].name;
       this.logImportMessage('Info', 'Begin import of ' + name + ' at ' + new Date().toLocaleString());
-      readXlsxFile(event.target.files[0], schemaImportFeedback).then((rows) => {
-        // `rows` is an array of rows
-        // each row being an array of cells.
-        rows.forEach(r => {
-          const raterEmail = r[enumImportFeedback.RATER_EMAIL].toString().toLowerCase();
-          const participantEmail = r[enumImportFeedback.PARTICIPANT_EMAIL].toString().toLowerCase();
-          if (raterEmail !== 'rater email' && participantEmail !== 'participant email') {
-            const fb = new Feedback();
-            fb.raterEmail = r[enumImportFeedback.RATER_EMAIL].toLowerCase();
-            fb.participantEmail = r[enumImportFeedback.PARTICIPANT_EMAIL].toLowerCase();
-            fb.dateReceived = r[enumImportFeedback.DATE_RECEIVED];
-            fb.question = r[enumImportFeedback.QUESTION_ID];
-            fb.answer = r[enumImportFeedback.FEEDBACK];
+      // readXlsxFile(event.target.files[0], schemaImportFeedback).then((rows) => {
+      //   // `rows` is an array of rows
+      //   // each row being an array of cells.
+      //   rows.forEach(r => {
+      //     const raterEmail = r[enumImportFeedback.RATER_EMAIL].toString().toLowerCase();
+      //     const participantEmail = r[enumImportFeedback.PARTICIPANT_EMAIL].toString().toLowerCase();
+      //     if (raterEmail !== 'rater email' && participantEmail !== 'participant email') {
+      //       const fb = new Feedback();
+      //       fb.raterEmail = r[enumImportFeedback.RATER_EMAIL].toLowerCase();
+      //       fb.participantEmail = r[enumImportFeedback.PARTICIPANT_EMAIL].toLowerCase();
+      //       fb.dateReceived = r[enumImportFeedback.DATE_RECEIVED];
+      //       fb.question = r[enumImportFeedback.QUESTION_ID];
+      //       fb.answer = r[enumImportFeedback.FEEDBACK];
 
-            console.log(`RATER: ${JSON.stringify(fb)}`);
-            this.feedback.push(fb);
-          }
-        });
-        this.logImportMessage('Info', this.feedback.length.toLocaleString() + ' records loaded from ' + name);
-      });
+      //       console.log(`RATER: ${JSON.stringify(fb)}`);
+      //       this.feedback.push(fb);
+      //     }
+      //   });
+      //   this.logImportMessage('Info', this.feedback.length.toLocaleString() + ' records loaded from ' + name);
+      // });
     }
   }
 }

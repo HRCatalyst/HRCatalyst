@@ -1,71 +1,66 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { ICampaign, Campaign } from 'src/app/campaign/campaign.interface';
-import { MatDialog } from '@angular/material';
+import { Component, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import * as campaignEntity from 'src/app/campaign/campaign.entity';
-import * as clientEntity from 'src/app/client/client.entity';
-import { LoadClientCampaignsAction, SelectCampaignAction, CreateCampaignAction, UpdateCampaignAction, DeleteCampaignAction } from 'src/app/campaign/campaign.action';
-import { Client } from 'src/app/client/client.interface';
 import { CampaignModalComponent } from './campaign.modal';
-import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
-import { Company } from 'src/app/company/company.interface';
-import { SelectCompanyAction } from 'src/app/company/company.action';
+import { CampaignState } from './+state/campaign.reducer';
+import { Campaign, Client, Company, ConfirmationComponent } from '@hrcatalyst/shared-feature';
+import { MatDialog } from '@angular/material/dialog';
+import { createCampaign, deleteCampaign, loadClientCampaigns, selectCampaign, updateCampaign } from './+state/campaign.actions';
+import { Dictionary } from '@ngrx/entity';
+import { selectCampaignState } from './+state/campaign.selectors';
+import { takeUntil } from 'rxjs/operators';
+import { selectCompany } from '@hrcatalyst/company-feature';
+import { ClientState } from '@hrcatalyst/client-feature';
 
 @Component({
   selector: 'hrcatalyst-campaign',
   templateUrl: './campaign.component.html',
   styleUrls: ['./campaign.component.css']
 })
-export class CampaignComponent implements OnDestroy, OnInit {
+export class CampaignComponent implements OnDestroy {
   campaignsDefs = [
     { headerName: 'Campaign Name', field: 'name', sortable: true },
     { headerName: 'Status', field: 'status', sortable: false }
   ];
 
-  selectedCompany: Company;
-  selectedClient: Client;
+  selectedCompany?: Company;
+  selectedClient?: Client;
   hasCampaign = false;
 
-  private gridApi;
+  private gridApi?: any;
 
-  campaignsState$: Observable<ICampaign[]>;
-  campaignSubscription$: Subscription;
-  campaigns: Campaign[];
+  private onDestroy$: Subject<void> = new Subject<void>();
+  campaigns?: Dictionary<Campaign>;
 
-  constructor(private dialog: MatDialog, private campaignStore: Store<campaignEntity.CampaignState>,
-    private clientStore: Store<clientEntity.ClientState>, private router: Router) {
-      const xtra = this.router.getCurrentNavigation().extras.state;
+  constructor(private dialog: MatDialog, private campaignStore: Store<CampaignState>,
+    private clientStore: Store<ClientState>, private router: Router) {
+      const xtra = this.router.getCurrentNavigation()?.extras.state;
 
       if (xtra != null) {
         this.selectedCompany = xtra.company;
         this.selectedClient = xtra.client;
-        this.clientStore.dispatch(new LoadClientCampaignsAction(this.selectedClient.id));
+        this.clientStore.dispatch(loadClientCampaigns({payload: this.selectedClient?.id ?? ''}));
       }
 
-      this.campaignsState$ = this.campaignStore.select(campaignEntity.selectAll);
-      this.campaignSubscription$ = this.campaignsState$.subscribe((state) => {
-        this.campaigns = state;
+      this.campaignStore.select(selectCampaignState)
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((state) => {
+        this.campaigns = state.entities;
       });
   }
 
-  ngOnInit() {
-
-  }
 
   ngOnDestroy() {
-    if (this.campaignSubscription$ != null) {
-      this.campaignSubscription$.unsubscribe();
-    }
+    this.onDestroy$.next();
   }
 
   onReset() {
-    this.selectedCompany = null;
-    this.selectedClient = null;
+    this.selectedCompany = undefined;
+    this.selectedClient = undefined;
   }
 
-  openCampaignModal(campaign) {
+  openCampaignModal(campaign: Campaign) {
     const dialogRef = this.dialog.open(CampaignModalComponent, {
       width: '450px',
       data: campaign
@@ -75,15 +70,15 @@ export class CampaignComponent implements OnDestroy, OnInit {
       console.log('The campaign dialog was closed');
       if (result instanceof Campaign) {
         if (result.id !== undefined) {
-          this.campaignStore.dispatch(new UpdateCampaignAction(result));
+          this.campaignStore.dispatch(updateCampaign({payload: result}));
         } else {
-          this.campaignStore.dispatch(new CreateCampaignAction(result));
+          this.campaignStore.dispatch(createCampaign({payload: result}));
         }
       }
     });
   }
 
-  openConfirmationModal(title, message) {
+  openConfirmationModal(title: string, message: string) {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
       width: '450px',
       data: { title: title, message: message }
@@ -93,19 +88,19 @@ export class CampaignComponent implements OnDestroy, OnInit {
       console.log('The confirmation dialog was closed');
       if (result === true) {
         const selectedRows = this.gridApi.getSelectedRows();
-        this.campaignStore.dispatch(new DeleteCampaignAction(selectedRows[0]));
+        this.campaignStore.dispatch(deleteCampaign({payload: selectedRows[0]}));
       }
     });
   }
 
-  onGridReady(params) {
+  onGridReady(params: any) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
   }
 
   addCampaign() {
     const campaign = new Campaign();
-    campaign.clientId = this.selectedClient.id;
+    campaign.clientId = this.selectedClient?.id ?? '';
 
     this.openCampaignModal(campaign);
   }
@@ -134,8 +129,8 @@ export class CampaignComponent implements OnDestroy, OnInit {
     this.hasCampaign = selectedRows.length > 0;
   }
 
-  onRowDoubleClicked(row) {
-    const params = new SelectCampaignAction(row.data);
+  onRowDoubleClicked(row: any) {
+    const params = selectCampaign({payload: row.data});
 
     this.campaignStore.dispatch(params);
 
@@ -152,7 +147,7 @@ export class CampaignComponent implements OnDestroy, OnInit {
   }
 
   onBackClicked() {
-    const params = new SelectCompanyAction(this.selectedCompany);
+    const params = selectCompany({payload: this.selectedCompany});
     this.router.navigate(['/company'], { state: params });
   }
 }
