@@ -1,14 +1,10 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { FormBase } from 'src/app/shared/form.base';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import * as questionEntity from 'src/app/question/question.entity';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Store } from '@ngrx/store';
-import { Question, IQuestion } from 'src/app/question/question.interface';
-import { LoadAllQuestionsAction } from 'src/app/question/question.action';
 import { takeUntil } from 'rxjs/operators';
-import { Interview, InterviewEdit } from 'src/app/interview/interview.interface';
+import { FormBase, IQuestion, Question } from '@hrcatalyst/shared-feature';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'hrcatalyst-interview',
@@ -21,12 +17,12 @@ export class InterviewComponent extends FormBase implements OnDestroy, OnInit {
   });
 
   private onDestroy$: Subject<void> = new Subject<void>();
-  questionState$: Observable<IQuestion[]>;
-  questions: Question[];
+  questionState$?: Observable<IQuestion[]>;
+  questions?: Question[];
   ecInterview = false;
 
   constructor(public dialogRef: MatDialogRef<InterviewComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: InterviewEdit, private questionStore: Store<questionEntity.QuestionState>) {
+    @Inject(MAT_DIALOG_DATA) public data: InterviewEdit, private questionStore: Store<QuestionState>) {
       super();
 
       this.questionStore.select(questionEntity.selectAll)

@@ -1,26 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import * as companyEntity from 'src/app/company/company.entity';
-import { MatDialog } from '@angular/material';
-import { ImportModalComponent } from '../import/import.modal';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { SignupComponent } from '../signup/signup.component';
-import { RegistrationAttemptAction } from 'src/app/auth/auth.action';
-import { RegistrationModel } from 'src/app/auth/auth.interface';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'hrcatalyst-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnDestroy, OnInit {
+export class HomeComponent implements OnDestroy {
   welcomeUser = '';
   role = 0;
 //  admin_interview = false;
 
   rootSubscription$: Subscription;
-  constructor(private dialog: MatDialog, private router: Router, private store: Store<companyEntity.CompanyState>) {
+  constructor(private dialog: MatDialog, private router: Router, private store: Store<CompanyState>) {
     const nav = this.router.getCurrentNavigation();
 
     this.rootSubscription$ = this.store.pipe(select((state: any) => state)).subscribe((state) => {
@@ -31,8 +26,6 @@ export class HomeComponent implements OnDestroy, OnInit {
     });
   }
 
-  ngOnInit() {
-  }
 
   ngOnDestroy() {
     if (this.rootSubscription$ != null) {
@@ -49,7 +42,7 @@ export class HomeComponent implements OnDestroy, OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The import dialog was closed');
+      console.log(`The import dialog was closed ${result}`);
     });
   }
 
@@ -67,7 +60,7 @@ export class HomeComponent implements OnDestroy, OnInit {
     dialogRef.beforeClosed().subscribe(result => {
       console.log('The signup dialog was closed');
       if (result instanceof RegistrationModel) {
-        this.store.dispatch(new RegistrationAttemptAction(result));
+        this.store.dispatch(registrationAttempt(result));
       }
     });
   }

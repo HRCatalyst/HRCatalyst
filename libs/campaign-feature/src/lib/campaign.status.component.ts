@@ -1,23 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Company } from 'src/app/company/company.interface';
-import { Client } from 'src/app/client/client.interface';
-import { Campaign } from 'src/app/campaign/campaign.interface';
+import { Associate, Campaign, Client, Company, enumFeedbackStatus, Feedback, FEEDBACK_STATUS, IFeedback, IImport, Participant, Rater, RELATIONSHIP_DATA, ReportParticipant, ReportRater } from '@hrcatalyst/shared-feature';
 import { Store, select } from '@ngrx/store';
-import * as importEntity from 'src/app/import/import.entity';
-import * as feedbackEntity from 'src/app/feedback/feedback.entity';
 import { Observable, Subscription } from 'rxjs';
-import { IFeedback, Feedback, ReportParticipant, ReportRater } from 'src/app/feedback/feedback.interface';
-import { Rater } from 'src/app/rater/rater.interface';
-import { Participant } from 'src/app/participant/participant.interface';
-import { Associate } from 'src/app/associate/associate.interface';
-import { IImport } from 'src/app/import/import.interface';
-import { LoadImportAction } from 'src/app/import/import.action';
-import { LoadFeedbackAction } from 'src/app/feedback/feedback.action';
-import { RELATIONSHIP_DATA } from 'src/app/rater/relationship.data';
-import { FEEDBACK_STATUS, enumFeedbackStatus } from 'src/app/feedback/feedback.data';
 import * as _ from 'lodash';
-import { ExportService } from '../export/export.service';
+import { ImportState } from '@ngrx/store-devtools/src/actions';
+import * as feedbackFeature from '@hrcatalyst/feedback-feature';
+import * as importFeature from '@hrcatalyst/import-feature';
 
 @Component({
   selector: 'hrcatalyst-campaign.status',
@@ -25,41 +14,41 @@ import { ExportService } from '../export/export.service';
   styleUrls: ['./campaign.status.component.css']
 })
 export class CampaignStatusComponent implements OnDestroy, OnInit {
-  selectedCompany: Company;
-  selectedClient: Client;
-  selectedCampaign: Campaign;
+  selectedCompany?: Company;
+  selectedClient?: Client;
+  selectedCampaign?: Campaign;
 
   feedbackState$: Observable<IFeedback[]>;
   feedbackSubscription$: Subscription;
-  feedbacks: Feedback[] = null;
+  feedbacks?: Feedback[] = undefined;
 
   importState$: Observable<IImport[]>;
   importSubscription$: Subscription;
-  associates: Associate[];
-  participants: Participant[];
-  campaigns: Campaign[];
-  raters: Rater[];
+  associates?: Associate[];
+  participants?: Participant[];
+  campaigns?: Campaign[];
+  raters?: Rater[];
 
-  source: Associate[];
+  source?: Associate[];
 
-  reportData: Array<ReportParticipant>;
+  reportData?: Array<ReportParticipant>;
 
-  constructor(private router: Router, private feedbackStore: Store<feedbackEntity.FeedbackState>,
-    private importStore: Store<importEntity.ImportState>, private exportService: ExportService) {
-    const xtra = this.router.getCurrentNavigation().extras.state;
+  constructor(private router: Router, private feedbackStore: Store<feedbackFeature.FeedbackState>,
+    private importStore: Store<ImportState>, private exportService: importFeature.ExportService) {
+    const xtra = this.router.getCurrentNavigation()?.extras.state;
     if (xtra != null) {
       this.selectedCompany = xtra.company;
       this.selectedClient = xtra.client;
       this.selectedCampaign = xtra.campaign;
     }
 
-    this.feedbackState$ = this.feedbackStore.select(feedbackEntity.selectAll);
+    this.feedbackState$ = this.feedbackStore.select(feedbackFeature.selectAll);
 
     this.feedbackSubscription$ = this.feedbackState$.subscribe((state) => {
         this.feedbacks = state;
     });
 
-    this.importState$ = this.importStore.select(importEntity.selectAll);
+    this.importState$ = this.importStore.select(importFeature.selectAll);
 
     this.importSubscription$ = this.importStore.pipe(select((state: any) => state)).subscribe((state) => {
       if (state.import.associates != null) {
@@ -82,8 +71,8 @@ export class CampaignStatusComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.feedbackStore.dispatch(new LoadFeedbackAction());
-    this.importStore.dispatch(new LoadImportAction());
+    this.feedbackStore.dispatch(feedbackFeature.loadFeedback());
+    this.importStore.dispatch(importFeature.loadImports());
   }
 
   ngOnDestroy() {
@@ -107,11 +96,11 @@ export class CampaignStatusComponent implements OnDestroy, OnInit {
           const d = new ReportParticipant();
 
           const data = new Array<ReportRater>();
-          d.id = participant.id;
+          d.id = participant.id ?? '';
           d.firstName = participant.firstName;
           d.lastName = participant.lastName;
 
-          d.raters = 0;
+          d.raters++;
           d.feedback = 0;
           d.unsolicited = 0;
           d.declined = 0;
@@ -119,10 +108,10 @@ export class CampaignStatusComponent implements OnDestroy, OnInit {
 
           raters.forEach(r => {
             d.raters++;
-            const rater = this.associates.filter(ra => ra.id === r.associateId);
-            const feedback = this.feedbacks.filter(f => f.raterId === r.associateId && f.participantId === d.id);
+            const rater = this.associates?.filter(ra => ra.id === r.associateId);
+            const feedback = this.feedbacks?.filter(f => f.raterId === r.associateId && f.participantId === d.id);
 
-            if (rater.length > 0) {
+            if (feedback != undefined && rater != undefined && rater.length > 0) {
               const e = new ReportRater();
 
               e.firstName = rater[0].firstName;
@@ -163,7 +152,7 @@ export class CampaignStatusComponent implements OnDestroy, OnInit {
   }
 
   uniqueName() {
-    return this.selectedCampaign.name + '-' + this.uniqueID();
+    return this.selectedCampaign?.name + '-' + this.uniqueID();
   }
 
   onBackClicked() {
@@ -173,9 +162,9 @@ export class CampaignStatusComponent implements OnDestroy, OnInit {
   onDownload() {
     const filename = this.uniqueName();
 
-    const reportData = new Array<Object>();
+    const reportData = new Array<unknown>();
 
-    this.reportData.forEach(p => {
+    this.reportData?.forEach(p => {
       reportData.push(p);
 
       if (p.data !== undefined) {

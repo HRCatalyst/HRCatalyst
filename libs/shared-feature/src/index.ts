@@ -21,7 +21,10 @@ export * from './lib/models/question.model';
 export * from './lib/models/rater.model';
 export * from './lib/models/user.model';
 export * from './lib/models/firebase.user';
-export * from './lib/data/relation.data';
-export * from './lib/data/feedback.status';
+
 export * from './lib/base/form.base';
+
+export * from './lib/data/feedback.status';
+export * from './lib/data/relation.data';
 export * from './lib/data/role.data';
+export * from './lib/data/campaign.data';

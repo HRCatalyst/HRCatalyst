@@ -9,6 +9,8 @@ import { CampaignComponent } from './campaign.component';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { CompanyFeatureModule } from '@hrcatalyst/company-feature';
 import { ClientFeatureModule } from '@hrcatalyst/client-feature';
+import { FeedbackFeatureModule } from '@hrcatalyst/feedback-feature';
+import { ImportFeatureModule } from '@hrcatalyst/import-feature';
 
 @NgModule({
   imports: [
@@ -21,6 +23,8 @@ import { ClientFeatureModule } from '@hrcatalyst/client-feature';
     ]),
     CompanyFeatureModule,
     ClientFeatureModule,
+    FeedbackFeatureModule,
+    ImportFeatureModule,
     StoreModule.forFeature('campaign', reducer),
     EffectsModule.forFeature([CampaignEffects]),
   ],

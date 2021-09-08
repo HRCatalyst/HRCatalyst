@@ -164,10 +164,3 @@ on(CampaignActions.createCampaignYearSuccess,
   ),
 );
 
-
-export const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal,
-} = adapter.getSelectors();

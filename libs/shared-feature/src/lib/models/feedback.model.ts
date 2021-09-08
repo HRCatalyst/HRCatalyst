@@ -72,7 +72,7 @@ export class ReportParticipant {
   id = '';
   firstName = '';
   lastName = '';
-  raters = '';
+  raters = 0;
   feedback = 0;
   pending = 0;
   unsolicited = 0;

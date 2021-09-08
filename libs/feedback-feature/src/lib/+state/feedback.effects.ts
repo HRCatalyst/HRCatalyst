@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, concatMap, mergeMap } from 'rxjs/operators';
-import { Observable, EMPTY, of } from 'rxjs';
+import { catchError, map, mergeMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 import * as FeedbackActions from './feedback.actions';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { enumFeedbackStatus, Feedback, FEEDBACK_STATUS, LoaderService } from '@hrcatalyst/shared-feature';
-import { FeedbackState } from './feedback.reducer';
+import { FeedbackState } from './feedback.entity';
 
 @Injectable()
 export class FeedbackEffects {
@@ -17,25 +17,25 @@ export class FeedbackEffects {
     this.campaignYear = '2021';
   }
 
-  // loadFeedback$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //   ofType(FeedbackActions.loadFeedback),
-  //   mergeMap(() => {
-  //     this.loader.isLoading.next(true);
-  //     this.get()
-  //       .pipe(
-  //         map(feedback => {
-  //           this.loader.isLoading.next(false);
-  //           return FeedbackActions.loadFeedbackSuccess({payload: feedback});
-  //         }),
-  //         catchError((err, caught) => {
-  //           this.store.dispatch(FeedbackActions.loadFeedbackFailure({error: err}));
-  //           this.loader.isLoading.next(false);
-  //           return caught;
-  //         })
-  //     )
-  //   }))
-  // });
+  loadFeedback$ = createEffect(() => {
+    return this.actions$.pipe(
+    ofType(FeedbackActions.loadFeedback),
+    mergeMap(() => {
+      this.loader.isLoading.next(true);
+      return this.get()
+        .pipe(
+          map(feedback => {
+            this.loader.isLoading.next(false);
+            return FeedbackActions.loadFeedbackSuccess({payload: feedback});
+          }),
+          catchError((err, caught) => {
+            this.store.dispatch(FeedbackActions.loadFeedbackFailure({error: err}));
+            this.loader.isLoading.next(false);
+            return caught;
+          })
+        )
+    }))
+  });
 
   participantFeedback$ = createEffect(() => {
     return this.actions$.pipe(

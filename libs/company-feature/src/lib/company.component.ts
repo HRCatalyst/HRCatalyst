@@ -1,24 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { Company } from 'src/app/company/company.interface';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Company } from '@hrcatalyst/shared-feature';
 
 @Component({
   selector: 'hrcatalyst-company',
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.css']
 })
-export class CompanyComponent implements OnInit {
-  selectedCompany: Company;
+export class CompanyComponent {
+  selectedCompany?: Company;
 
   constructor(private router: Router) {
-    const xtra = this.router.getCurrentNavigation().extras.state;
+    const xtra = this.router.getCurrentNavigation()?.extras.state;
 
     if (xtra != null) {
       this.selectedCompany = xtra.payload;
     }
-  }
-
-  ngOnInit() {
   }
 
   showErrors() {

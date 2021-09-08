@@ -7,7 +7,7 @@ import * as InterviewActions from './interview.actions';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Associate, Campaign, enumFeedbackType, Feedback, IAssociate, IFeedback, Interview, InterviewParticipant, LoaderService, Participant, Rater } from '@hrcatalyst/shared-feature';
 import { Store } from '@ngrx/store';
-
+import { createFeedback } from '@hrcatalyst/feedback-feature';
 
 
 @Injectable()
@@ -130,9 +130,9 @@ export class InterviewEffects {
           this.loader.isLoading.next(false);
           return InterviewActions.createInterviewFailire({error: err});
         });
-      return of(x);
-    })
-  )});
+        return of(x);
+      })
+    )});
 
   update$ = createEffect(() => {
     return this.actions$.pipe(

@@ -7,6 +7,8 @@ import { reducer } from './+state/interview.reducer';
 import { InterviewEffects } from './+state/interview.effects';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { InterviewComponent } from './interview.component';
+import { FeedbackFeatureModule } from '@hrcatalyst/feedback-feature';
+import { QuestionFeatureModule } from '@hrcatalyst/question-feature';
 
 @NgModule({
   imports: [
@@ -17,6 +19,8 @@ import { InterviewComponent } from './interview.component';
         component: InterviewComponent
       }
     ]),
+    FeedbackFeatureModule,
+    QuestionFeatureModule,
     StoreModule.forFeature('interview', reducer),
     EffectsModule.forFeature([InterviewEffects]),
   ],
