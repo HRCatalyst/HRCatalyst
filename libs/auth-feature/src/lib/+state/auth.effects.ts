@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 
 import * as AuthActions from './auth.actions';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -15,7 +15,7 @@ import { AuthState } from './auth.entity';
 @Injectable()
 export class AuthEffects {
 
-  constructor(private store: Store<AuthState>, private firebaseAuth: AngularFireAuth, private firestore: AngularFirestore,
+  constructor(private store: Store<AuthState>, private firebaseAuth: AngularFireAuth, private firestore: Firestore,
     private router: Router, private loader: LoaderService, private actions$: Actions) {
   }
 
@@ -57,7 +57,7 @@ export class AuthEffects {
             }
             return of(data);
           })
-          .catch(err => {
+          .catch((err: any) => {
             this.loader.isLoading.next(false);
             return of(AuthActions.loadSettingsFailure({ error: err }));
           });

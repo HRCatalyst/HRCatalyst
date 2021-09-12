@@ -5,11 +5,11 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/interview.reducer';
 import { InterviewEffects } from './+state/interview.effects';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { InterviewComponent } from './interview.component';
 import { FeedbackFeatureModule } from '@hrcatalyst/feedback-feature';
 import { QuestionFeatureModule } from '@hrcatalyst/question-feature';
-import { AssociateFeatureModule } from '@hrcatalyst/associate-feature';
+import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
 
 @NgModule({
   imports: [
@@ -22,7 +22,7 @@ import { AssociateFeatureModule } from '@hrcatalyst/associate-feature';
     ]),
     FeedbackFeatureModule,
     QuestionFeatureModule,
-    AssociateFeatureModule,
+    SharedFeatureModule,
     StoreModule.forFeature('interview', reducer),
     EffectsModule.forFeature([InterviewEffects]),
   ],
@@ -33,7 +33,7 @@ import { AssociateFeatureModule } from '@hrcatalyst/associate-feature';
     InterviewComponent
   ],
   providers: [
-    AngularFirestore
+    Firestore
   ]
 })
 export class InterviewFeatureModule {}

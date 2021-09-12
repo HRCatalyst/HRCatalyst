@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import * as QuestionActions from './question.actions';
 import { LoaderService, Question } from '@hrcatalyst/shared-feature';
 import { Store } from '@ngrx/store';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { QuestionState } from './question.entity';
 
 
@@ -14,7 +14,7 @@ export class QuestionEffects {
 
   constructor(private actions$: Actions,
     private store: Store<QuestionState>,
-    private firestore: AngularFirestore,
+    private firestore: Firestore,
     private loader: LoaderService) {}
 
   load$ = createEffect(() => {
@@ -46,7 +46,7 @@ export class QuestionEffects {
           this.loader.isLoading.next(false);
           return QuestionActions.createQuestionSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
             this.loader.isLoading.next(false);
             return QuestionActions.createQuestionFailire({error: err});
         });
@@ -64,7 +64,7 @@ export class QuestionEffects {
           this.loader.isLoading.next(false);
           return QuestionActions.updateQuestionSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return QuestionActions.updateQuestionFailure({error: err});
         });
@@ -82,7 +82,7 @@ export class QuestionEffects {
           this.loader.isLoading.next(false);
           return QuestionActions.deleteQuestionSuccess({payload: x.payload.id});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return QuestionActions.deleteQuestionFailure({error: err});
           return of(x);

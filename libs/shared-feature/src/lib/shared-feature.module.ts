@@ -28,9 +28,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { AmazingTimePickerModule } from 'amazing-time-picker';
+// import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   imports: [
@@ -51,10 +52,11 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatRadioModule,
     MatCheckboxModule,
     MatSelectModule,
-    AmazingTimePickerModule,
+    // AmazingTimePickerModule,
     MatSlideToggleModule,
     MatTooltipModule,
     FlexLayoutModule,
+    AgGridModule,
     RouterModule.forChild([
       /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
     ]),
@@ -84,10 +86,11 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    AmazingTimePickerModule,
+    //AmazingTimePickerModule,
     MatSlideToggleModule,
     MatTooltipModule,
     FlexLayoutModule,
+    AgGridModule,
   ],
   providers: [
     LoaderService,

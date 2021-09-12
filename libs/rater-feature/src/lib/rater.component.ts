@@ -8,7 +8,7 @@ import { Associate, Campaign, Client, Company, ConfirmationComponent, Participan
 import { MatDialog } from '@angular/material/dialog';
 import { RaterState } from './+state/rater.entity';
 import { createRater, deleteRater, selectRater, updateRater } from './+state/rater.actions';
-import { FeedbackState } from '@hrcatalyst/feedback-feature';
+//import { FeedbackState } from '@hrcatalyst/feedback-feature';
 
 @Component({
   selector: 'hrcatalyst-rater',
@@ -38,7 +38,7 @@ export class RaterComponent implements OnDestroy {
   raters: Array<Associate> = new Array<Associate>();
 
   constructor(private dialog: MatDialog, private router: Router, private raterStore: Store<RaterState>,
-    private feedbackStore: Store<FeedbackState>) {
+   ) {
       const xtra = this.router.getCurrentNavigation()?.extras.state;
 
       if (xtra != null) {

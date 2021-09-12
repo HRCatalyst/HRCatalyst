@@ -4,7 +4,7 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
 
 import * as InterviewActions from './interview.actions';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Associate, Campaign, enumFeedbackType, Feedback, IAssociate, IFeedback, Interview, InterviewParticipant, LoaderService, Participant, Rater } from '@hrcatalyst/shared-feature';
 import { Store } from '@ngrx/store';
 import { createFeedback } from '@hrcatalyst/feedback-feature';
@@ -14,7 +14,7 @@ import { createFeedback } from '@hrcatalyst/feedback-feature';
 export class InterviewEffects {
   campaignYear: string = Date.now.toString();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
       private store: Store<IAssociate>, private feedbackStore: Store<IFeedback>, private loader: LoaderService) {
         this.campaignYear = '2021';
   }
@@ -126,7 +126,7 @@ export class InterviewEffects {
           this.loader.isLoading.next(false);
           return InterviewActions.createInterviewSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return InterviewActions.createInterviewFailire({error: err});
         });
@@ -147,7 +147,7 @@ export class InterviewEffects {
           this.loader.isLoading.next(false);
           return InterviewActions.updateInterviewSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return InterviewActions.updateInterviewFailure({error: err});
         });
@@ -165,7 +165,7 @@ export class InterviewEffects {
           this.loader.isLoading.next(false);
           return InterviewActions.deleteInterviewSuccess({payload: x.id});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return InterviewActions.deleteInterviewFailure({error: err});
         });

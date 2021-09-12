@@ -5,7 +5,7 @@ import { of, Subject } from 'rxjs';
 
 import * as CampaignActions from './campaign.actions';
 import { Campaign, CampaignYear, LoaderService } from '@hrcatalyst/shared-feature';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { createCampaign,
           createCampaignFailire,
           createCampaignSuccess,
@@ -36,7 +36,7 @@ export class CampaignEffects {
   campaignYear: string = Date.now.toString();
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<CampaignState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }
@@ -96,7 +96,7 @@ export class CampaignEffects {
             this.loader.isLoading.next(false);
             return CampaignActions.loadClientCampaignsSuccess({payload: result});
           })
-          .catch(err => {
+          .catch((err: any) => {
             this.loader.isLoading.next(false);
             return of(loadClientCampaignsFailure({error: err}));
           });
@@ -115,7 +115,7 @@ export class CampaignEffects {
           this.store.dispatch(loadClientCampaigns({payload: x.payload.clientId}));
           return createCampaignSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return createCampaignFailire({error: err});
         });
@@ -133,7 +133,7 @@ export class CampaignEffects {
           this.loader.isLoading.next(false);
           return updateCampaignSuccess({payload: x.payload});
         })
-        .catch(err => {
+        .catch((err: any) => {
             this.loader.isLoading.next(false);
             return updateCampaignFailure({error: err});
         });
@@ -151,7 +151,7 @@ export class CampaignEffects {
           this.loader.isLoading.next(false);
           return deleteCampaignSuccess({payload: x.payload.id});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return deleteCampaignFailure({error: err});
         });
@@ -199,7 +199,7 @@ export class CampaignEffects {
           this.loader.isLoading.next(false);
           return createCampaignYearSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
             this.loader.isLoading.next(false);
             return createCampaignYearFailire({error: err});
         });
@@ -219,7 +219,7 @@ export class CampaignEffects {
             this.loader.isLoading.next(false);
             return updateCampaignYearSuccess({payload: x.payload});
           })
-          .catch(err => {
+          .catch((err: any) => {
             this.loader.isLoading.next(false);
             return updateCampaignYearFailure({error: err});
           });
@@ -236,7 +236,7 @@ export class CampaignEffects {
               this.loader.isLoading.next(false);
               return deleteCampaignSuccess({payload: 0});
             })
-            .catch(err => {
+            .catch((err: any) => {
               this.loader.isLoading.next(false);
               return deleteCampaignFailure({error: err});
             });
@@ -305,7 +305,7 @@ export class CampaignEffects {
 
       });
     })
-    .catch(error => {
+    .catch((err: any)or => {
       this.loader.isLoading.next(false);
       return of(updateCampaignFailure(error));
     });

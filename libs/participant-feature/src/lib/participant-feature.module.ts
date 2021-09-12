@@ -5,8 +5,9 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/participant.reducer';
 import { ParticipantEffects } from './+state/participant.effects';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { ParticipantComponent } from './participant.component';
+import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { ParticipantComponent } from './participant.component';
         component: ParticipantComponent
       }
     ]),
+    SharedFeatureModule,
     StoreModule.forFeature('participant', reducer),
     EffectsModule.forFeature([ParticipantEffects]),
   ],
@@ -27,7 +29,7 @@ import { ParticipantComponent } from './participant.component';
     ParticipantComponent
   ],
   providers: [
-    AngularFirestore
+    Firestore
   ]
 })
 export class ParticipantFeatureModule {}

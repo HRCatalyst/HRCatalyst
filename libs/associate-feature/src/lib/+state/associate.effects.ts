@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, debounceTime, distinctUntilChanged, map, mergeMap, switchMap, takeUntil } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
@@ -17,7 +17,7 @@ export class AssociateEffects {
 
   constructor(private actions$: Actions,
               private store: Store<AssociateState>,
-              private firestore: AngularFirestore,
+              private firestore: Firestore,
               private loader: LoaderService) {
       this.campaignYear = '2021';
   };
@@ -58,7 +58,7 @@ export class AssociateEffects {
           this.loader.isLoading.next(false);
           return of(loadCompanyAssociatesSuccess({payload: result}));
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return of(loadCompanyAssociatesFailure({error: err}));
         });
@@ -108,7 +108,7 @@ export class AssociateEffects {
           this.store.dispatch(loadCompanyAssociates({payload: x.payload.companyId}));
           return createAssociateSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return createAssociateFailire({ error: err });
         })
@@ -128,7 +128,7 @@ export class AssociateEffects {
             this.store.dispatch(loadCompanyAssociates({payload: x.payload.companyId}));
             return updateAssociateSuccess({payload: x.payload});
           })
-          .catch(err => {
+          .catch((err: any) => {
             this.loader.isLoading.next(false);
             return updateAssociateFailure({error: err });
           })
@@ -148,7 +148,7 @@ export class AssociateEffects {
             this.store.dispatch(loadCompanyAssociates({payload: x.payload.companyId}));
             return deleteAssociateSuccess({payload: x.payload});
           })
-          .catch(err => {
+          .catch((err: any) => {
             this.loader.isLoading.next(false);
             return deleteAssociateFailure({error: err});
           })

@@ -5,7 +5,7 @@ import { CompanyState } from './company.entity';
 import { Company, LoaderService } from '@hrcatalyst/shared-feature';
 import { createCompany, createCompanyFailire, createCompanySuccess, deleteCompany, deleteCompanyFailure, deleteCompanySuccess, loadAllCompanys, loadAllCompanysFailure, loadAllCompanysSuccess, updateCompany, updateCompanyFailure, updateCompanySuccess } from './company.actions';
 import { Store } from '@ngrx/store';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { of, Subject } from 'rxjs';
 
 
@@ -14,7 +14,7 @@ export class CompanyEffects {
   campaignYear: string = Date.now.toString();
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<CompanyState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }
@@ -48,7 +48,7 @@ export class CompanyEffects {
           this.loader.isLoading.next(false);
           return createCompanySuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any)=> {
           this.loader.isLoading.next(false);
           return createCompanyFailire({error: err});
         });
@@ -66,7 +66,7 @@ export class CompanyEffects {
           this.loader.isLoading.next(false);
           return updateCompanySuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any)=> {
           this.loader.isLoading.next(false);
           return updateCompanyFailure({error: err});
         });
@@ -84,7 +84,7 @@ export class CompanyEffects {
           this.loader.isLoading.next(false);
           return deleteCompanySuccess({payload: x.payload});
         })
-        .catch(err => {
+        .catch((err: any)=> {
           this.loader.isLoading.next(false);
           return deleteCompanyFailure({error: err});
         });

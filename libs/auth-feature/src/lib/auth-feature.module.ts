@@ -7,11 +7,11 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/auth.reducer';
 import { AuthEffects } from './+state/auth.effects';
 import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
-import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AngularFireFunctionsModule } from '@angular/fire/functions';
+// import { AngularFireModule } from '@angular/fire';
+import { FirestoreModule } from '@angular/fire/firestore';
+// import { AngularFireAuthModule } from '@angular/fire/auth';
+// import { AngularFireStorageModule } from '@angular/fire/storage';
+// import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -20,17 +20,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     SharedFeatureModule,
-    AngularFireModule,
-    AngularFirestoreModule,
-    AngularFireAuthModule,
-    AngularFireStorageModule,
-    AngularFireFunctionsModule,
+    // AngularFireModule,
+    FirestoreModule,
+    // AngularFireAuthModule,
+    // AngularFireStorageModule,
+    // AngularFireFunctionsModule,
     RouterModule.forChild([
       {
         path: '',
         component: LoginComponent
       }
     ]),
+    SharedFeatureModule,
     StoreModule.forFeature('auth', reducer),
     EffectsModule.forFeature([AuthEffects]),
   ],

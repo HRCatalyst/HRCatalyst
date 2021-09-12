@@ -6,9 +6,11 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/home.reducer';
 import { HomeEffects } from './+state/home.effects';
 import { HomeComponent } from './home.component';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { AuthFeatureModule } from '@hrcatalyst/auth-feature';
 import { ImportFeatureModule } from '@hrcatalyst/import-feature';
+import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
+import { QuestionFeatureModule } from '@hrcatalyst/question-feature';
 
 @NgModule({
   imports: [
@@ -21,6 +23,8 @@ import { ImportFeatureModule } from '@hrcatalyst/import-feature';
     ]),
     AuthFeatureModule,
     ImportFeatureModule,
+    QuestionFeatureModule,
+    SharedFeatureModule,
     StoreModule.forFeature('home', reducer),
     EffectsModule.forFeature([HomeEffects]),
   ],
@@ -31,7 +35,7 @@ import { ImportFeatureModule } from '@hrcatalyst/import-feature';
     HomeComponent
   ],
   providers: [
-    AngularFirestore
+    Firestore
   ]
 })
 export class HomeFeatureModule {}

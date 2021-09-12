@@ -6,7 +6,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/company.reducer';
 import { CompanyEffects } from './+state/company.effects';
 import { CompanyComponent } from './company.component';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
         component: CompanyComponent
       }
     ]),
+    SharedFeatureModule,
     StoreModule.forFeature('company', reducer),
     EffectsModule.forFeature([CompanyEffects]),
   ],
@@ -27,7 +29,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
     CompanyComponent
   ],
   providers: [
-    AngularFirestore
+    Firestore
   ]
 })
 export class CompanyFeatureModule {}

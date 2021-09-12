@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Client } from './client.model';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { LoaderService } from '@hrcatalyst/shared-feature';
 import { createClient, createClientFailire, createClientSuccess, deleteClient, deleteClientFailure, deleteClientSuccess, loadCompanyClients, loadCompanyClientsFailure, loadCompanyClientsSuccess, updateClient, updateClientFailure, updateClientSuccess } from './client.actions';
@@ -14,7 +14,7 @@ export class ClientEffects {
   campaignYear: string = Date.now.toString();
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<ClientState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }
@@ -34,7 +34,7 @@ export class ClientEffects {
           this.store.dispatch(loadCompanyClientsSuccess({payload: result}));
           this.loader.isLoading.next(false);
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return of(loadCompanyClientsFailure({error: err}));
         });
@@ -54,7 +54,7 @@ export class ClientEffects {
           this.store.dispatch(loadCompanyClients({ids: x.payload.companyId}));
           return createClientSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return of(createClientFailire({error: err}));
         });
@@ -73,7 +73,7 @@ export class ClientEffects {
           this.store.dispatch(loadCompanyClients({ids: x.payload.companyId}));
           return updateClientSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
             this.loader.isLoading.next(false);
             return updateClientFailure({error: err});
         });
@@ -92,7 +92,7 @@ export class ClientEffects {
             this.store.dispatch(loadCompanyClients({ids: x.payload.companyId}));
             return deleteClientSuccess({payload: x.payload});
           })
-          .catch(err => {
+          .catch((err: any) => {
             this.loader.isLoading.next(false);
             return deleteClientFailure({error: err});
           });

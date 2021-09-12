@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as FeedbackActions from './feedback.actions';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { enumFeedbackStatus, Feedback, FEEDBACK_STATUS, LoaderService } from '@hrcatalyst/shared-feature';
 import { FeedbackState } from './feedback.entity';
@@ -12,7 +12,7 @@ import { FeedbackState } from './feedback.entity';
 export class FeedbackEffects {
   campaignYear: string = Date.now.toString();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<FeedbackState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }
@@ -52,7 +52,7 @@ export class FeedbackEffects {
           this.store.dispatch(FeedbackActions.loadParticipantFeedbackSuccess({payload: result}));
           this.loader.isLoading.next(false);
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return of(FeedbackActions.loadParticipantFeedbackFailure({error: err}));
         });
@@ -80,7 +80,7 @@ export class FeedbackEffects {
           this.loader.isLoading.next(false);
           return FeedbackActions.createFeedbackSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return FeedbackActions.createFeedbackFailire({error: err});
         });
@@ -98,7 +98,7 @@ export class FeedbackEffects {
           this.loader.isLoading.next(false);
           return FeedbackActions.updateFeedbackSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return FeedbackActions.updateFeedbackFailure({error: err});
         });
@@ -116,7 +116,7 @@ export class FeedbackEffects {
           this.loader.isLoading.next(false);
           return FeedbackActions.deleteFeedbackSuccess({payload: x.payload});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return FeedbackActions.deleteFeedbackFailure({error: err});
         });

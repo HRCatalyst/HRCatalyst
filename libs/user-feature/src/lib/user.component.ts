@@ -22,14 +22,15 @@ export class UserComponent implements OnDestroy, OnInit {
     { headerName: 'Role', field: 'role' },
   ];
 
-  users?: Dictionary<User>;
+  entities?: Dictionary<User>;
+  users?: User[];
   private onDestroy$: Subject<void> = new Subject<void>();
 
   constructor(private store: Store<UserState>) {
     this.store.select(selectUserState)
     .pipe(takeUntil(this.onDestroy$))
     .subscribe((state) => {
-      this.users = state.entities;
+      this.entities = state.entities;
     });
   }
 

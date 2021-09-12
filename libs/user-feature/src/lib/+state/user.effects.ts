@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as UserActions from './user.actions';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { IUser, LoaderService, User } from '@hrcatalyst/shared-feature';
 import { Store } from '@ngrx/store';
 
@@ -13,7 +13,7 @@ export class UserEffects {
 
   constructor(
       private actions$: Actions,
-      private firestore: AngularFirestore,
+      private firestore: Firestore,
       private loader: LoaderService,
       private store: Store<IUser>
     ) {
@@ -49,7 +49,7 @@ export class UserEffects {
           .then(data => {
             return UserActions.createUserSuccess({payload: data});
           })
-          .catch(err => {
+          .catch((err: any) => {
             this.loader.isLoading.next(false);
             return UserActions.createUserFailure({error: err});
           });
@@ -67,7 +67,7 @@ export class UserEffects {
             this.loader.isLoading.next(false);
             return UserActions.updateUserSuccess({payload: data});
           })
-          .catch(err => {
+          .catch((err: any) => {
             this.loader.isLoading.next(false);
             return UserActions.updateUserFailure({error: err});
           });
@@ -85,7 +85,7 @@ export class UserEffects {
             this.loader.isLoading.next(false);
             return UserActions.deleteUserSuccess({payload: x.payload.id});
           })
-          .catch(err=> {
+          .catch((err: any)=> {
             this.loader.isLoading.next(false);
             return UserActions.deleteUserFailure({error: err});
           });

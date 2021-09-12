@@ -6,7 +6,7 @@ import { of, zip } from 'rxjs';
 import * as RaterActions from './rater.actions';
 import { Store } from '@ngrx/store';
 import { Associate, Feedback, IRater, LoaderService, Rater, SelectRaterParams, enumRationship} from '@hrcatalyst/shared-feature';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 
 @Injectable()
 export class RaterEffects {
@@ -14,7 +14,7 @@ export class RaterEffects {
 
   constructor(
     private actions$: Actions,
-    private firestore: AngularFirestore,
+    private firestore: Firestore,
     private loader: LoaderService,
     private store: Store<IRater>
   ) {
@@ -93,7 +93,7 @@ export class RaterEffects {
           this.loader.isLoading.next(false);
           return RaterActions.createRaterSuccess({payload:data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return RaterActions.createRaterFailire({error: err});
         });
@@ -111,7 +111,7 @@ export class RaterEffects {
           this.loader.isLoading.next(false);
           return RaterActions.updateRaterSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return RaterActions.updateRaterFailure({error: err});
         });
@@ -129,7 +129,7 @@ export class RaterEffects {
           this.loader.isLoading.next(false);
           return RaterActions.deleteRaterSuccess({payload: x.payload.id});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return RaterActions.deleteRaterFailure({error: err});
         });
@@ -151,7 +151,7 @@ export class RaterEffects {
           this.loader.isLoading.next(false);
           return RaterActions.loadRaterFeedbackSuccess({payload: result});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return RaterActions.loadRaterFeedbackFailure({error: err});
         });

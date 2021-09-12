@@ -8,10 +8,9 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
 import { AuthFeatureModule } from '@hrcatalyst/auth-feature';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { AssociateComponent } from './associate.component';
 import { CampaignFeatureModule } from '@hrcatalyst/campaign-feature';
-import { InterviewFeatureModule } from '@hrcatalyst/interview-feature';
 
 @NgModule({
   imports: [
@@ -25,7 +24,6 @@ import { InterviewFeatureModule } from '@hrcatalyst/interview-feature';
     SharedFeatureModule,
     AuthFeatureModule,
     CampaignFeatureModule,
-    InterviewFeatureModule,
     StoreModule.forFeature('associate', reducer),
     EffectsModule.forFeature([AssociateEffects]),
   ],
@@ -36,7 +34,7 @@ import { InterviewFeatureModule } from '@hrcatalyst/interview-feature';
     AssociateComponent
   ],
   providers: [
-    AngularFirestore
+    Firestore
   ]
 })
 export class AssociateFeatureModule {}

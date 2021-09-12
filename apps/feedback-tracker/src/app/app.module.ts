@@ -7,14 +7,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
-import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AngularFireFunctionsModule } from '@angular/fire/functions';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { environment } from '../environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { enableIndexedDbPersistence, Firestore, getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,18 +22,22 @@ import { AngularFirestore } from '@angular/fire/firestore';
     FormsModule,
     ReactiveFormsModule,
     SharedFeatureModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
-    AngularFireStorageModule,
-    AngularFireFunctionsModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => {
+        const firestore = getFirestore();
+        enableIndexedDbPersistence(firestore);
+        return firestore;
+    }),
+    AngularFireAuth,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({})
   ],
   providers: [
-    AngularFirestore
+    Firestore
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+

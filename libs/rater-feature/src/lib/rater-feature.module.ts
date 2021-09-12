@@ -5,8 +5,9 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/rater.reducer';
 import { RaterEffects } from './+state/rater.effects';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { RaterComponent } from './rater.component';
+import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { RaterComponent } from './rater.component';
         component: RaterComponent
       }
     ]),
+    SharedFeatureModule,
     StoreModule.forFeature('rater', reducer),
     EffectsModule.forFeature([RaterEffects])
   ],
@@ -27,7 +29,7 @@ import { RaterComponent } from './rater.component';
     RaterComponent
   ],
   providers: [
-    AngularFirestore
+    Firestore
   ]
 })
 export class RaterFeatureModule {}

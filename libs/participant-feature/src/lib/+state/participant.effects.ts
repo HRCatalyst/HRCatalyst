@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
 import * as ParticipantActions from './participant.actions';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Associate, Feedback, LoaderService, Participant } from '@hrcatalyst/shared-feature';
 import { Store } from '@ngrx/store';
 import { ParticipantState } from './participant.entity';
@@ -13,7 +13,7 @@ import { ParticipantState } from './participant.entity';
 export class ParticipantEffects {
   campaignYear: string = Date.now.toString();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<ParticipantState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }
@@ -31,7 +31,7 @@ export class ParticipantEffects {
             this.store.dispatch(ParticipantActions.loadParticipantCampaignSuccess({payload: result}));
             this.loader.isLoading.next(false);
           })
-          .catch(err => {
+          .catch((err: any) => {
             this.loader.isLoading.next(false);
             return of(ParticipantActions.loadParticipantCampaignFailure({error: err}));
           });
@@ -99,7 +99,7 @@ export class ParticipantEffects {
           this.loader.isLoading.next(false);
           return ParticipantActions.createParticipantSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return ParticipantActions.createParticipantFailire({error: err});
         });
@@ -117,7 +117,7 @@ export class ParticipantEffects {
           this.loader.isLoading.next(false);
           return ParticipantActions.updateParticipantSuccess({payload: data});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return ParticipantActions.updateParticipantFailure({error: err});
         });
@@ -135,7 +135,7 @@ export class ParticipantEffects {
           this.loader.isLoading.next(false);
           return ParticipantActions.deleteParticipantSuccess({payload: x.payload.id});
         })
-        .catch(err => {
+        .catch((err: any) => {
           this.loader.isLoading.next(false);
           return ParticipantActions.deleteParticipantFailure({error: err});
         });

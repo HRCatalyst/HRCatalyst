@@ -6,11 +6,12 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/campaign.reducer';
 import { CampaignEffects } from './+state/campaign.effects';
 import { CampaignComponent } from './campaign.component';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { CompanyFeatureModule } from '@hrcatalyst/company-feature';
 import { ClientFeatureModule } from '@hrcatalyst/client-feature';
 import { FeedbackFeatureModule } from '@hrcatalyst/feedback-feature';
 import { ImportFeatureModule } from '@hrcatalyst/import-feature';
+import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { ImportFeatureModule } from '@hrcatalyst/import-feature';
     ClientFeatureModule,
     FeedbackFeatureModule,
     ImportFeatureModule,
+    SharedFeatureModule,
     StoreModule.forFeature('campaign', reducer),
     EffectsModule.forFeature([CampaignEffects]),
   ],
@@ -35,7 +37,7 @@ import { ImportFeatureModule } from '@hrcatalyst/import-feature';
     CampaignComponent
   ],
   providers: [
-    AngularFirestore
+    Firestore
   ]
 })
 export class CampaignFeatureModule {}
