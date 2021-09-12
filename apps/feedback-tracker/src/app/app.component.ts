@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { logoutAttempt } from 'libs/auth-feature/src/lib/+state/auth.actions';
-import { Auth } from 'libs/auth-feature/src/lib/+state/auth.reducer';
+import { AuthState, logoutAttempt } from '@hrcatalyst/auth-feature';
 
 @Component({
   selector: 'hrcatalyst-root',
@@ -17,7 +16,7 @@ export class AppComponent implements OnDestroy {
   authenticated = false;
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private dialog: MatDialog, private store: Store<Auth>, private router: Router) {
+  constructor(private dialog: MatDialog, private store: Store<AuthState>, private router: Router) {
     this.store.pipe(select((state: any) => state))
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {

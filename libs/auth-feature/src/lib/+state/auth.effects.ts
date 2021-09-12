@@ -8,14 +8,14 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { IFirebaseUser, LoaderService, User } from '@hrcatalyst/shared-feature';
 import { Store } from '@ngrx/store';
-import { Auth } from './auth.reducer';
 import { loginFailure, loginSuccess,loginInprogress } from './auth.actions';
 import { of } from 'rxjs';
+import { AuthState } from './auth.entity';
 
 @Injectable()
 export class AuthEffects {
 
-  constructor(private store: Store<Auth>, private firebaseAuth: AngularFireAuth, private firestore: AngularFirestore,
+  constructor(private store: Store<AuthState>, private firebaseAuth: AngularFireAuth, private firestore: AngularFirestore,
     private router: Router, private loader: LoaderService, private actions$: Actions) {
   }
 

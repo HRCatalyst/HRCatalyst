@@ -9,6 +9,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { InterviewComponent } from './interview.component';
 import { FeedbackFeatureModule } from '@hrcatalyst/feedback-feature';
 import { QuestionFeatureModule } from '@hrcatalyst/question-feature';
+import { AssociateFeatureModule } from '@hrcatalyst/associate-feature';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { QuestionFeatureModule } from '@hrcatalyst/question-feature';
     ]),
     FeedbackFeatureModule,
     QuestionFeatureModule,
+    AssociateFeatureModule,
     StoreModule.forFeature('interview', reducer),
     EffectsModule.forFeature([InterviewEffects]),
   ],

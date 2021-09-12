@@ -3,7 +3,6 @@ import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { CampaignModalComponent } from './campaign.modal';
-import { CampaignState } from './+state/campaign.reducer';
 import { Campaign, Client, Company, ConfirmationComponent } from '@hrcatalyst/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
 import { createCampaign, deleteCampaign, loadClientCampaigns, selectCampaign, updateCampaign } from './+state/campaign.actions';
@@ -12,6 +11,7 @@ import { selectCampaignState } from './+state/campaign.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { selectCompany } from '@hrcatalyst/company-feature';
 import { ClientState } from '@hrcatalyst/client-feature';
+import { CampaignState } from './+state/campaign.entity';
 
 @Component({
   selector: 'hrcatalyst-campaign',

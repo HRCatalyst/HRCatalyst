@@ -1,6 +1,6 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import * as fromQuestion from './question.reducer';
+import { createFeatureSelector } from "@ngrx/store";
+import { questionsFeatureKey, QuestionState } from "./question.entity";
 
-export const selectQuestionState = createFeatureSelector<fromQuestion.State>(
-  fromQuestion.questionFeatureKey
+export const selectQuestionState = createFeatureSelector<QuestionState>(
+  questionsFeatureKey
 );

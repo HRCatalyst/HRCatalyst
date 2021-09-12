@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { Associate, FormBase } from '@hrcatalyst/shared-feature';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { schemaImportAssociate, enumImportAssociate } from './associate.import.schema';
 import { Store} from '@ngrx/store';
 import { createAssociate } from './+state/associate.actions';
 import { AssociateState } from './+state/associate.entity';
@@ -45,7 +44,7 @@ export class AssociateImportModalComponent extends FormBase {
     return (this.associates != null && this.associates.length > 0);
   }
 
-  onFileChange(event) {
+  onFileChange(event: any) {
       this.associates = new Array<Associate>();
 
     // if (event.target.files && event.target.files.length) {
@@ -70,6 +69,5 @@ export class AssociateImportModalComponent extends FormBase {
     //       });
     //   });
     }
-  }
 }
 

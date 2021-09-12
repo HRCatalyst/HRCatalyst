@@ -6,7 +6,6 @@ import { DocumentReference } from '@angular/fire/firestore';
 
 export const loadImports = createAction(
   '[Import/API] Load Imports',
-  props<{ imports: Import[] }>()
 );
 
 export const addImport = createAction(

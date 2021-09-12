@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap } from 'rxjs/operators';
-import { Observable, of, Subject } from 'rxjs';
 import { Client } from './client.model';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ClientState } from './client.reducer';
 import { Store } from '@ngrx/store';
 import { LoaderService } from '@hrcatalyst/shared-feature';
-import { createClient, createClientFailire, createClientSuccess, deleteClient, deleteClientFailure, deleteClientSuccess, loadCompanyClients, loadCompanyClientsFailure, loadCompanyClientsInprogress, loadCompanyClientsSuccess, updateClient, updateClientFailure, updateClientSuccess } from './client.actions';
+import { createClient, createClientFailire, createClientSuccess, deleteClient, deleteClientFailure, deleteClientSuccess, loadCompanyClients, loadCompanyClientsFailure, loadCompanyClientsSuccess, updateClient, updateClientFailure, updateClientSuccess } from './client.actions';
+import { of, Subject } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { ClientState } from './client.entity';
 
 @Injectable()
 export class ClientEffects {

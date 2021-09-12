@@ -3,8 +3,10 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import { FormBase, IQuestion, Question } from '@hrcatalyst/shared-feature';
+import { FormBase, Interview, InterviewEdit, IQuestion, Question } from '@hrcatalyst/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { loadAllQuestions, QuestionState } from '@hrcatalyst/question-feature';
+import * as questionEntity from '@hrcatalyst/question-feature';
 
 @Component({
   selector: 'hrcatalyst-interview',
@@ -33,12 +35,12 @@ export class InterviewComponent extends FormBase implements OnDestroy, OnInit {
             ((q.reference.toLowerCase().includes('ec') && this.ecInterview) || !q.reference.toLowerCase().includes('ec')))
               .sort((a, b) => a.sequence - b.sequence);
 
-          this.questions.forEach(q => {
+            this.questions?.forEach(q => {
               this.form.setControl(q.reference, new FormControl());
 
               const answer = this.data.interviews.filter(i => i.question === q.reference);
               if (answer.length > 0) {
-                this.form.get(q.reference).setValue(answer[0].answer);
+                this.form.get(q.reference)?.setValue(answer[0].answer);
               }
           });
         }
@@ -49,7 +51,7 @@ export class InterviewComponent extends FormBase implements OnDestroy, OnInit {
     if (this.data != null && this.data.campaignName != null) {
       this.ecInterview = this.data.campaignName.toLowerCase().startsWith('ec');
     }
-    this.questionStore.dispatch(new LoadAllQuestionsAction());
+    this.questionStore.dispatch(loadAllQuestions());
   }
 
   ngOnDestroy() {
@@ -71,7 +73,7 @@ export class InterviewComponent extends FormBase implements OnDestroy, OnInit {
   onSave(status: string) {
     const interviews = new Array<Interview>();
 
-    this.questions.forEach(q => {
+    this.questions?.forEach(q => {
       const iv = new Interview();
 
       iv.interviewer = this.data.interviewer;
@@ -91,7 +93,7 @@ export class InterviewComponent extends FormBase implements OnDestroy, OnInit {
       iv.status = status;
 
       iv.question = q.reference;
-      iv.answer = this.form.get(q.reference).value;
+      iv.answer = this.form.get(q.reference)?.value;
 
       const interview = this.data.interviews.filter(i => i.question === q.reference);
       iv.id = interview.length > 0 ? interview[0].id : undefined;

@@ -36,8 +36,6 @@ export class AssociateComponent implements OnDestroy {
   private onDestroy$: Subject<void> = new Subject<void>();
   private gridApi: any;
 
-  //associateState$: Observable<Associate[]>;
-  //associateSubscription$: Subscription;
   associates?: Dictionary<Associate>;
 
   constructor(private dialog: MatDialog, private associateStore: Store<AssociateState>, private router: Router) {

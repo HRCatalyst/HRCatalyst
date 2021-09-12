@@ -1,25 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import * as AuthActions from './auth.actions';
-import { IFirebaseUser, User } from '@hrcatalyst/shared-feature';
+import { adapter, initialState } from './auth.entity';
 
-// export const authsFeatureKey = 'auths';
-// export interface Auth extends EntityState<Auth> {
-//     user?: IFirebaseUser;
-//     settings?: User;
-//     loading?: boolean;
-//     error?: string;
-//     selectedOrganization?: string;
-// }
-
-// export const adapter: EntityAdapter<Auth> = createEntityAdapter<Auth>();
-
-// export const initialState: Auth = adapter.getInitialState({
-//   user: undefined,
-//   settings: undefined,
-//   loading: false,
-//   error: '',
-//   selectedOrganization: ''
-// });
 
 export const reducer = createReducer(
   initialState,

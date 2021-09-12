@@ -1,15 +1,15 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { FormBase } from 'src/app/shared/form.base';
+import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { IQuestion, Question } from 'src/app/question/question.interface';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBase, IQuestion, Question } from '@hrcatalyst/shared-feature';
+
 
 @Component({
   selector: 'hrcatalyst-question.modal',
   templateUrl: './question.modal.html',
   styleUrls: ['./question.modal.css']
 })
-export class QuestionModalComponent extends FormBase implements OnInit {
+export class QuestionModalComponent extends FormBase {
   form = new FormGroup({
     'reference': new FormControl('', [Validators.required, Validators.minLength(2)]),
     'content': new FormControl('', [Validators.required, Validators.minLength(2)])
@@ -20,14 +20,11 @@ export class QuestionModalComponent extends FormBase implements OnInit {
 
   }
 
-  ngOnInit() {
-  }
-
   onSave() {
     const qst = new Question();
 
-    qst.reference = this.form.get('reference').value;
-    qst.content = this.form.get('content').value;
+    qst.reference = this.form.get('reference')?.value;
+    qst.content = this.form.get('content')?.value;
 
     this.dialogRef.close(qst);
   }

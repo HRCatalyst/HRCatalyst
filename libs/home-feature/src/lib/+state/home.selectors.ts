@@ -1,6 +1,6 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import * as fromHome from './home.reducer';
+import { createFeatureSelector } from "@ngrx/store";
+import { homesFeatureKey, HomeState } from "./home.entity";
 
-export const selectHomeState = createFeatureSelector<fromHome.State>(
-  fromHome.homeFeatureKey
+export const selectHomeState = createFeatureSelector<HomeState>(
+  homesFeatureKey
 );

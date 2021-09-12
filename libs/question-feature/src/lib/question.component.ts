@@ -1,53 +1,51 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material';
-import { IQuestion, Question } from 'src/app/question/question.interface';
-import * as questionEntity from 'src/app/question/question.entity';
-import { LoadAllQuestionsAction, CreateQuestionAction, DeleteQuestionAction } from 'src/app/question/question.action';
 import { QuestionModalComponent } from './question.modal';
-import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
+import { ConfirmationComponent, Question } from '@hrcatalyst/shared-feature';
+import { QuestionState } from './+state/question.entity';
+import { MatDialog } from '@angular/material/dialog';
+import { createQuestion, deleteQuestion, loadAllQuestions } from './+state/question.actions';
 
 @Component({
   selector: 'hrcatalyst-question',
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css']
 })
-export class QuestionComponent implements OnDestroy, OnInit {
+export class QuestionComponent implements OnInit {
   questionsDefs = [
     { headerName: 'Reference', field: 'reference', sortable: true },
     { headerName: 'Content', field: 'content', sortable: true },
   ];
 
-  private gridApi;
+  private gridApi: any;
 
-  questionState$: Observable<IQuestion[]>;
-  questionSubscription$: Subscription;
-  questions: Question[];
+  // questionState$: Observable<IQuestion[]>;
+  // questionSubscription$: Subscription;
+  questions?: Question[];
   welcomeUser = '';
   hasQuestion = false;
 
-  constructor(private dialog: MatDialog, private store: Store<questionEntity.QuestionState>, private router: Router) {
-    this.questionState$ = this.store.select(questionEntity.selectAll);
-    this.questionSubscription$ = this.questionState$.subscribe((state) => {
-      if (state.length > 0) {
-        this.questions = state;
-      }
-    });
+  constructor(private dialog: MatDialog, private store: Store<QuestionState>, private router: Router) {
+    // this.questionState$ = this.store.select(selectQuestionState);
+    // this.questionSubscription$ = this.questionState$.subscribe((state) => {
+    //   if (state.length > 0) {
+    //     this.questions = state;
+    //   }
+    // });
   }
 
   ngOnInit() {
-    this.store.dispatch(new LoadAllQuestionsAction());
+    this.store.dispatch(loadAllQuestions());
   }
 
-  ngOnDestroy() {
-    if (this.questionSubscription$ != null) {
-      this.questionSubscription$.unsubscribe();
-    }
-  }
+  // ngOnDestroy() {
+  //   if (this.questionSubscription$ != null) {
+  //     this.questionSubscription$.unsubscribe();
+  //   }
+  // }
 
-  openQuestionModal(question) {
+  openQuestionModal(question: Question) {
     const dialogRef = this.dialog.open(QuestionModalComponent, {
       width: '450px',
       data: question
@@ -56,12 +54,12 @@ export class QuestionComponent implements OnDestroy, OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The question dialog was closed');
       if (result instanceof Question) {
-        this.store.dispatch(new CreateQuestionAction(result));
+        this.store.dispatch(createQuestion({payload: result}));
       }
     });
   }
 
-  openConfirmationModal(title, message) {
+  openConfirmationModal(title: string, message: string) {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
       width: '450px',
       data: { title: title, message: message }
@@ -71,12 +69,12 @@ export class QuestionComponent implements OnDestroy, OnInit {
       console.log('The confirmation dialog was closed');
       if (result === true) {
         const selectedRows = this.gridApi.getSelectedRows();
-        this.store.dispatch(new DeleteQuestionAction(selectedRows[0]));
+        this.store.dispatch(deleteQuestion({payload: selectedRows[0]}));
       }
     });
   }
 
-  onGridReady(params) {
+  onGridReady(params:any) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
   }
@@ -111,7 +109,10 @@ export class QuestionComponent implements OnDestroy, OnInit {
     this.hasQuestion = selectedRows.length > 0;
   }
 
-  onRowDoubleClicked(row) {
+  onRowDoubleClicked(row:any) {
+    if (row) {
+      console.log(row);
+    }
   }
 }
 

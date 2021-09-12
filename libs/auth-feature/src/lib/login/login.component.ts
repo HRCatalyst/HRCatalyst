@@ -3,9 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IFirebaseUser, LoginModel, User } from '@hrcatalyst/shared-feature';
 import { select, Store } from '@ngrx/store';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { loadSettings, loginAttempt } from '../+state/auth.actions';
-import { Auth } from '../+state/auth.reducer';
+import { AuthState } from '../+state/auth.entity';
 import { selectAuthState } from '../+state/auth.selectors';
 
 @Component({
@@ -22,7 +22,7 @@ export class LoginComponent implements OnDestroy {
     'userName': new FormControl('', [Validators.required, Validators.minLength(4)]),
     'userPassword': new FormControl('', [Validators.required, Validators.minLength(4)])
   });
-  constructor(private store: Store<Auth>, private router: Router) {
+  constructor(private store: Store<AuthState>, private router: Router) {
     this.store.pipe(select(selectAuthState))
       .subscribe((state) => {
       if (state.user != null && this.currentUser !== state.user) {

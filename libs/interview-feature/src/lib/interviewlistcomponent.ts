@@ -1,21 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
-import { IAuth } from 'src/app/auth/auth.interface';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IUser } from 'src/app/user/user.interface';
-import * as interviewEntity from 'src/app/interview/interview.entity';
-import * as associateEntity from 'src/app/associate/associate.entity';
-import { Associate } from 'src/app/associate/associate.interface';
-import { Participant } from 'src/app/participant/participant.interface';
-import { RELATIONSHIP_DATA } from 'src/app/rater/relationship.data';
 import { Router } from '@angular/router';
 import { InterviewComponent } from './interview.component';
-import { Interview, InterviewEdit, InterviewParticipant } from 'src/app/interview/interview.interface';
-import { UpdateInterviewAction, CreateInterviewAction, LoadInterviewParticipantsAction, LoadInterviewParticipantsSuccessAction } from 'src/app/interview/interview.action';
-import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
-import { LoadAssociateAction, SearchAssociatesAction} from 'src/app/associate/associate.action';
+import { Associate, ConfirmationComponent, Interview, InterviewParticipant, IUser, RELATIONSHIP_DATA } from '@hrcatalyst/shared-feature';
+import { InterviewState } from './+state/interview.entity';
+import { AssociateState, searchAssociates } from '@hrcatalyst/associate-feature';
+import { loadInterviewParticipantsSuccess } from './+state/interview.actions';
 
 @Component({
   selector: 'hrcatalyst-interviewlist',
@@ -24,10 +17,10 @@ import { LoadAssociateAction, SearchAssociatesAction} from 'src/app/associate/as
 })
 export class InterviewListComponent implements OnDestroy, OnInit {
   private onDestroy$: Subject<void> = new Subject<void>();
-  user$: IUser;
-  selectedAssociate?: Associate = null;
-  participants: InterviewParticipant[] = null;
-  interviews: Array<Interview>;
+  user$?: IUser;
+  selectedAssociate?: Associate = undefined;
+  participants?: InterviewParticipant[] = undefined;
+  interviews?: Array<Interview>;
 
   participantsDefs = [
     { headerName: 'Participant First Name', field: 'first', sortable: true },
@@ -36,10 +29,10 @@ export class InterviewListComponent implements OnDestroy, OnInit {
     { headerName: 'Interview Status', field: 'status', sortable: true },
   ];
 
-  private gridApi;
+  private gridApi? = undefined;
 
-  constructor(private dialog: MatDialog, private store: Store<IAuth>, private interviewStore: Store<interviewEntity.InterviewState>,
-    private associateStore: Store<associateEntity.AssociateState>, private router: Router) {
+  constructor(private dialog: MatDialog, private store: Store<IAuth>, private interviewStore: Store<InterviewState>,
+    private associateStore: Store<AssociateState>, private router: Router) {
     this.store.pipe(select((state: any) => state))
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {
@@ -172,9 +165,9 @@ export class InterviewListComponent implements OnDestroy, OnInit {
   }
 
   onBackClicked() {
-    this.selectedAssociate = null;
-    this.store.dispatch(new SearchAssociatesAction(''));
-    this.store.dispatch(new LoadInterviewParticipantsSuccessAction([]));
+    this.selectedAssociate = undefined;
+    this.store.dispatch(searchAssociates({payload: ''}));
+    this.store.dispatch(loadInterviewParticipantsSuccess({payload: []}));
     this.router.navigate(['/associate']);
   }
 

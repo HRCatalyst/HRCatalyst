@@ -1,6 +1,6 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import * as fromFeedback from './feedback.reducer';
+import { createFeatureSelector } from '@ngrx/store';
+import { feedbacksFeatureKey, FeedbackState } from './feedback.entity';
 
-export const selectFeedbackState = createFeatureSelector<fromFeedback.State>(
-  fromFeedback.feedbackFeatureKey
+export const selectFeedbackState = createFeatureSelector<FeedbackState>(
+  feedbacksFeatureKey
 );

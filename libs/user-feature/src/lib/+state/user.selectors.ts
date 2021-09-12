@@ -1,6 +1,7 @@
-import { createFeatureSelector } from '@ngrx/store';
-import * as fromUser from './user.reducer';
 
-export const selectUserState = createFeatureSelector<fromUser.UserState>(
-  fromUser.usersFeatureKey
+import { createFeatureSelector } from '@ngrx/store';
+import { usersFeatureKey, UserState } from './user.entity';
+
+export const selectUserState = createFeatureSelector<UserState>(
+  usersFeatureKey
 );

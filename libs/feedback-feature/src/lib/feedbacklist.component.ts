@@ -1,24 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Company } from 'src/app/company/company.interface';
-import { Client } from 'src/app/client/client.interface';
-import { Campaign } from 'src/app/campaign/campaign.interface';
-import { Associate } from 'src/app/associate/associate.interface';
+import { Component, OnDestroy } from '@angular/core';
+import { ClientState } from '@hrcatalyst/client-feature';
+import { CompanyState } from '@hrcatalyst/company-feature';
+import { ParticipantState } from '@hrcatalyst/participant-feature';
+import { Associate, Campaign, Client, Company, Feedback, Participant } from '@hrcatalyst/shared-feature';
 import { Store, select } from '@ngrx/store';
-import { Feedback } from 'src/app/feedback/feedback.interface';
-import * as feedbackEntity from 'src/app/feedback/feedback.entity';
-import * as companyEntity from 'src/app/company/company.entity';
-import * as clientEntity from 'src/app/client/client.entity';
-import * as participantEntity from 'src/app/participant/participant.entity';
-import { Participant } from 'src/app/participant/participant.interface';
-import { ExportService } from '../export/export.service';
 import { Subscription } from 'rxjs';
+import { FeedbackState } from './+state/feedback.entity';
 
 @Component({
   selector: 'hrcatalyst-feedbacklist',
   templateUrl: './feedbacklist.component.html',
   styleUrls: ['./feedbacklist.component.css']
 })
-export class FeedbackListComponent implements OnDestroy, OnInit {
+export class FeedbackListComponent implements OnDestroy {
   feedbacksDefs = [
     { headerName: 'Campaign', field: 'campaignName', sortable: true },
     { headerName: 'Participant', field: 'participantEmail', sortable: true },
@@ -29,24 +23,24 @@ export class FeedbackListComponent implements OnDestroy, OnInit {
     { headerName: 'Status', field: 'status', sortable: true }
   ];
 
-  selectedCompany: Company;
-  selectedClient: Client;
-  selectedCampaign: Campaign;
-  selectedAssociate: Associate;
-  selectedParticipant: Participant;
+  selectedCompany?: Company;
+  selectedClient?: Client;
+  selectedCampaign?: Campaign;
+  selectedAssociate?: Associate;
+  selectedParticipant?: Participant;
 
   participantSubscription$: Subscription;
   feedbackSubscription$: Subscription;
   companySubscription$: Subscription;
   clientSubscription$: Subscription;
 
-  private gridApi;
+  private gridApi: any;
 
-  feedbacks: Feedback[] = null;
+  feedbacks?: Feedback[] = undefined;
 
-  constructor(private feedbackStore: Store<feedbackEntity.FeedbackState>,
-     private clientStore: Store<clientEntity.ClientState>, private companyStore: Store<companyEntity.CompanyState>,
-     private participantStore: Store<participantEntity.ParticipantState>, private exportService: ExportService) {
+  constructor(private feedbackStore: Store<FeedbackState>, private clientStore: Store<ClientState>,
+    private companyStore: Store<CompanyState>, private participantStore: Store<ParticipantState>,
+    private exportService: ExportService) {
 
       this.participantSubscription$ = this.participantStore.pipe(select((state: any) => state)).subscribe((state) => {
         if (state.participant.selectedParticipant != null && this.selectedParticipant !== state.participant.selectedParticipant) {
@@ -75,9 +69,6 @@ export class FeedbackListComponent implements OnDestroy, OnInit {
       });
   }
 
-  ngOnInit() {
-  }
-
   ngOnDestroy() {
     if (this.participantSubscription$ != null) { this.participantSubscription$.unsubscribe(); }
     if (this.feedbackSubscription$ != null) { this.feedbackSubscription$.unsubscribe(); }
@@ -86,15 +77,15 @@ export class FeedbackListComponent implements OnDestroy, OnInit {
   }
 
   onReset() {
-    this.selectedCompany = null;
-    this.selectedClient = null;
-    this.selectedCampaign = null;
-    this.selectedParticipant = null;
-    this.selectedAssociate = null;
-    this.feedbacks = null;
+    this.selectedCompany = undefined;
+    this.selectedClient = undefined;
+    this.selectedCampaign = undefined;
+    this.selectedParticipant = undefined;
+    this.selectedAssociate = undefined;
+    this.feedbacks = undefined;
   }
 
-  onGridReady(params) {
+  onGridReady(params: any) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
   }
@@ -102,8 +93,8 @@ export class FeedbackListComponent implements OnDestroy, OnInit {
   onDownload() {
     const filename = this.uniqueName();
 
-    this.feedbacks.forEach(f => {
-      if (f.dateReceived != null) {
+    this.feedbacks?.forEach(f => {
+      if (f.dateReceived !== undefined) {
         const date = f.dateReceived['seconds'];
         const ms = date * 1000;
         f.dateReceived = new Date(ms).toLocaleString();
@@ -123,22 +114,25 @@ export class FeedbackListComponent implements OnDestroy, OnInit {
   }
 
   uniqueName() {
-    return this.selectedAssociate.lastName + '-' + this.selectedAssociate.firstName + '-' + this.uniqueID();
+    return this.selectedAssociate?.lastName + '-' + this.selectedAssociate?.firstName + '-' + this.uniqueID();
   }
 
   onSelectionChanged() {
     const selectedRows = this.gridApi.getSelectedRows();
 
     if (selectedRows.length > 0) {
+      console.log(selectedRows);
     }
   }
 
-  onRowDoubleClicked(row) {
-
+  onRowDoubleClicked(row: any) {
+    if (row) {
+      console.log(row);
+    }
   }
 
   onBackClicked() {
-
+    console.log('onBackClicked');
   }
 }
 

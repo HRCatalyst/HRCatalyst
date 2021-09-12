@@ -1,17 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FeedbackModalComponent } from './feedback.modal';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { Associate, Campaign, Client, Company, IRater, Participant } from '@hrcatalyst/shared-feature';
-
+import { Associate, Campaign, Client, Company, ConfirmationComponent, Feedback, IRater, Participant, SelectRaterParams } from '@hrcatalyst/shared-feature';
+import { createFeedback, deleteFeedback, updateFeedback } from './+state/feedback.actions';
+import { MatDialog } from '@angular/material/dialog';
+import { FeedbackState } from './+state/feedback.entity';
+import { loadRaterFeedback, RaterState } from '@hrcatalyst/rater-feature';
 
 @Component({
   selector: 'hrcatalyst-feedback',
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.css']
 })
-export class FeedbackComponent implements OnDestroy, OnInit {
+export class FeedbackComponent implements OnDestroy {
   feedbacksDefs = [
     { headerName: 'Campaign', field: 'campaignName', sortable: true },
     { headerName: 'Participant', field: 'participantEmail', sortable: true },
@@ -33,11 +36,11 @@ export class FeedbackComponent implements OnDestroy, OnInit {
 
   raterState$?: Observable<IRater[]>;
   raterSubscription$: Subscription;
-  feedbacks: Feedback[] = null;
+  feedbacks?: Feedback[] = undefined;
 
-  constructor(private dialog: MatDialog, private feedbackStore: Store<feedbackEntity.FeedbackState>,
+  constructor(private dialog: MatDialog, private feedbackStore: Store<FeedbackState>,
      private raterStore: Store<RaterState>, private router: Router) {
-      const xtra = this.router.getCurrentNavigation().extras.state;
+      const xtra = this.router.getCurrentNavigation()?.extras.state;
 
       if (xtra != null) {
         this.selectedCompany = xtra.company;
@@ -47,8 +50,11 @@ export class FeedbackComponent implements OnDestroy, OnInit {
         this.selectedAssociate = xtra.associate;
         this.selectedRater = xtra.rater;
 
-        this.raterStore.dispatch(new LoadRaterFeedbackAction(new SelectRaterParams(
-          this.selectedCampaign, this.selectedAssociate, this.selectedRater)));
+        if (this.selectedCampaign && this.selectedAssociate && this.selectedRater) {
+          this.raterStore.dispatch(loadRaterFeedback({payload: new SelectRaterParams(
+            this.selectedCampaign, this.selectedAssociate, this.selectedRater)}));
+        }
+
       }
 
       this.raterSubscription$ = this.raterStore.pipe(select((state: any) => state)).subscribe((state) => {
@@ -58,29 +64,26 @@ export class FeedbackComponent implements OnDestroy, OnInit {
       });
   }
 
-  ngOnInit() {
-  }
-
   ngOnDestroy() {
-    if (this.raterSubscription$ != null) {
+    if (this.raterSubscription$ != undefined) {
       this.raterSubscription$.unsubscribe();
     }
   }
 
   onReset() {
-    this.selectedCompany = null;
-    this.selectedClient = null;
-    this.selectedCampaign = null;
-    this.selectedParticipant = null;
-    this.selectedRater = null;
+    this.selectedCompany = undefined;
+    this.selectedClient = undefined;
+    this.selectedCampaign = undefined;
+    this.selectedParticipant = undefined;
+    this.selectedRater = undefined;
   }
 
-  onGridReady(params) {
+  onGridReady(params: any) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
   }
 
-  openFeedbackModal(feedback) {
+  openFeedbackModal(feedback: Feedback) {
     const dialogRef = this.dialog.open(FeedbackModalComponent, {
       width: '450px',
       data: feedback
@@ -90,25 +93,25 @@ export class FeedbackComponent implements OnDestroy, OnInit {
       console.log('The feedback dialog was closed');
       if (result instanceof Feedback) {
         if (result.id !== undefined) {
-          this.feedbackStore.dispatch(new UpdateFeedbackAction(result));
+          this.feedbackStore.dispatch(updateFeedback({payload: result}));
         } else {
-          this.feedbackStore.dispatch(new CreateFeedbackAction(result));
+          this.feedbackStore.dispatch(createFeedback({payload: result}));
         }
       }
     });
   }
 
- openConfirmationModal(title, message) {
+ openConfirmationModal(title: string, message: string) {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
       width: '450px',
       data: { title: title, message: message }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       console.log('The confirmation dialog was closed');
       if (result === true) {
         const selectedRows = this.gridApi.getSelectedRows();
-        this.feedbackStore.dispatch(new DeleteFeedbackAction(selectedRows[0]));
+        this.feedbackStore.dispatch(deleteFeedback({payload: selectedRows[0]}));
       }
     });
   }
@@ -116,16 +119,16 @@ export class FeedbackComponent implements OnDestroy, OnInit {
   addFeedback() {
     const fb = new Feedback();
 
-    fb.campaignId = this.selectedCampaign.id;
-    fb.campaignName = this.selectedCampaign.name;
-    fb.participantId = this.selectedParticipant.id;
-    fb.participantEmail = this.selectedAssociate.emailAddress;
-    fb.participantFirst = this.selectedAssociate.firstName;
-    fb.participantLast = this.selectedAssociate.lastName;
-    fb.raterId = this.selectedRater.id;
-    fb.raterEmail = this.selectedRater.emailAddress;
-    fb.raterFirst = this.selectedRater.firstName;
-    fb.raterLast = this.selectedRater.lastName;
+    fb.campaignId = this.selectedCampaign?.id;
+    fb.campaignName = this.selectedCampaign?.name;
+    fb.participantId = this.selectedParticipant?.id;
+    fb.participantEmail = this.selectedAssociate?.emailAddress ?? '';
+    fb.participantFirst = this.selectedAssociate?.firstName;
+    fb.participantLast = this.selectedAssociate?.lastName;
+    fb.raterId = this.selectedRater?.id;
+    fb.raterEmail = this.selectedRater?.emailAddress ?? '';
+    fb.raterFirst = this.selectedRater?.firstName;
+    fb.raterLast = this.selectedRater?.lastName;
 
     this.openFeedbackModal(fb);
   }
@@ -154,8 +157,10 @@ export class FeedbackComponent implements OnDestroy, OnInit {
     this.hasFeedback = selectedRows.length > 0;
   }
 
-  onRowDoubleClicked(row) {
-
+  onRowDoubleClicked(row: any) {
+    if (row) {
+      console.log(row);
+    }
   }
 
   onBackClicked() {

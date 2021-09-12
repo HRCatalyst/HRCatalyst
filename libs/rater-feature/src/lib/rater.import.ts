@@ -1,60 +1,50 @@
-import { Component, OnInit, Inject, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { FormBase } from 'src/app/shared/form.base';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 //import readXlsxFile from 'read-excel-file';
-import { schemaImportRater, enumImportRater } from './rater.schema';
 import { Observable, Subscription } from 'rxjs';
-import { Associate, IAssociate } from 'src/app/associate/associate.interface';
-import * as companyEntity from 'src/app/company/company.entity';
-import * as raterEntity from 'src/app/rater/rater.entity';
-import * as associateEntity from 'src/app/associate/associate.entity';
-import { Store, select } from '@ngrx/store';
-import { Rater } from 'src/app/rater/rater.interface';
-import { CreateRaterAction } from 'src/app/rater/rater.action';
-import { Company } from 'src/app/company/company.interface';
-import { LoadCompanyAssociatesAction } from 'src/app/associate/associate.action';
-import { RELATIONSHIP_DATA } from 'src/app/rater/relationship.data';
+import { Store } from '@ngrx/store';
+import { Associate, Company, FormBase, IAssociate, Rater } from '@hrcatalyst/shared-feature';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { RaterState } from './+state/rater.entity';
+import { CompanyState } from '@hrcatalyst/company-feature';
+import { createRater } from './+state/rater.actions';
+
 
 @Component({
   selector: 'hrcatalyst-raterimport',
   templateUrl: './rater.import.html',
   styleUrls: ['./rater.import.css']
 })
-export class RaterImportComponent extends FormBase implements OnDestroy, OnInit {
-  files: File | FileList;
+export class RaterImportComponent extends FormBase implements OnDestroy {
+  files?: File | FileList;
 
-  raters: Rater[];
+  raters?: Rater[];
 
-  selectedCompany: Company;
-  associateState$: Observable<IAssociate[]>;
-  associateSubscription: Subscription;
-  companySubscription: Subscription;
-  associates: Associate[];
+  selectedCompany?: Company;
+  associateState$?: Observable<IAssociate[]>;
+  associateSubscription?: Subscription;
+  companySubscription?: Subscription;
+  associates?: Associate[];
 
   form = new FormGroup({
       'file': new FormControl([null, Validators.required])
   });
 
   constructor(public dialogRef: MatDialogRef<RaterImportComponent>, @Inject(MAT_DIALOG_DATA) public data: string,
-    private raterStore: Store<raterEntity.RaterState>, private associateStore: Store<associateEntity.AssociateState>,
-    private companyStore: Store<companyEntity.CompanyState>) {
+    private raterStore: Store<RaterState>, private companyStore: Store<CompanyState>) {
     super();
 
-    this.associateState$ = this.associateStore.select(associateEntity.selectAll);
-    this.associateSubscription = this.associateState$.subscribe((state) => {
-        this.associates = state;
-    });
+    // this.associateState$ = this.associateStore.select(associateEntity.selectAll);
+    // this.associateSubscription = this.associateState$.subscribe((state) => {
+    //     this.associates = state;
+    // });
 
-    this.companySubscription = this.companyStore.pipe(select((state: any) => state)).subscribe((state) => {
-      if (state.company.selectedCompany != null && this.selectedCompany == null) {
-        this.selectedCompany = state.company.selectedCompany;
-        this.associateStore.dispatch(new LoadCompanyAssociatesAction(state.company.selectedCompany.id));
-      }
-    });
-  }
-
-  ngOnInit() {
+    // this.companySubscription = this.companyStore.pipe(select((state: any) => state)).subscribe((state) => {
+    //   if (state.company.selectedCompany != null && this.selectedCompany == null) {
+    //     this.selectedCompany = state.company.selectedCompany;
+    //     this.associateStore.dispatch(new LoadCompanyAssociatesAction(state.company.selectedCompany.id));
+    //   }
+    // });
   }
 
   ngOnDestroy() {
@@ -67,8 +57,8 @@ export class RaterImportComponent extends FormBase implements OnDestroy, OnInit 
   }
 
   onSave() {
-    this.raters.map(p => {
-     this.raterStore.dispatch(new CreateRaterAction(p));
+    this.raters?.map(p => {
+     this.raterStore.dispatch(createRater({payload: p}));
     });
 
     this.dialogRef.close('import');
@@ -82,7 +72,7 @@ export class RaterImportComponent extends FormBase implements OnDestroy, OnInit 
     return (this.raters != null && this.raters.length > 0);
   }
 
-  onFileChange(event) {
+  onFileChange(event: any) {
     const reader = new FileReader();
 
     this.raters = new Array<Rater>();

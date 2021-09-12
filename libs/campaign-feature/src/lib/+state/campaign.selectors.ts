@@ -1,6 +1,6 @@
 import { createFeatureSelector } from '@ngrx/store';
-import { CampaignState } from './campaign.entity';
-import { campaignsFeatureKey } from './campaign.reducer';
+import { campaignsFeatureKey, CampaignState } from './campaign.entity';
+
 
 export const selectCampaignState = createFeatureSelector<CampaignState>(
   campaignsFeatureKey

@@ -1,74 +1,65 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { FormBase } from 'src/app/shared/form.base';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 //import readXlsxFile from 'read-excel-file';
-import { schemaImportParticipant, enumImportParticipant } from './participant.schema';
-import { Observable, Subscription } from 'rxjs';
-import { Associate, IAssociate } from 'src/app/associate/associate.interface';
-import * as participantEntity from 'src/app/participant/participant.entity';
-import * as associateEntity from 'src/app/associate/associate.entity';
-import * as campaignEntity from 'src/app/campaign/campaign.entity';
 import { Store } from '@ngrx/store';
-import { Participant } from 'src/app/participant/participant.interface';
-import { CreateParticipantAction } from 'src/app/participant/participant.action';
-import { Campaign, ICampaign } from 'src/app/campaign/campaign.interface';
-import { LoadAllCampaignsAction } from 'src/app/campaign/campaign.action';
+import { FormBase, Participant } from '@hrcatalyst/shared-feature';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ParticipantState } from './+state/participant.entity';
+import { createParticipant } from './+state/participant.actions';
 
 @Component({
   selector: 'hrcatalyst-participantimport',
   templateUrl: './participant.import.html',
   styleUrls: ['./participant.import.css']
 })
-export class ParticipantImportComponent extends FormBase implements OnDestroy, OnInit {
-  files: File | FileList;
+export class ParticipantImportComponent extends FormBase {
+  files?: File | FileList;
 
-  participants: Participant[];
+  participants?: Participant[];
 
-  associateState$: Observable<IAssociate[]>;
-  associateSubscription$: Subscription;
-  associates: Associate[];
+  // associateState$: Observable<IAssociate[]>;
+  // associateSubscription$: Subscription;
+  // associates: Associate[];
 
-  campaignsState$: Observable<ICampaign[]>;
-  campaignSubscription$: Subscription;
-  campaigns: Campaign[];
+  // campaignsState$: Observable<ICampaign[]>;
+  // campaignSubscription$: Subscription;
+  // campaigns: Campaign[];
 
   form = new FormGroup({
       'file': new FormControl([null, Validators.required])
   });
 
   constructor(public dialogRef: MatDialogRef<ParticipantImportComponent>, @Inject(MAT_DIALOG_DATA) public data: string,
-    private participantStore: Store<participantEntity.ParticipantState>, private associateStore: Store<associateEntity.AssociateState>,
-    private campaignStore: Store<campaignEntity.CampaignState>) {
+    private participantStore: Store<ParticipantState>) {
     super();
 
-    this.associateState$ = this.associateStore.select(associateEntity.selectAll);
-    this.associateSubscription$ = this.associateState$.subscribe((state) => {
-      this.associates = state;
-    });
+    // this.associateState$ = this.associateStore.select(associateEntity.selectAll);
+    // this.associateSubscription$ = this.associateState$.subscribe((state) => {
+    //   this.associates = state;
+    // });
 
-    this.campaignsState$ = this.campaignStore.select(campaignEntity.selectAll);
-    this.campaignSubscription$ = this.campaignsState$.subscribe((state) => {
-      this.campaigns = state;
-    });
+    // this.campaignsState$ = this.campaignStore.select(campaignEntity.selectAll);
+    // this.campaignSubscription$ = this.campaignsState$.subscribe((state) => {
+    //   this.campaigns = state;
+    // });
   }
 
-  ngOnInit() {
-    this.campaignStore.dispatch(new LoadAllCampaignsAction());
-  }
+//   ngOnInit() {
+// //    this.campaignStore.dispatch(new LoadAllCampaignsAction());
+//   }
 
-  ngOnDestroy() {
-    if (this.associateSubscription$ != null) {
-      this.associateSubscription$.unsubscribe();
-    }
-    if (this.campaignSubscription$ != null) {
-      this.campaignSubscription$.unsubscribe();
-    }
-  }
+  // ngOnDestroy() {
+  //   if (this.associateSubscription$ != null) {
+  //     this.associateSubscription$.unsubscribe();
+  //   }
+  //   if (this.campaignSubscription$ != null) {
+  //     this.campaignSubscription$.unsubscribe();
+  //   }
+  // }
 
   onSave() {
-    this.participants.forEach(p => {
-      this.participantStore.dispatch(new CreateParticipantAction(p));
+    this.participants?.forEach(p => {
+      this.participantStore.dispatch(createParticipant({payload: p}));
     });
 
     this.dialogRef.close('import');
@@ -82,7 +73,7 @@ export class ParticipantImportComponent extends FormBase implements OnDestroy, O
     return (this.participants != null && this.participants.length > 0);
   }
 
-  onFileChange(event) {
+  onFileChange(event: any) {
     const reader = new FileReader();
 
     this.participants = new Array<Participant>();
@@ -113,8 +104,7 @@ export class ParticipantImportComponent extends FormBase implements OnDestroy, O
       //         }
       //       }
       //   });
-      });
+      };
     }
-  }
 }
 

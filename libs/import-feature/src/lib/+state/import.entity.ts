@@ -1,11 +1,14 @@
-import { Import } from "@hrcatalyst/shared-feature";
+import { Associate, Campaign, Import, Participant, Rater } from "@hrcatalyst/shared-feature";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
 
 export const importsFeatureKey = 'imports';
 
 export interface ImportState  extends EntityState<Import> {
-  selectedImport?: Import;
+  associates?: Associate[];
+  campaigns?: Campaign[];
+  participants?: Participant[];
+  raters?: Rater[];
 }
 
 export function selectimportId(a: Import): string {
@@ -23,8 +26,10 @@ export const adapter: EntityAdapter<Import> = createEntityAdapter<Import>({
 });
 
 export const initialState: ImportState = adapter.getInitialState({
-  // additional entity state properties
-  selectedImport: undefined
+  associates: undefined,
+  campaigns: undefined,
+  participants: undefined,
+  raters: undefined
 });
 
 // Create the default selectors

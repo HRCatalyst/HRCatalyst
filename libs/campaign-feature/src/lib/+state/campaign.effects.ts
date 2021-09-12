@@ -29,7 +29,7 @@ import { createCampaign,
           updateCampaignYearFailure,
           updateCampaignYearSuccess } from './campaign.actions';
 import { Store } from '@ngrx/store';
-import { CampaignState } from './campaign.reducer';
+import { CampaignState } from './campaign.entity';
 
 @Injectable()
 export class CampaignEffects {

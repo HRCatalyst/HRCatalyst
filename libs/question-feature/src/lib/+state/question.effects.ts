@@ -4,9 +4,9 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as QuestionActions from './question.actions';
 import { LoaderService, Question } from '@hrcatalyst/shared-feature';
-import { QuestionState } from './question.reducer';
 import { Store } from '@ngrx/store';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { QuestionState } from './question.entity';
 
 
 @Injectable()

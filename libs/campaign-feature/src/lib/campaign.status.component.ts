@@ -56,11 +56,11 @@ export class CampaignStatusComponent implements OnDestroy, OnInit {
       }
 
       if (state.import.participants != null) {
-          this.participants = state.import.participants.filter(p => p.campaignId === this.selectedCampaign.id);
+          this.participants = state.import.participants.filter((p: any) => p.campaignId === this.selectedCampaign?.id);
       }
 
       if (state.import.campaigns != null) {
-          this.campaigns = state.import.campaigns.filter(c => c.id === this.selectedCampaign.id);
+          this.campaigns = state.import.campaigns.filter((c: any) => c.id === this.selectedCampaign?.id);
       }
 
       if (state.import.raters != null) {
@@ -88,9 +88,9 @@ export class CampaignStatusComponent implements OnDestroy, OnInit {
   loadReportParticipants() {
     if (this.participants !== null && this.raters !== null && this.feedbacks !== null && this.associates !== null) {
       const reportData = new Array<ReportParticipant>();
-      this.participants.forEach(p => {
-        const participant = this.associates.find(pa => pa.id === p.associateId);
-        const raters = this.raters.filter(r => r.participantId === p.associateId);
+      this.participants?.forEach(p => {
+        const participant = this.associates?.find(pa => pa.id === p.associateId);
+        const raters = this.raters?.filter(r => r.participantId === p.associateId);
 
         if (participant !== undefined) {
           const d = new ReportParticipant();
@@ -106,7 +106,7 @@ export class CampaignStatusComponent implements OnDestroy, OnInit {
           d.declined = 0;
           d.pending = 0;
 
-          raters.forEach(r => {
+          raters?.forEach(r => {
             d.raters++;
             const rater = this.associates?.filter(ra => ra.id === r.associateId);
             const feedback = this.feedbacks?.filter(f => f.raterId === r.associateId && f.participantId === d.id);

@@ -18,7 +18,7 @@ import { RaterComponent } from './rater.component';
       }
     ]),
     StoreModule.forFeature('rater', reducer),
-    EffectsModule.forFeature([RaterEffects]),
+    EffectsModule.forFeature([RaterEffects])
   ],
   declarations: [
     RaterComponent

@@ -1,21 +1,17 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { FEEDBACK_STATUS, FEEDBACK_TYPE, enumFeedbackType } from 'src/app/feedback/feedback.data';
-import { RELATIONSHIP_DATA } from 'src/app/rater/relationship.data';
 import { Observable, Subscription } from 'rxjs';
-import { IQuestion, Question } from 'src/app/question/question.interface';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Feedback } from 'src/app/feedback/feedback.interface';
 import { Store } from '@ngrx/store';
-import { FormBase } from 'src/app/shared/form.base';
-import * as questionEntity from 'src/app/question/question.entity';
+import { enumFeedbackType, Feedback, FEEDBACK_STATUS, FEEDBACK_TYPE, FormBase, IQuestion, Question, RELATIONSHIP_DATA } from '@hrcatalyst/shared-feature';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { QuestionState, selectQuestionState } from '@hrcatalyst/question-feature';
 
 @Component({
   selector: 'hrcatalyst-feedbackerrors.modal',
   templateUrl: './feedbackerrors.modal.html',
   styleUrls: ['./feedbackerrors.modal.css']
 })
-export class FeedbackErrorsModalComponent extends FormBase implements OnDestroy, OnInit {
+export class FeedbackErrorsModalComponent extends FormBase implements OnDestroy {
   form = new FormGroup({
     'participant_email': new FormControl('', [Validators.required]),
     'rater_email': new FormControl('', [Validators.required]),
@@ -32,13 +28,13 @@ export class FeedbackErrorsModalComponent extends FormBase implements OnDestroy,
 
   questionState$: Observable<IQuestion[]>;
   questionSubscription$: Subscription;
-  questions: Question[];
+  questions?: Question[];
 
   constructor(public dialogRef: MatDialogRef<FeedbackErrorsModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Feedback, private questionStore: Store<questionEntity.QuestionState>) {
+    @Inject(MAT_DIALOG_DATA) public data: Feedback, private questionStore: Store<QuestionState>) {
       super();
 
-      this.questionState$ = this.questionStore.select(questionEntity.selectAll);
+      this.questionState$ = this.questionStore.select(selectQuestionState);
 
       this.questionSubscription$ = this.questionState$.subscribe((state) => {
         if (state.length > 0) {
@@ -49,18 +45,14 @@ export class FeedbackErrorsModalComponent extends FormBase implements OnDestroy,
       if (data !== null) {
         data.type = data.type !== undefined ? data.type : this.types[enumFeedbackType.WRITTEN].name;
 
-        this.form.get('participant_email').setValue(data.participantEmail);
-        this.form.get('rater_email').setValue(data.raterEmail);
-        this.form.get('relationship').setValue(data.relationship);
-        this.form.get('status').setValue(data.status);
-        this.form.get('type').setValue(data.type);
-        this.form.get('question').setValue(data.question);
-        this.form.get('answer').setValue(data.answer);
+        this.form.get('participant_email')?.setValue(data.participantEmail);
+        this.form.get('rater_email')?.setValue(data.raterEmail);
+        this.form.get('relationship')?.setValue(data.relationship);
+        this.form.get('status')?.setValue(data.status);
+        this.form.get('type')?.setValue(data.type);
+        this.form.get('question')?.setValue(data.question);
+        this.form.get('answer')?.setValue(data.answer);
       }
-  }
-
-  ngOnInit() {
-
   }
 
   ngOnDestroy() {
@@ -87,12 +79,12 @@ export class FeedbackErrorsModalComponent extends FormBase implements OnDestroy,
     fb.participantEmail = this.data.participantEmail;
     fb.participantFirst = this.data.participantFirst;
     fb.participantLast = this.data.participantLast;
-    fb.relationship =   this.form.get('relationship').value;
+    fb.relationship =   this.form.get('relationship')?.value;
     fb.dateCreated = new Date().toLocaleString();
-    fb.status = this.form.get('status').value;
-    fb.type = this.form.get('type').value;
-    fb.question = this.form.get('question').value;
-    fb.answer = this.form.get('answer').value;
+    fb.status = this.form.get('status')?.value;
+    fb.type = this.form.get('type')?.value;
+    fb.question = this.form.get('question')?.value;
+    fb.answer = this.form.get('answer')?.value;
 
     this.dialogRef.close(fb);
   }

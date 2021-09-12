@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { IFirebaseUser, LoginModel, RegistrationModel, User } from '@hrcatalyst/shared-feature';
-import { Auth } from './auth.reducer';
+import { Auth, IFirebaseUser, LoginModel, RegistrationModel, User } from '@hrcatalyst/shared-feature';
+
 
 export const loadAuths = createAction(
   '[Auth/API] Load Auths',

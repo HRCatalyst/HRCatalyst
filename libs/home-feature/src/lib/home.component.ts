@@ -3,6 +3,10 @@ import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { RegistrationModel } from '@hrcatalyst/shared-feature';
+import { registrationAttempt, SignupComponent } from '@hrcatalyst/auth-feature';
+import { CompanyState } from '@hrcatalyst/company-feature';
+import { ImportModalComponent } from '@hrcatalyst/import-feature';
 
 @Component({
   selector: 'hrcatalyst-home',
@@ -25,7 +29,6 @@ export class HomeComponent implements OnDestroy {
         }
     });
   }
-
 
   ngOnDestroy() {
     if (this.rootSubscription$ != null) {
@@ -60,9 +63,8 @@ export class HomeComponent implements OnDestroy {
     dialogRef.beforeClosed().subscribe(result => {
       console.log('The signup dialog was closed');
       if (result instanceof RegistrationModel) {
-        this.store.dispatch(registrationAttempt(result));
+        this.store.dispatch(registrationAttempt({payload: result}));
       }
     });
   }
-
 }

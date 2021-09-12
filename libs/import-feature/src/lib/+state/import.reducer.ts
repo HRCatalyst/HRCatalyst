@@ -17,21 +17,21 @@ export const reducer = createReducer(
   on(ImportActions.upsertImports,
     (state, action) => adapter.upsertMany(action.imports, state)
   ),
-  on(ImportActions.updateImport,
-    (state, action) => adapter.updateOne(action.import, state)
-  ),
+  // on(ImportActions.updateImport,
+  //   (state, action) => adapter.updateOne(action.payload, state)
+  // ),
   on(ImportActions.updateImports,
     (state, action) => adapter.updateMany(action.imports, state)
   ),
-  on(ImportActions.deleteImport,
-    (state, action) => adapter.removeOne(action.id, state)
-  ),
+  // on(ImportActions.deleteImport,
+  //   (state, action) => adapter.removeOne(action.id, state)
+  // ),
   on(ImportActions.deleteImports,
     (state, action) => adapter.removeMany(action.ids, state)
   ),
-  on(ImportActions.loadImports,
-    (state, action) => adapter.setAll(action.imports, state)
-  ),
+  // on(ImportActions.loadImports,
+  //   (state, action) => adapter.setAll(action.imports, state)
+  // ),
   on(ImportActions.clearImports,
     state => adapter.removeAll(state)
   ),

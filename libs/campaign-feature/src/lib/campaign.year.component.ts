@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { CampaignYear} from 'src/app/campaign/campaign.interface';
-import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
-import * as campaignEntity from 'src/app/campaign/campaign.entity';
-import { CreateCampaignYearAction, DeleteCampaignYearAction, LoadCampaignYearsAction, UpdateCampaignYearAction } from 'src/app/campaign/campaign.action';
 import { takeUntil } from 'rxjs/operators';
 import { CampaignYearModalComponent } from './campaign.year.modal';
+import { CampaignYear, ConfirmationComponent } from '@hrcatalyst/shared-feature';
+import { createCampaignYear, deleteCampaignYear, loadCampaignYears, updateCampaignYear } from './+state/campaign.actions';
+import { MatDialog } from '@angular/material/dialog';
+import { CampaignState } from './+state/campaign.entity';
+import { selectCampaignState } from '..';
 
 
 @Component({
@@ -24,65 +24,65 @@ export class CampaignYearComponent implements OnDestroy, OnInit {
     { headerName: 'Active', field: 'active', sortable: false }
   ];
 
-  selectedYear: CampaignYear;
+  selectedYear?: CampaignYear;
   hasYear = false;
 
-  private gridApi;
+  private gridApi?: any;
 
-  years: CampaignYear[];
+  years?: CampaignYear[];
 
-  constructor(private dialog: MatDialog, private campaignStore: Store<campaignEntity.CampaignState>) {
-    this.campaignStore.pipe(select((state: any) => state))
+  constructor(private dialog: MatDialog, private campaignStore: Store<CampaignState>) {
+    this.campaignStore.pipe(select(selectCampaignState))
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {
-        if (state.campaign.campaignYears != null) {
-          this.years = state.campaign.campaignYears;
+        if (state.campaignYears != null) {
+          this.years = state.campaignYears;
         }
     });
   }
 
   ngOnInit() {
-    this.campaignStore.dispatch(new LoadCampaignYearsAction());
+    this.campaignStore.dispatch(loadCampaignYears());
   }
 
   ngOnDestroy() {
     this.onDestroy$.next();
   }
 
-  openCampaignModal(campaignYear) {
+  openCampaignModal(campaignYear: CampaignYear) {
     const dialogRef = this.dialog.open(CampaignYearModalComponent, {
       width: '450px',
       data: campaignYear
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: CampaignYear) => {
       console.log('The campaign year dialog was closed');
       if (result instanceof CampaignYear) {
         if (result.id !== undefined) {
-          this.campaignStore.dispatch(new UpdateCampaignYearAction(result));
+          this.campaignStore.dispatch(updateCampaignYear({payload: result}));
         } else {
-          this.campaignStore.dispatch(new CreateCampaignYearAction(result));
+          this.campaignStore.dispatch(createCampaignYear({payload: result}));
         }
       }
     });
   }
 
-  openConfirmationModal(title, message) {
+  openConfirmationModal(title: string, message: string) {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
       width: '450px',
       data: { title: title, message: message }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       console.log('The confirmation dialog was closed');
       if (result === true) {
         const selectedRows = this.gridApi.getSelectedRows();
-        this.campaignStore.dispatch(new DeleteCampaignYearAction(selectedRows[0]));
+        this.campaignStore.dispatch(deleteCampaignYear({payload: selectedRows[0]}));
       }
     });
   }
 
-  onGridReady(params) {
+  onGridReady(params: any) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
   }

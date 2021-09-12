@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, concatMap, mergeMap } from 'rxjs/operators';
-import { Observable, EMPTY, of, Subject } from 'rxjs';
-
-import * as CompanyActions from './company.actions';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import { CompanyState } from './company.entity';
 import { Company, LoaderService } from '@hrcatalyst/shared-feature';
 import { createCompany, createCompanyFailire, createCompanySuccess, deleteCompany, deleteCompanyFailure, deleteCompanySuccess, loadAllCompanys, loadAllCompanysFailure, loadAllCompanysSuccess, updateCompany, updateCompanyFailure, updateCompanySuccess } from './company.actions';
-import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { of, Subject } from 'rxjs';
 
 
 @Injectable()

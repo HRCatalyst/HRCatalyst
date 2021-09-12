@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { adapter, initialState } from './rate.entity';
+import { adapter, initialState } from './rater.entity';
 import * as RaterActions from './rater.actions';
 
 

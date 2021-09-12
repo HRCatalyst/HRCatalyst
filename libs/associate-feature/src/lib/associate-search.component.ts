@@ -1,20 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthState, selectAuthState } from '@hrcatalyst/auth-feature';
+import { loadCampaignYears } from '@hrcatalyst/campaign-feature';
+import { loadInterviewParticipants } from '@hrcatalyst/interview-feature';
 import { AssociateSearchResult, User } from '@hrcatalyst/shared-feature';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { loadAssociate, searchAssociates } from './+state/associate.actions';
 import { AssociateState } from './+state/associate.entity';
-// import { AssociateSearchResult } from 'src/app/associate/associate.interface';
-// import * as associateEntity from 'src/app/associate/associate.entity';
-// import { select, Store } from '@ngrx/store';
-// import { takeUntil } from 'rxjs/operators';
-// import { SearchAssociatesAction, SelectAssociateAction, LoadAssociateAction } from 'src/app/associate/associate.action';
-// import { LoadInterviewParticipantsAction } from 'src/app/interview/interview.action';
-// import { Router } from '@angular/router';
-// import { IUser } from 'src/app/user/user.interface';
-// import { IAuth } from 'src/app/auth/auth.interface';
-// import { LoadCampaignYearsAction } from 'src/app/campaign/campaign.action';
+import { selectAssociateState } from './+state/associate.selectors';
+
 
 @Component({
   selector: 'hrcatalyst-associate-search',
@@ -32,33 +28,33 @@ export class AssociateSearchComponent implements OnDestroy, OnInit {
     { headerName: 'Email Address', field: 'email', sortable: true },
   ];
 
-  private gridApi?: unknown;
+  private gridApi?: any;
 
   constructor(private associateStore: Store<AssociateState>, private store: Store<AuthState>, private router: Router) {
-    this.store.pipe(select((state: unknown) => state))
+    this.store.pipe(select(selectAuthState))
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {
-        if (state.auth.settings != undefined) {
-          this.user$ = state.auth.settings;
+        if (state.settings !== undefined) {
+          this.user$ = state.settings;
         }
     });
 
-    this.associateStore.pipe(select((state: any) => state))
+    this.associateStore.pipe(select(selectAssociateState))
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {
-        if (state.associate.searchResult != null) {
-          this.searchResults = state.associate.searchResult;
+        if (state.searchResult !== undefined) {
+          this.searchResults = state.searchResult;
         }
     });
   }
 
   ngOnInit() {
-    this.store.dispatch(new LoadCampaignYearsAction());
+    this.store.dispatch(loadCampaignYears());
   }
 
   searchAssociates(criteria: string) {
     if (criteria.length > 2) {
-      this.associateStore.dispatch(searchAssociates(criteria));
+      this.associateStore.dispatch(searchAssociates({payload: criteria}));
     } else {
       this.searchResults = new Array<AssociateSearchResult>();
     }
@@ -68,7 +64,7 @@ export class AssociateSearchComponent implements OnDestroy, OnInit {
     this.onDestroy$.next();
   }
 
-  onGridReady(params) {
+  onGridReady(params: any) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
   }
@@ -79,12 +75,16 @@ export class AssociateSearchComponent implements OnDestroy, OnInit {
 
   onSelectionChanged() {
     const selectedRows = this.gridApi.getSelectedRows();
+    if (selectedRows) {
+      console.log(selectedRows);
+    }
   }
 
-  onRowDoubleClicked(row) {
-    const params = new LoadAssociateAction(row.data.id);
-    this.associateStore.dispatch(params);
-    this.associateStore.dispatch(new LoadInterviewParticipantsAction(row.data.id));
+  onRowDoubleClicked(row: any) {
+    this.associateStore.dispatch(loadAssociate(row.data.id));
+    this.associateStore.dispatch(loadInterviewParticipants(row.data.id));
     this.router.navigate(['/interview']);
   }
 }
+
+

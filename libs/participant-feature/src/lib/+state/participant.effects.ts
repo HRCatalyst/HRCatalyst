@@ -6,8 +6,7 @@ import * as ParticipantActions from './participant.actions';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Associate, Feedback, LoaderService, Participant } from '@hrcatalyst/shared-feature';
 import { Store } from '@ngrx/store';
-import { ParticipantState } from './participant.reducer';
-
+import { ParticipantState } from './participant.entity';
 
 
 @Injectable()

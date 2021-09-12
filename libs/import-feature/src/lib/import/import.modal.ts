@@ -1,27 +1,16 @@
-import { Component, OnInit, Inject, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { FormBase } from 'src/app/shared/form.base';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 //import readXlsxFile from 'read-excel-file';
-import { schemaImportFeedback, enumImportFeedback } from './import.schema';
-import { Feedback } from 'src/app/feedback/feedback.interface';
 import { Observable, Subscription } from 'rxjs';
-import { Associate } from 'src/app/associate/associate.interface';
-import * as participantEntity from 'src/app/participant/participant.entity';
-import * as importEntity from 'src/app/import/import.entity';
-import * as feedbackEntity from 'src/app/feedback/feedback.entity';
-import * as raterEntity from 'src/app/rater/rater.entity';
 import { Store, select } from '@ngrx/store';
-import { Participant } from 'src/app/participant/participant.interface';
-import { Campaign } from 'src/app/campaign/campaign.interface';
-import { IImport, Import } from 'src/app/import/import.interface';
-import { LoadImportAction, LogImportErrorAction } from 'src/app/import/import.action';
-import { enumFeedbackStatus, FEEDBACK_STATUS } from 'src/app/feedback/feedback.data';
-import { CreateFeedbackAction } from 'src/app/feedback/feedback.action';
-import { CreateParticipantAction } from 'src/app/participant/participant.action';
-import { Rater } from 'src/app/rater/rater.interface';
-import { enumRationship, RELATIONSHIP_DATA } from 'src/app/rater/relationship.data';
-import { CreateRaterAction } from 'src/app/rater/rater.action';
+import { Associate, Campaign, enumFeedbackStatus, enumRationship, Feedback, FEEDBACK_STATUS, FormBase, IImport, Import, Participant, Rater, RELATIONSHIP_DATA } from '@hrcatalyst/shared-feature';
+import { createRater, RaterState } from '@hrcatalyst/rater-feature';
+import { createParticipant, ParticipantState } from '@hrcatalyst/participant-feature';
+import { loadImport, logImportError } from '../+state/import.actions';
+import { createFeedback, FeedbackState } from '@hrcatalyst/feedback-feature';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ImportState } from '@hrcatalyst/import-feature';
+import * as importEntity from '@hrcatalyst/import-feature';
 
 @Component({
   selector: 'hrcatalyst-import',
@@ -29,24 +18,24 @@ import { CreateRaterAction } from 'src/app/rater/rater.action';
   styleUrls: ['./import.modal.css']
 })
 export class ImportModalComponent extends FormBase implements OnDestroy, OnInit {
-  files: File | FileList;
+  files?: File | FileList;
 
-  feedback: Feedback[] = null;
+  feedback?: Array<Feedback>;
 
   importState$: Observable<IImport[]>;
   importSubscription$: Subscription;
-  associates: Associate[];
-  participants: Participant[];
-  campaigns: Campaign[];
-  raters: Rater[];
+  associates?: Associate[];
+  participants?: Participant[];
+  campaigns?: Campaign[];
+  raters?: Rater[];
 
   form = new FormGroup({
       'file': new FormControl([null, Validators.required])
   });
 
   constructor(public dialogRef: MatDialogRef<ImportModalComponent>, @Inject(MAT_DIALOG_DATA) public data: string,
-    private participantStore: Store<participantEntity.ParticipantState>, private raterStore: Store<raterEntity.RaterState>,
-    private importStore: Store<importEntity.ImportState>, private feedbackStore: Store<feedbackEntity.FeedbackState>) {
+    private participantStore: Store<ParticipantState>, private raterStore: Store<RaterState>,
+    private importStore: Store<ImportState>, private feedbackStore: Store<FeedbackState>) {
     super();
 
     this.importState$ = this.importStore.select(importEntity.selectAll);
@@ -70,7 +59,7 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
   }
 
   ngOnInit() {
-    this.importStore.dispatch(new LoadImportAction());
+    this.importStore.dispatch(loadImport());
   }
 
   ngOnDestroy() {
@@ -80,11 +69,11 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
   }
 
   onSave() {
-    this.feedback.map(f => {
-      const rater = this.associates.filter(r => r.emailAddress.toLowerCase() === f.raterEmail.toLowerCase());
-      const participant = this.associates.filter(p => p.emailAddress.toLowerCase() === f.participantEmail.toLowerCase());
+    this.feedback?.map(f => {
+      const rater = this.associates?.filter(r => r.emailAddress.toLowerCase() === f.raterEmail.toLowerCase());
+      const participant = this.associates?.filter(p => p.emailAddress.toLowerCase() === f.participantEmail.toLowerCase());
 
-      if (rater.length > 0) {
+      if (rater !== undefined && rater.length > 0) {
         f.raterId = rater[0].id;
         f.raterFirst = rater[0].firstName;
         f.raterLast = rater[0].lastName;
@@ -93,25 +82,25 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
       }
 
       f.relationship = RELATIONSHIP_DATA[enumRationship.COLLEAGUE].name;
-      if (participant.length > 0 && rater.length > 0) {
-        const relate = this.raters.filter(x => x.associateId === rater[0].id && x.participantId === participant[0].id);
-        if (relate.length > 0) {
+      if (participant !== undefined && participant.length > 0 && rater !== undefined && rater.length > 0) {
+        const relate = this.raters?.filter(x => x.associateId === rater[0].id && x.participantId === participant[0].id);
+        if (relate !== undefined && relate.length > 0) {
           const item = RELATIONSHIP_DATA.filter(y => y.id === relate[0].relationship);
           f.relationship = item.length > 0 ? item[0].name : RELATIONSHIP_DATA[enumRationship.COLLEAGUE].name;
         }
       }
 
-      if (participant.length > 0) {
+      if (participant !== undefined && participant.length > 0) {
         f.participantId = participant[0].id;
         f.participantFirst = participant[0].firstName;
         f.participantLast = participant[0].lastName;
 
-        const associate = this.participants.filter(a => a.associateId === f.participantId);
-        if (associate.length > 0) {
+        const associate = this.participants?.filter(a => a.associateId === f.participantId);
+        if (associate !== undefined && associate.length > 0) {
             f.campaignId = associate[0].campaignId;
 
-            const campaign = this.campaigns.filter(c => c.id === f.campaignId);
-            if (campaign.length > 0) {
+            const campaign = this.campaigns?.filter(c => c.id === f.campaignId);
+            if (campaign !== undefined && campaign.length > 0) {
               f.campaignName = campaign[0].name;
             }
         }
@@ -123,13 +112,13 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
       f.status = FEEDBACK_STATUS[enumFeedbackStatus.RECEIVED].name;
 
       console.log(`FEEDBACK: ${JSON.stringify(f)}`);
-      this.feedbackStore.dispatch(new CreateFeedbackAction(f));
+      this.feedbackStore.dispatch(createFeedback({payload: f}));
     });
-    this.logImportMessage('Info', 'Import of ' + this.feedback.length.toLocaleString() + ' records at ' + new Date().toLocaleString());
+    this.logImportMessage('Info', 'Import of ' + this.feedback?.length.toLocaleString() + ' records at ' + new Date().toLocaleString());
     this.dialogRef.close('import');
   }
 
-  logImportMessage(event, content) {
+  logImportMessage(event: any, content: any) {
     const i = new Import();
     i.importType = 'Feedback';
     i.eventType = event;
@@ -137,44 +126,44 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
     i.content = content;
     i.status = 'Open';
 
-    this.feedbackStore.dispatch(new LogImportErrorAction(i));
+    this.feedbackStore.dispatch(logImportError({payload: i}));
     console.log(`FEEDBACK: ${JSON.stringify(content)}`);
   }
 
   addParticipants() {
-    const campaign = this.campaigns.length > 0 ? this.campaigns[0] : null;
+    const campaign = this.campaigns !== undefined && this.campaigns.length > 0 ? this.campaigns[0] : null;
 
-    const partIds = this.participants.length > 0 ? this.participants.map(p => p.associateId) : [];
+    const partIds = this.participants !== undefined && this.participants.length > 0 ? this.participants?.map(p => p.associateId) : [];
 
-    const assocIds = this.associates.filter(a => !partIds.includes(a.id));
+    const assocIds = this.associates?.filter(a => !partIds?.includes(a.id ?? ''));
 
-    assocIds.forEach(x => {
+    assocIds?.forEach(x => {
       const p = new Participant();
-      p.campaignId = campaign.id;
-      p.associateId = x.id;
-      this.participantStore.dispatch(new CreateParticipantAction(p));
+      p.campaignId = campaign?.id ?? '';
+      p.associateId = x.id ?? '';
+      this.participantStore.dispatch(createParticipant({payload: p}));
     });
   }
 
   addRaters() {
-    const assocIds = this.associates.map(a => a.id);
+    const assocIds = this.associates?.map(a => a.id);
 
-    assocIds.forEach(a => {
+    assocIds?.forEach(a => {
       // skip
-      const skipIds = this.raters.filter(r => r.participantId === a).map(e => e.associateId);
+      const skipIds = this.raters?.filter(r => r.participantId === a).map(e => e.associateId);
 
       // skip yourself
-      skipIds.push(a);
+      skipIds?.push(a ?? '');
 
-      const addIds = this.associates.filter(n => !skipIds.includes(n.id)).map(i => i.id);
+      const addIds = this.associates?.filter(n => !skipIds?.includes(n.id ?? '')).map(i => i.id);
 
-      addIds.forEach(r => {
+      addIds?.forEach(r => {
         const rater = new Rater();
-        rater.participantId = a;
-        rater.associateId = r;
+        rater.participantId = a ?? '';
+        rater.associateId = r ?? '';
         rater.relationship = enumRationship.PEER;
 
-        this.raterStore.dispatch(new CreateRaterAction(rater));
+        this.raterStore.dispatch(createRater({payload: rater}));
         console.log(JSON.stringify(rater));
       });
     });
@@ -192,7 +181,7 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
     return (this.feedback != null && this.feedback.length > 0);
   }
 
-  onFileChange(event) {
+  onFileChange(event: any) {
     const reader = new FileReader();
 
     this.feedback = new Array<Feedback>();

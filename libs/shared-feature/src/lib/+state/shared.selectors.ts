@@ -1,6 +1,7 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import * as fromShared from './shared.reducer';
+import { createFeatureSelector } from "@ngrx/store";
+import { sharedFeatureKey, SharedState } from "./shared.entity";
 
-export const selectSharedState = createFeatureSelector<fromShared.State>(
-  fromShared.sharedFeatureKey
+
+export const selectSharedState = createFeatureSelector<SharedState>(
+  sharedFeatureKey
 );

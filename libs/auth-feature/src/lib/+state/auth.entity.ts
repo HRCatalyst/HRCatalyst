@@ -1,27 +1,33 @@
+import { Auth, IFirebaseUser, User } from "@hrcatalyst/shared-feature";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
+import { createFeatureSelector } from "@ngrx/store";
 
 export const authFeatureKey = 'auth';
 
 export interface AuthState  extends EntityState<Auth> {
-  selectedAuth?: Auth;
+     user?: IFirebaseUser;
+     settings?: User;
+     loading?: boolean;
+     error?: string;
+     selectedOrganization?: string;
 }
 
-export function selectassociateId(a: Auth): string {
+export function selectauthId(a: Auth): string {
   // In this case this would be optional since primary key is id
-  return a.id ?? '';
+  return a?.user?.uid ?? '';
 }
 
 export const adapter: EntityAdapter<Auth> = createEntityAdapter<Auth>({
-  selectId: selectassociateId,
+  selectId: selectauthId,
   sortComparer: sortByName,
 });
 
 export function sortByName(a: Auth, b: Auth): number {
-return (a.lastName + a.firstName).localeCompare(b.lastName + a.firstName);
+  return (a?.user?.displayName ?? '').localeCompare(b?.user?.displayName ?? '');
 }
 
 // Create the default selectors
-export const getAuthState = createFeatureSelector<AuthState>('associate');
+export const getAuthState = createFeatureSelector<AuthState>('auth');
 
 export const {
 selectIds,
@@ -31,6 +37,9 @@ selectTotal,
 } = adapter.getSelectors(getAuthState);
 
 export const initialState: AuthState = adapter.getInitialState({
-// additional entity state properties
-selectedAuth: undefined,
+   user: undefined,
+   settings: undefined,
+   loading: false,
+   error: '',
+   selectedOrganization: ''
 });

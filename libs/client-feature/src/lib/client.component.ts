@@ -1,110 +1,102 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store} from '@ngrx/store';
-import * as clientEntity from 'src/app/client/client.entity';
-import { Company } from 'src/app/company/company.interface';
-import { LoadCompanyClientsAction, DeleteClientAction, UpdateClientAction } from 'src/app/client/client.action';
-import { MatDialog } from '@angular/material';
-import { Client, IClient } from 'src/app/client/client.interface';
-import { CreateClientAction, SelectClientAction } from 'src/app/client/client.action';
 import { ClientModalComponent } from './client.modal';
-import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
+import { Client, Company, ConfirmationComponent } from '@hrcatalyst/shared-feature';
+import { createClient, deleteClient, selectClient, updateClient } from './+state/client.actions';
+import { ClientState } from './+state/client.entity';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'hrcatalyst-client',
   templateUrl: './client.component.html',
   styleUrls: ['./client.component.css']
 })
-export class ClientComponent implements OnDestroy, OnInit {
+export class ClientComponent {
   clientsDefs = [
     { headerName: 'Client Name', field: 'name', sortable: true }
   ];
 
-  selectedCompany: Company;
-  selectedClient: Client;
+  selectedCompany?: Company;
+  selectedClient?: Client;
   hasClient = false;
 
-  private gridApi;
+  private gridApi?: any;
 
-  clientState$: Observable<IClient[]>;
-  clientSubscription$: Subscription;
-  clients: Client[];
+  // clientState$: Observable<IClient[]>;
+  // clientSubscription$: Subscription;
+  clients?: Client[];
 
-  constructor(private dialog: MatDialog, private clientStore: Store<clientEntity.ClientState>, private router: Router) {
-      const xtra = this.router.getCurrentNavigation().extras.state;
+  constructor(private dialog: MatDialog, private clientStore: Store<ClientState>, private router: Router) {
+      const xtra = this.router.getCurrentNavigation()?.extras.state;
 
-      if (xtra != null) {
-        this.selectedCompany = xtra.payload;
-        this.clientStore.dispatch(new LoadCompanyClientsAction(this.selectedCompany.id));
-      }
+      // if (xtra != null) {
+      //   this.selectedCompany = xtra.payload;
+      //   this.clientStore.dispatch(loadCompanyClients({id: this.selectedCompany?.id ?? ''}));
+      // }
 
-      this.clientState$ = this.clientStore.select(clientEntity.selectAll);
-      this.clientSubscription$ = this.clientState$.subscribe((state) => {
-          this.clients = state;
-      });
+      // this.clientState$ = this.clientStore.select(clientEntity.selectAll);
+      // this.clientSubscription$ = this.clientState$.subscribe((state) => {
+      //     this.clients = state;
+      // });
   }
 
-  ngOnInit() {
-
-  }
-
-  ngOnDestroy() {
-    if (this.clientSubscription$ != null) {
-      this.clientSubscription$.unsubscribe();
-    }
-  }
+  // ngOnDestroy() {
+  //   if (this.clientSubscription$ != null) {
+  //     this.clientSubscription$.unsubscribe();
+  //   }
+  // }
 
   onReset() {
-    this.selectedCompany = null;
-    this.selectedClient = null;
+    this.selectedCompany = undefined;
+    this.selectedClient = undefined;
   }
 
-  openClientModal(client) {
+  openClientModal(client: any) {
     const dialogRef = this.dialog.open(ClientModalComponent, {
       width: '450px',
       data: client
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result:any) => {
       console.log('The client dialog was closed');
       if (result instanceof Client) {
         if (result.id !== undefined) {
-          this.clientStore.dispatch(new UpdateClientAction(result));
+          this.clientStore.dispatch(updateClient({payload: result}));
         } else {
-          this.clientStore.dispatch(new CreateClientAction(result));
+          this.clientStore.dispatch(createClient({payload: result}));
         }
       }
     });
   }
 
-  openConfirmationModal(title, message) {
+  openConfirmationModal(title: string, message: string) {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
       width: '450px',
       data: { title: title, message: message }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: any) => {
       console.log('The confirmation dialog was closed');
       if (result === true) {
         const selectedRows = this.gridApi.getSelectedRows();
-        this.clientStore.dispatch(new DeleteClientAction(selectedRows[0]));
+        this.clientStore.dispatch(deleteClient({payload: selectedRows[0]}));
       }
     });
   }
 
-  onGridReady(params) {
+  onGridReady(params: any) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
   }
 
   onClientStatus() {
-
+    console.log('onClientStatue');
   }
 
   addClient() {
     const client = new Client();
-    client.companyId = this.selectedCompany.id;
+    client.companyId = this.selectedCompany?.id ?? '';
 
     this.openClientModal(client);
   }
@@ -133,9 +125,8 @@ export class ClientComponent implements OnDestroy, OnInit {
     this.hasClient = selectedRows.length > 0;
   }
 
-  onRowDoubleClicked(row) {
-    const params = new SelectClientAction(row.data);
-    this.clientStore.dispatch(params);
+  onRowDoubleClicked(row: any) {
+    this.clientStore.dispatch(selectClient({payload:row.data}));
 
     this.selectedClient = row.data;
 

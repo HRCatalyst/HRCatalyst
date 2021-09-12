@@ -1,6 +1,6 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import * as fromCompany from './company.reducer';
+import { createFeatureSelector } from "@ngrx/store";
+import { companysFeatureKey, CompanyState } from "./company.entity";
 
-export const selectCompanyState = createFeatureSelector<fromCompany.State>(
-  fromCompany.companyFeatureKey
+export const selectCompanyState = createFeatureSelector<CompanyState>(
+  companysFeatureKey
 );

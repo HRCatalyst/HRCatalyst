@@ -1,6 +1,6 @@
 
 export interface IAssociate {
-  id: string | undefined;
+  id?: string;
   companyId: string;
   firstName: string;
   lastName: string;
@@ -14,7 +14,7 @@ export interface IAssociate {
 }
 
 export class Associate implements IAssociate {
-  id = undefined;
+  id?: string;
   companyId = '';
   firstName = '';
   lastName = '';

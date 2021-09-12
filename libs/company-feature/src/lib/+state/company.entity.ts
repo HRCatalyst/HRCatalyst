@@ -2,7 +2,7 @@ import { Company } from '@hrcatalyst/shared-feature';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
 
-export const companiesFeatureKey = 'companies';
+export const companysFeatureKey = 'companies';
 export interface CompanyState  extends EntityState<Company> {
     selectedCompany?: Company;
 }

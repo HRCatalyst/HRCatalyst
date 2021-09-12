@@ -1,26 +1,22 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Campaign } from 'src/app/campaign/campaign.interface';
-import * as participantEntity from 'src/app/participant/participant.entity';
-import { Participant, IParticipant, CampaignParticipantsParams } from 'src/app/participant/participant.interface';
+import { Component, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { ParticipantModalComponent } from './participant.modal';
-import { SelectParticipantAction, CreateParticipantAction, LoadCampaignParticipantsAction, SelectParticipantParams,
-  UpdateParticipantAction, DeleteParticipantAction} from 'src/app/participant/participant.action';
-import { Associate, IAssociate } from 'src/app/associate/associate.interface';
-import { Company } from 'src/app/company/company.interface';
-import { Client } from 'src/app/client/client.interface';
+
 import { ParticipantImportComponent } from './participant.import';
-import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
+import { Associate, Campaign, CampaignParticipantsParams, Client, Company, ConfirmationComponent, IAssociate, IParticipant, Participant, SelectParticipantParams } from '@hrcatalyst/shared-feature';
+import { MatDialog } from '@angular/material/dialog';
+import { ParticipantState } from './+state/participant.entity';
+import { createParticipant, deleteParticipant, loadCampaignParticipants, selectParticipant, updateParticipant } from './+state/participant.actions';
+import * as participantEntity from './+state/participant.entity';
 
 @Component({
   selector: 'hrcatalyst-participant',
   templateUrl: './participant.component.html',
   styleUrls: ['./participant.component.css']
 })
-export class ParticipantComponent implements OnDestroy, OnInit {
+export class ParticipantComponent implements OnDestroy {
   participantsDefs = [
     { headerName: 'First Name', field: 'firstName', sortable: true },
     { headerName: 'Last Name', field: 'lastName', sortable: true },
@@ -29,32 +25,32 @@ export class ParticipantComponent implements OnDestroy, OnInit {
     { headerName: 'Notes', field: 'notes', sortable: true }
   ];
 
-  selectedCompany: Company;
-  selectedClient: Client;
-  selectedCampaign: Campaign;
-  selectedParticipant: Participant;
-  selectedAssociate: Associate;
+  selectedCompany?: Company;
+  selectedClient?: Client;
+  selectedCampaign?: Campaign;
+  selectedParticipant?: Participant;
+  selectedAssociate?: Associate;
   hasParticipant = false;
 
-  private gridApi;
+  private gridApi?: any;
 
   participantState$: Observable<IParticipant[]>;
   participantSubscription$: Subscription;
-  participants: Participant[];
-  associateState$: Observable<IAssociate[]>;
+  participants?: Participant[];
+  associateState$?: Observable<IAssociate[]>;
   associateSubscription$: Subscription;
-  associates: Array<any>;
+  associates?: Array<any>;
 
-  constructor(private dialog: MatDialog, private participantStore: Store<participantEntity.ParticipantState>, private router: Router) {
-      const xtra = this.router.getCurrentNavigation().extras.state;
+  constructor(private dialog: MatDialog, private participantStore: Store<ParticipantState>, private router: Router) {
+      const xtra = this.router.getCurrentNavigation()?.extras.state;
 
       if (xtra != null) {
         this.selectedCompany = xtra.company;
         this.selectedClient = xtra.client;
         this.selectedCampaign = xtra.campaign;
 
-        this.participantStore.dispatch(new LoadCampaignParticipantsAction(new
-            CampaignParticipantsParams(this.selectedCompany.id, this.selectedCampaign.id)));
+        this.participantStore.dispatch(loadCampaignParticipants({payload: new
+            CampaignParticipantsParams(this.selectedCompany?.id ?? '', this.selectedCampaign?.id ?? '')}));
       }
 
       this.participantState$ = this.participantStore.select(participantEntity.selectAll);
@@ -69,9 +65,6 @@ export class ParticipantComponent implements OnDestroy, OnInit {
       });
     }
 
-    ngOnInit() {
-    }
-
     ngOnDestroy() {
       if (this.participantSubscription$ != null) {
         this.participantSubscription$.unsubscribe();
@@ -82,14 +75,14 @@ export class ParticipantComponent implements OnDestroy, OnInit {
     }
 
     onReset() {
-      this.selectedCompany = null;
-      this.selectedClient = null;
-      this.selectedCampaign = null;
-      this.selectedParticipant = null;
-      this.selectedAssociate = null;
+      this.selectedCompany = undefined;
+      this.selectedClient = undefined;
+      this.selectedCampaign = undefined;
+      this.selectedParticipant = undefined;
+      this.selectedAssociate = undefined;
     }
 
-    openParticipantModal(participant) {
+    openParticipantModal(participant: Participant) {
       const dialogRef = this.dialog.open(ParticipantModalComponent, {
         width: '450px',
         data: participant
@@ -99,15 +92,15 @@ export class ParticipantComponent implements OnDestroy, OnInit {
         console.log('The participant dialog was closed');
         if (result instanceof Participant) {
           if (result.id !== undefined) {
-            this.participantStore.dispatch(new UpdateParticipantAction(result));
+            this.participantStore.dispatch(updateParticipant({payload: result}));
           } else {
-            this.participantStore.dispatch(new CreateParticipantAction(result));
+            this.participantStore.dispatch(createParticipant({payload: result}));
           }
         }
       });
     }
 
-    openConfirmationModal(title, message) {
+    openConfirmationModal(title: string, message: string) {
       const dialogRef = this.dialog.open(ConfirmationComponent, {
         width: '450px',
         data: { title: title, message: message }
@@ -117,19 +110,19 @@ export class ParticipantComponent implements OnDestroy, OnInit {
         console.log('The confirmation dialog was closed');
         if (result === true) {
           const selectedRows = this.gridApi.getSelectedRows();
-          this.participantStore.dispatch(new DeleteParticipantAction(selectedRows[0]));
+          this.participantStore.dispatch(deleteParticipant({payload: selectedRows[0]}));
         }
       });
     }
 
-    onGridReady(params) {
+    onGridReady(params: any) {
       this.gridApi = params.api;
       this.gridApi.sizeColumnsToFit();
     }
 
     addParticipant() {
       const client = new Participant();
-      client.campaignId = this.selectedCampaign.id;
+      client.campaignId = this.selectedCampaign?.id ?? '';
 
       this.openParticipantModal(client);
     }
@@ -158,14 +151,19 @@ export class ParticipantComponent implements OnDestroy, OnInit {
       this.hasParticipant = selectedRows.length > 0;
     }
 
-    onRowDoubleClicked(row) {
+    onRowDoubleClicked(row: any) {
       this.selectedAssociate = row.data;
-      this.selectedParticipant = this.participants.find(x => x.associateId === this.selectedAssociate.id);
+      this.selectedParticipant = this.participants?.find(x => x.associateId === this.selectedAssociate?.id);
 
-      const params = new SelectParticipantAction(new SelectParticipantParams(
-        this.selectedCampaign, this.selectedParticipant, this.selectedAssociate));
+      if (this.selectedCampaign !== undefined &&
+        this.selectedParticipant !== undefined &&
+        this.selectedAssociate !== undefined) {
+        const params = selectParticipant({payload: new SelectParticipantParams(
+          this.selectedCampaign, this.selectedParticipant, this.selectedAssociate)});
 
-      this.participantStore.dispatch(params);
+        this.participantStore.dispatch(params);
+      }
+
 
       this.router.navigate(['/rater'], { state: {
           company: this.selectedCompany,
@@ -184,11 +182,11 @@ export class ParticipantComponent implements OnDestroy, OnInit {
     onUpload() {
       const dialogRef = this.dialog.open(ParticipantImportComponent, {
         width: '450px',
-        data: this.selectedCompany.id
+        data: this.selectedCompany?.id
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The participant import dialog was closed');
+        console.log(`The participant import dialog was closed ${result}`);
       });
     }
 }

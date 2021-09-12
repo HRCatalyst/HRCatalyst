@@ -7,6 +7,11 @@ import { reducer } from './+state/feedback.reducer';
 import { FeedbackEffects } from './+state/feedback.effects';
 import { FeedbackComponent } from './feedback.component';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { ClientFeatureModule } from '@hrcatalyst/client-feature';
+import { CompanyFeatureModule } from '@hrcatalyst/company-feature';
+import { ParticipantFeatureModule } from '@hrcatalyst/participant-feature';
+import { RaterFeatureModule } from '@hrcatalyst/rater-feature';
+import { QuestionFeatureModule } from '@hrcatalyst/question-feature';
 
 @NgModule({
   imports: [
@@ -17,6 +22,11 @@ import { AngularFirestore } from '@angular/fire/firestore';
         component: FeedbackComponent
       }
     ]),
+    ClientFeatureModule,
+    CompanyFeatureModule,
+    ParticipantFeatureModule,
+    RaterFeatureModule,
+    QuestionFeatureModule,
     StoreModule.forFeature('feedback', reducer),
     EffectsModule.forFeature([FeedbackEffects]),
   ],

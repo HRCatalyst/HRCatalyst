@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { loadAllUsers } from './+state/user.actions';
-import { UserState } from './+state/user.reducer';
+import { UserState } from './+state/user.entity';
 import { selectUserState } from './+state/user.selectors';
 
 @Component({
