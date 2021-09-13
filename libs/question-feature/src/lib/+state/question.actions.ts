@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { IQuestion, Question } from '@hrcatalyst/shared-feature';
-import { DocumentReference } from '@angular/fire/firestore';
+import { IQuestion, Question } from '@hrc/shared-feature';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadQuestions = createAction(
   '[Question/API] Load Questions',

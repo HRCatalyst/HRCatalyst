@@ -3,18 +3,18 @@ import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { CampaignModalComponent } from './campaign.modal';
-import { Campaign, Client, Company, ConfirmationComponent } from '@hrcatalyst/shared-feature';
+import { Campaign, Client, Company, ConfirmationComponent } from '@hrc/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
 import { createCampaign, deleteCampaign, loadClientCampaigns, selectCampaign, updateCampaign } from './+state/campaign.actions';
 import { Dictionary } from '@ngrx/entity';
 import { selectCampaignState } from './+state/campaign.selectors';
 import { takeUntil } from 'rxjs/operators';
-import { selectCompany } from '@hrcatalyst/company-feature';
-import { ClientState } from '@hrcatalyst/client-feature';
+import { selectCompany } from '@hrc/company-feature';
+import { ClientState } from '@hrc/client-feature';
 import { CampaignState } from './+state/campaign.entity';
 
 @Component({
-  selector: 'hrcatalyst-campaign',
+  selector: 'hrc-campaign',
   templateUrl: './campaign.component.html',
   styleUrls: ['./campaign.component.css']
 })

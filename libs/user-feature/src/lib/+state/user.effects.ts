@@ -3,8 +3,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as UserActions from './user.actions';
-import { Firestore } from '@angular/fire/firestore';
-import { IUser, LoaderService, User } from '@hrcatalyst/shared-feature';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { IUser, LoaderService, User } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 
 
@@ -13,7 +13,7 @@ export class UserEffects {
 
   constructor(
       private actions$: Actions,
-      private firestore: Firestore,
+      private firestore: AngularFirestore,
       private loader: LoaderService,
       private store: Store<IUser>
     ) {

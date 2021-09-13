@@ -3,16 +3,16 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as FeedbackActions from './feedback.actions';
-import { Firestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Store } from '@ngrx/store';
-import { enumFeedbackStatus, Feedback, FEEDBACK_STATUS, LoaderService } from '@hrcatalyst/shared-feature';
+import { enumFeedbackStatus, Feedback, FEEDBACK_STATUS, LoaderService } from '@hrc/shared-feature';
 import { FeedbackState } from './feedback.entity';
 
 @Injectable()
 export class FeedbackEffects {
   campaignYear: string = Date.now.toString();
 
-  constructor(private actions$: Actions, private firestore: Firestore,
+  constructor(private actions$: Actions, private firestore: AngularFirestore,
     private store: Store<FeedbackState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }

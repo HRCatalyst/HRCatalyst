@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { CampaignParticipantsParams, IParticipant, Participant, SelectParticipantParams } from '@hrcatalyst/shared-feature';
-import { DocumentReference } from '@angular/fire/firestore';
+import { CampaignParticipantsParams, IParticipant, Participant, SelectParticipantParams } from '@hrc/shared-feature';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadParticipants = createAction(
   '[Participant/API] Load Participants',

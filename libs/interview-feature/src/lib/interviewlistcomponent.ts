@@ -5,13 +5,13 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { InterviewComponent } from './interview.component';
-import { Associate, ConfirmationComponent, Interview, InterviewParticipant, IUser, RELATIONSHIP_DATA } from '@hrcatalyst/shared-feature';
+import { Associate, ConfirmationComponent, Interview, InterviewParticipant, IUser, RELATIONSHIP_DATA } from '@hrc/shared-feature';
 import { InterviewState } from './+state/interview.entity';
-import { AssociateState, searchAssociates } from '@hrcatalyst/associate-feature';
+import { AssociateState, searchAssociates } from '@hrc/associate-feature';
 import { loadInterviewParticipantsSuccess } from './+state/interview.actions';
 
 @Component({
-  selector: 'hrcatalyst-interviewlist',
+  selector: 'hrc-interviewlist',
   templateUrl: './interviewlist.component.html',
   styleUrls: ['./interviewlist.component.css']
 })

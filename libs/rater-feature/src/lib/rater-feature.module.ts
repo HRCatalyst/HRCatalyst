@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/rater.reducer';
 import { RaterEffects } from './+state/rater.effects';
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/compat/firestore';
 import { RaterComponent } from './rater.component';
-import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
+import { SharedFeatureModule } from '@hrc/shared-feature';
 
 @NgModule({
   imports: [
@@ -30,6 +30,10 @@ import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
   ],
   providers: [
     Firestore
+  ],
+  schemas: [
+    NO_ERRORS_SCHEMA,
+    CUSTOM_ELEMENTS_SCHEMA
   ]
 })
 export class RaterFeatureModule {}

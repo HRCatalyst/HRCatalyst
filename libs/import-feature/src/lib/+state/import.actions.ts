@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { IImport, Import, ImportSuccessResult } from '@hrcatalyst/shared-feature';
-import { DocumentReference } from '@angular/fire/firestore';
+import { IImport, Import, ImportSuccessResult } from '@hrc/shared-feature';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadImports = createAction(
   '[Import/API] Load Imports',

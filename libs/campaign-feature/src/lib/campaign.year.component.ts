@@ -3,7 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CampaignYearModalComponent } from './campaign.year.modal';
-import { CampaignYear, ConfirmationComponent } from '@hrcatalyst/shared-feature';
+import { CampaignYear, ConfirmationComponent } from '@hrc/shared-feature';
 import { createCampaignYear, deleteCampaignYear, loadCampaignYears, updateCampaignYear } from './+state/campaign.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { CampaignState } from './+state/campaign.entity';
@@ -11,7 +11,7 @@ import { selectCampaignState } from '..';
 
 
 @Component({
-  selector: 'hrcatalyst-campaign-year',
+  selector: 'hrc-campaign-year',
   templateUrl: './campaign.year.component.html',
   styleUrls: ['./campaign.year.component.css']
 })

@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Associate, Campaign, Client, Company, enumFeedbackStatus, Feedback, FEEDBACK_STATUS, IFeedback, IImport, Participant, Rater, RELATIONSHIP_DATA, ReportParticipant, ReportRater } from '@hrcatalyst/shared-feature';
+import { Associate, Campaign, Client, Company, enumFeedbackStatus, Feedback, FEEDBACK_STATUS, IFeedback, IImport, Participant, Rater, RELATIONSHIP_DATA, ReportParticipant, ReportRater } from '@hrc/shared-feature';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { ImportState } from '@ngrx/store-devtools/src/actions';
-import * as feedbackFeature from '@hrcatalyst/feedback-feature';
-import * as importFeature from '@hrcatalyst/import-feature';
+import * as feedbackFeature from '@hrc/feedback-feature';
+import * as importFeature from '@hrc/import-feature';
 
 @Component({
-  selector: 'hrcatalyst-campaign.status',
+  selector: 'hrc-campaign.status',
   templateUrl: './campaign.status.component.html',
   styleUrls: ['./campaign.status.component.css']
 })

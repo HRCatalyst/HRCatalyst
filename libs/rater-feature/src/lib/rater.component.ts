@@ -4,14 +4,14 @@ import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { RaterImportComponent } from './rater.import';
 import { Subscription } from 'rxjs';
-import { Associate, Campaign, Client, Company, ConfirmationComponent, Participant, Rater, SelectRaterParams } from '@hrcatalyst/shared-feature';
+import { Associate, Campaign, Client, Company, ConfirmationComponent, Participant, Rater, SelectRaterParams } from '@hrc/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
 import { RaterState } from './+state/rater.entity';
 import { createRater, deleteRater, selectRater, updateRater } from './+state/rater.actions';
-//import { FeedbackState } from '@hrcatalyst/feedback-feature';
+//import { FeedbackState } from '@hrc/feedback-feature';
 
 @Component({
-  selector: 'hrcatalyst-rater',
+  selector: 'hrc-rater',
   templateUrl: './rater.component.html',
   styleUrls: ['./rater.component.css']
 })

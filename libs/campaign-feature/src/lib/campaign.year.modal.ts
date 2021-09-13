@@ -1,12 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CampaignYear, FormBase, ICampaignYear } from '@hrcatalyst/shared-feature';
+import { CampaignYear, FormBase, ICampaignYear } from '@hrc/shared-feature';
 
 
 
 @Component({
-  selector: 'hrcatalyst-campaign-year-modal',
+  selector: 'hrc-campaign-year-modal',
   templateUrl: './campaign.year.modal.html',
   styleUrls: ['./campaign.year.modal.css']
 })

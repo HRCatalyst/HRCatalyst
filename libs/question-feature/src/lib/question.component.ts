@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { QuestionModalComponent } from './question.modal';
-import { ConfirmationComponent, Question } from '@hrcatalyst/shared-feature';
+import { ConfirmationComponent, Question } from '@hrc/shared-feature';
 import { QuestionState } from './+state/question.entity';
 import { MatDialog } from '@angular/material/dialog';
 import { createQuestion, deleteQuestion, loadAllQuestions } from './+state/question.actions';
 
 @Component({
-  selector: 'hrcatalyst-question',
+  selector: 'hrc-question',
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css']
 })

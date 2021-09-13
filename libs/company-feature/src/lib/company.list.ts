@@ -10,7 +10,7 @@ import { LoadAllCompanysAction, CreateCompanyAction, SelectCompanyAction, Update
 import { ConfirmationComponent } from 'src/app/shared/confirmation/confirmation.component';
 
 @Component({
-  selector: 'hrcatalyst-company-list',
+  selector: 'hrc-company-list',
   templateUrl: './company.list.html',
   styleUrls: ['./company.list.css']
 })

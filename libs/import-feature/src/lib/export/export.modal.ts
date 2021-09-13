@@ -20,7 +20,7 @@ import { enumFeedbackStatus, FEEDBACK_STATUS } from 'src/app/feedback/feedback.d
 import { Rater } from 'src/app/rater/rater.interface';
 
 @Component({
-  selector: 'hrcatalyst-export',
+  selector: 'hrc-export',
   templateUrl: './export.modal.html',
   styleUrls: ['./export.modal.css']
 })

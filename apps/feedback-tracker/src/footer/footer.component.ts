@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'hrcatalyst-footer',
+  selector: 'hrc-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css']
 })

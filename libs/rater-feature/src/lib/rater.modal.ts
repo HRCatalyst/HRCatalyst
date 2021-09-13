@@ -1,10 +1,10 @@
 import { Component, Inject, OnDestroy } from '@angular/core';
-import { FormBase, IRater, Rater, RELATIONSHIP_DATA } from '@hrcatalyst/shared-feature';
+import { FormBase, IRater, Rater, RELATIONSHIP_DATA } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'hrcatalyst-rater-modal',
+  selector: 'hrc-rater-modal',
   templateUrl: './rater.modal.html',
   styleUrls: ['./rater.modal.css']
 })

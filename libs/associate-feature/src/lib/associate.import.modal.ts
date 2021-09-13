@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { Associate, FormBase } from '@hrcatalyst/shared-feature';
+import { Associate, FormBase } from '@hrc/shared-feature';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store} from '@ngrx/store';
 import { createAssociate } from './+state/associate.actions';
@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 //import readXlsxFile from 'read-excel-file'; //'read-excel-file';
 
 @Component({
-  selector: 'hrcatalyst-associateimport',
+  selector: 'hrc-associateimport',
   templateUrl: './associate.import.modal.html',
   styleUrls: ['./associate.import.modal.css']
 })

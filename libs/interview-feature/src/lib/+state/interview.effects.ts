@@ -4,17 +4,17 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
 
 import * as InterviewActions from './interview.actions';
-import { Firestore } from '@angular/fire/firestore';
-import { Associate, Campaign, enumFeedbackType, Feedback, IAssociate, IFeedback, Interview, InterviewParticipant, LoaderService, Participant, Rater } from '@hrcatalyst/shared-feature';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Associate, Campaign, enumFeedbackType, Feedback, IAssociate, IFeedback, Interview, InterviewParticipant, LoaderService, Participant, Rater } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
-import { createFeedback } from '@hrcatalyst/feedback-feature';
+import { createFeedback } from '@hrc/feedback-feature';
 
 
 @Injectable()
 export class InterviewEffects {
   campaignYear: string = Date.now.toString();
 
-  constructor(private actions$: Actions, private firestore: Firestore,
+  constructor(private actions$: Actions, private firestore: AngularFirestore,
       private store: Store<IAssociate>, private feedbackStore: Store<IFeedback>, private loader: LoaderService) {
         this.campaignYear = '2021';
   }

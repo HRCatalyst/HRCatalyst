@@ -5,14 +5,14 @@ import { Router } from '@angular/router';
 import { ParticipantModalComponent } from './participant.modal';
 
 import { ParticipantImportComponent } from './participant.import';
-import { Associate, Campaign, CampaignParticipantsParams, Client, Company, ConfirmationComponent, IAssociate, IParticipant, Participant, SelectParticipantParams } from '@hrcatalyst/shared-feature';
+import { Associate, Campaign, CampaignParticipantsParams, Client, Company, ConfirmationComponent, IAssociate, IParticipant, Participant, SelectParticipantParams } from '@hrc/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
 import { ParticipantState } from './+state/participant.entity';
 import { createParticipant, deleteParticipant, loadCampaignParticipants, selectParticipant, updateParticipant } from './+state/participant.actions';
 import * as participantEntity from './+state/participant.entity';
 
 @Component({
-  selector: 'hrcatalyst-participant',
+  selector: 'hrc-participant',
   templateUrl: './participant.component.html',
   styleUrls: ['./participant.component.css']
 })

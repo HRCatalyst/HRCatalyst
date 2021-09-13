@@ -2,13 +2,13 @@ import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 //import readXlsxFile from 'read-excel-file';
 import { Store } from '@ngrx/store';
-import { FormBase, Participant } from '@hrcatalyst/shared-feature';
+import { FormBase, Participant } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ParticipantState } from './+state/participant.entity';
 import { createParticipant } from './+state/participant.actions';
 
 @Component({
-  selector: 'hrcatalyst-participantimport',
+  selector: 'hrc-participantimport',
   templateUrl: './participant.import.html',
   styleUrls: ['./participant.import.css']
 })

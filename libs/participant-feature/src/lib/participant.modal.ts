@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { FormBase, IParticipant, Participant } from '@hrcatalyst/shared-feature';
+import { FormBase, IParticipant, Participant } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'hrcatalyst-participant-modal',
+  selector: 'hrc-participant-modal',
   templateUrl: './participant.modal.html',
   styleUrls: ['./participant.modal.css']
 })

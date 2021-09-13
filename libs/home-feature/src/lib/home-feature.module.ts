@@ -6,11 +6,11 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/home.reducer';
 import { HomeEffects } from './+state/home.effects';
 import { HomeComponent } from './home.component';
-import { Firestore } from '@angular/fire/firestore';
-import { AuthFeatureModule } from '@hrcatalyst/auth-feature';
-import { ImportFeatureModule } from '@hrcatalyst/import-feature';
-import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
-import { QuestionFeatureModule } from '@hrcatalyst/question-feature';
+import { Firestore } from '@angular/fire/compat/firestore';
+import { AuthFeatureModule } from '@hrc/auth-feature';
+import { ImportFeatureModule } from '@hrc/import-feature';
+import { SharedFeatureModule } from '@hrc/shared-feature';
+import { QuestionFeatureModule } from '@hrc/question-feature';
 
 @NgModule({
   imports: [

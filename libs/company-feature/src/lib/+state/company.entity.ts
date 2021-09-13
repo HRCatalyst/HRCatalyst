@@ -1,4 +1,4 @@
-import { Company } from '@hrcatalyst/shared-feature';
+import { Company } from '@hrc/shared-feature';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
 

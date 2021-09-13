@@ -13,7 +13,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "hrcatalyst",
+            "prefix": "hrc",
             "style": "camelCase"
           }
         ],
@@ -21,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "hrcatalyst",
+            "prefix": "hrc",
             "style": "kebab-case"
           }
         ]

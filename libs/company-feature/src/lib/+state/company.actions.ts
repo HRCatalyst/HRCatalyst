@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { Company } from '@hrcatalyst/shared-feature';
-import { DocumentReference } from '@angular/fire/firestore';
+import { Company } from '@hrc/shared-feature';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadCompanys = createAction(
   '[Company/API] Load Companys',

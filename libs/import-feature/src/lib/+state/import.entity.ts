@@ -1,4 +1,4 @@
-import { Associate, Campaign, Import, Participant, Rater } from "@hrcatalyst/shared-feature";
+import { Associate, Campaign, Import, Participant, Rater } from "@hrc/shared-feature";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
 

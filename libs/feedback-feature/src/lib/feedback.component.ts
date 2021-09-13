@@ -3,14 +3,14 @@ import { Router } from '@angular/router';
 import { FeedbackModalComponent } from './feedback.modal';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { Associate, Campaign, Client, Company, ConfirmationComponent, Feedback, IRater, Participant, SelectRaterParams } from '@hrcatalyst/shared-feature';
+import { Associate, Campaign, Client, Company, ConfirmationComponent, Feedback, IRater, Participant, SelectRaterParams } from '@hrc/shared-feature';
 import { createFeedback, deleteFeedback, updateFeedback } from './+state/feedback.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { FeedbackState } from './+state/feedback.entity';
-import { loadRaterFeedback, RaterState } from '@hrcatalyst/rater-feature';
+import { loadRaterFeedback, RaterState } from '@hrc/rater-feature';
 
 @Component({
-  selector: 'hrcatalyst-feedback',
+  selector: 'hrc-feedback',
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.css']
 })

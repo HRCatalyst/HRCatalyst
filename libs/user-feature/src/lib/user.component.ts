@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User } from '@hrcatalyst/shared-feature';
+import { User } from '@hrc/shared-feature';
 import { Dictionary } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
@@ -9,7 +9,7 @@ import { UserState } from './+state/user.entity';
 import { selectUserState } from './+state/user.selectors';
 
 @Component({
-  selector: 'hrcatalyst-user',
+  selector: 'hrc-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })

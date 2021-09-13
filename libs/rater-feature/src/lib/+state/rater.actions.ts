@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { IRater, Rater, SelectParticipantParams, SelectRaterParams } from '@hrcatalyst/shared-feature';
-import { DocumentReference } from '@angular/fire/firestore';
+import { IRater, Rater, SelectParticipantParams, SelectRaterParams } from '@hrc/shared-feature';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadRaters = createAction(
   '[Rater/API] Load Raters',

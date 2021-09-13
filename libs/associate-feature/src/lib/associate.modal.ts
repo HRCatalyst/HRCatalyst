@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Associate, FormBase, IAssociate } from '@hrcatalyst/shared-feature';
+import { Associate, FormBase, IAssociate } from '@hrc/shared-feature';
 
 @Component({
-  selector: 'hrcatalyst-associate.modal',
+  selector: 'hrc-associate.modal',
   templateUrl: './associate.modal.html',
   styleUrls: ['./associate.modal.css']
 })

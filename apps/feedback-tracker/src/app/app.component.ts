@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthState, logoutAttempt } from '@hrcatalyst/auth-feature';
+import { AuthState, logoutAttempt } from '@hrc/auth-feature';
 
 @Component({
-  selector: 'hrcatalyst-root',
+  selector: 'hrc-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

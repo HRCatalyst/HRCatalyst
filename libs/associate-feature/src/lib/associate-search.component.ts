@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthState, selectAuthState } from '@hrcatalyst/auth-feature';
-import { loadCampaignYears } from '@hrcatalyst/campaign-feature';
-import { loadInterviewParticipants } from '@hrcatalyst/interview-feature';
-import { AssociateSearchResult, User } from '@hrcatalyst/shared-feature';
+import { AuthState, selectAuthState } from '@hrc/auth-feature';
+import { loadCampaignYears } from '@hrc/campaign-feature';
+import { loadInterviewParticipants } from '@hrc/interview-feature';
+import { AssociateSearchResult, User } from '@hrc/shared-feature';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { selectAssociateState } from './+state/associate.selectors';
 
 
 @Component({
-  selector: 'hrcatalyst-associate-search',
+  selector: 'hrc-associate-search',
   templateUrl: './associate-search.component.html',
   styleUrls: ['./associate-search.component.css']
 })

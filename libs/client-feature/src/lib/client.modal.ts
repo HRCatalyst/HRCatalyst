@@ -1,11 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Client, FormBase, IClient } from '@hrcatalyst/shared-feature';
+import { Client, FormBase, IClient } from '@hrc/shared-feature';
 
 
 @Component({
-  selector: 'hrcatalyst-client-modal',
+  selector: 'hrc-client-modal',
   templateUrl: './client.modal.html',
   styleUrls: ['./client.modal.css']
 })

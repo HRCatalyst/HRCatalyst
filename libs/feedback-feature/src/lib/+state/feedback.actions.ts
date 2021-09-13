@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Feedback, IFeedback, SelectParticipantParams } from '@hrcatalyst/shared-feature';
-import { DocumentReference } from '@angular/fire/firestore';
+import { Feedback, IFeedback, SelectParticipantParams } from '@hrc/shared-feature';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadFeedbacks = createAction(
   '[Feedback/API] Load Feedbacks',

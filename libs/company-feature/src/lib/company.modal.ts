@@ -5,7 +5,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'hrcatalyst-company',
+  selector: 'hrc-company',
   templateUrl: './company.modal.html',
   styleUrls: ['./company.modal.css']
 })

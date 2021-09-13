@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { CompanyState } from './company.entity';
-import { Company, LoaderService } from '@hrcatalyst/shared-feature';
+import { Company, LoaderService } from '@hrc/shared-feature';
 import { createCompany, createCompanyFailire, createCompanySuccess, deleteCompany, deleteCompanyFailure, deleteCompanySuccess, loadAllCompanys, loadAllCompanysFailure, loadAllCompanysSuccess, updateCompany, updateCompanyFailure, updateCompanySuccess } from './company.actions';
 import { Store } from '@ngrx/store';
-import { Firestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { of, Subject } from 'rxjs';
 
 
@@ -14,7 +14,7 @@ export class CompanyEffects {
   campaignYear: string = Date.now.toString();
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private actions$: Actions, private firestore: Firestore,
+  constructor(private actions$: Actions, private firestore: AngularFirestore,
     private store: Store<CompanyState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }

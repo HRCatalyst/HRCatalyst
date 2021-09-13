@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Campaign, CAMPAIGN_STATUS, FormBase, ICampaign } from '@hrcatalyst/shared-feature';
+import { Campaign, CAMPAIGN_STATUS, FormBase, ICampaign } from '@hrc/shared-feature';
 
 @Component({
-  selector: 'hrcatalyst-campaign.modal',
+  selector: 'hrc-campaign.modal',
   templateUrl: './campaign.modal.html',
   styleUrls: ['./campaign.modal.css']
 })

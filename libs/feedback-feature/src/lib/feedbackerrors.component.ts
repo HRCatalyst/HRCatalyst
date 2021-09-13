@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Associate, Campaign, ConfirmationComponent, enumRationship, Feedback, IFeedback, IImport, Participant, Rater, RELATIONSHIP_DATA } from '@hrcatalyst/shared-feature';
+import { Associate, Campaign, ConfirmationComponent, enumRationship, Feedback, IFeedback, IImport, Participant, Rater, RELATIONSHIP_DATA } from '@hrc/shared-feature';
 import { Store, select } from '@ngrx/store';
 import { ImportState } from '@ngrx/store-devtools/src/actions';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { selectFeedbackState } from './+state/feedback.selectors';
 import { FeedbackErrorsModalComponent } from './feedbackerrors.modal';
 
 @Component({
-  selector: 'hrcatalyst-feedbackerrors',
+  selector: 'hrc-feedbackerrors',
   templateUrl: './feedbackerrors.component.html',
   styleUrls: ['./feedbackerrors.component.css']
 })

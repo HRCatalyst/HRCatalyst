@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { AssociateModalComponent } from './associate.modal';
 import { Router } from '@angular/router';
 import { AssociateImportModalComponent } from './associate.import.modal';
-import { Associate, Company, ConfirmationComponent } from '@hrcatalyst/shared-feature';
+import { Associate, Company, ConfirmationComponent } from '@hrc/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
 import { AssociateState } from './+state/associate.entity';
 import { createAssociate, deleteAssociate, loadCompanyAssociates, selectAssociate, updateAssociate } from './+state/associate.actions';
@@ -16,7 +16,7 @@ import { selectAssociateState } from './+state/associate.selectors';
 import { Dictionary } from '@ngrx/entity';
 
 @Component({
-  selector: 'hrcatalyst-associate',
+  selector: 'hrc-associate',
   templateUrl: './associate.component.html',
   styleUrls: ['./associate.component.css']
 })

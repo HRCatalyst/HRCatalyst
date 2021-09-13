@@ -1,11 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBase, IQuestion, Question } from '@hrcatalyst/shared-feature';
+import { FormBase, IQuestion, Question } from '@hrc/shared-feature';
 
 
 @Component({
-  selector: 'hrcatalyst-question.modal',
+  selector: 'hrc-question.modal',
   templateUrl: './question.modal.html',
   styleUrls: ['./question.modal.css']
 })

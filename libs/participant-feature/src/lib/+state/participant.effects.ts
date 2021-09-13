@@ -3,8 +3,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
 import * as ParticipantActions from './participant.actions';
-import { Firestore } from '@angular/fire/firestore';
-import { Associate, Feedback, LoaderService, Participant } from '@hrcatalyst/shared-feature';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Associate, Feedback, LoaderService, Participant } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 import { ParticipantState } from './participant.entity';
 
@@ -13,7 +13,7 @@ import { ParticipantState } from './participant.entity';
 export class ParticipantEffects {
   campaignYear: string = Date.now.toString();
 
-  constructor(private actions$: Actions, private firestore: Firestore,
+  constructor(private actions$: Actions, private firestore: AngularFirestore,
     private store: Store<ParticipantState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }

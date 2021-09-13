@@ -1,5 +1,5 @@
 {
-  "npmScope": "hrcatalyst",
+  "npmScope": "hrc",
   "affected": {
     "defaultBase": "master"
   },

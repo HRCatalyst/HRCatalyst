@@ -4,8 +4,8 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
 
 import * as CampaignActions from './campaign.actions';
-import { Campaign, CampaignYear, LoaderService } from '@hrcatalyst/shared-feature';
-import { Firestore } from '@angular/fire/firestore';
+import { Campaign, CampaignYear, LoaderService } from '@hrc/shared-feature';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { createCampaign,
           createCampaignFailire,
           createCampaignSuccess,
@@ -36,7 +36,7 @@ export class CampaignEffects {
   campaignYear: string = Date.now.toString();
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private actions$: Actions, private firestore: Firestore,
+  constructor(private actions$: Actions, private firestore: AngularFirestore,
     private store: Store<CampaignState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }

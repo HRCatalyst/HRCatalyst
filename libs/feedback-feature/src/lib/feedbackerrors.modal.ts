@@ -2,12 +2,12 @@ import { Component, Inject, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { enumFeedbackType, Feedback, FEEDBACK_STATUS, FEEDBACK_TYPE, FormBase, IQuestion, Question, RELATIONSHIP_DATA } from '@hrcatalyst/shared-feature';
+import { enumFeedbackType, Feedback, FEEDBACK_STATUS, FEEDBACK_TYPE, FormBase, IQuestion, Question, RELATIONSHIP_DATA } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { QuestionState, selectQuestionState } from '@hrcatalyst/question-feature';
+import { QuestionState, selectQuestionState } from '@hrc/question-feature';
 
 @Component({
-  selector: 'hrcatalyst-feedbackerrors.modal',
+  selector: 'hrc-feedbackerrors.modal',
   templateUrl: './feedbackerrors.modal.html',
   styleUrls: ['./feedbackerrors.modal.css']
 })

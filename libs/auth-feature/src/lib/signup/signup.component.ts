@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBase, RegistrationModel, ROLE_DATA } from '@hrcatalyst/shared-feature';
+import { FormBase, RegistrationModel, ROLE_DATA } from '@hrc/shared-feature';
 
 @Component({
-  selector: 'hrcatalyst-signup',
+  selector: 'hrc-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })

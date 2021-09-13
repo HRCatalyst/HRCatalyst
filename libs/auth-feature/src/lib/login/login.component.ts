@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IFirebaseUser, LoginModel, User } from '@hrcatalyst/shared-feature';
+import { IFirebaseUser, LoginModel, User } from '@hrc/shared-feature';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { loadSettings, loginAttempt } from '../+state/auth.actions';
@@ -9,7 +9,7 @@ import { AuthState } from '../+state/auth.entity';
 import { selectAuthState } from '../+state/auth.selectors';
 
 @Component({
-  selector: 'hrcatalyst-login',
+  selector: 'hrc-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

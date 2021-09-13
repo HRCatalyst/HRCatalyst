@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { Auth, IFirebaseUser, LoginModel, RegistrationModel, User } from '@hrcatalyst/shared-feature';
+import { Auth, IFirebaseUser, LoginModel, RegistrationModel, User } from '@hrc/shared-feature';
 
 
 export const loadAuths = createAction(

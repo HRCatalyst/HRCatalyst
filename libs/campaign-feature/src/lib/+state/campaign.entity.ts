@@ -1,4 +1,4 @@
-import { Campaign, ICampaignYear } from '@hrcatalyst/shared-feature';
+import { Campaign, ICampaignYear } from '@hrc/shared-feature';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
 

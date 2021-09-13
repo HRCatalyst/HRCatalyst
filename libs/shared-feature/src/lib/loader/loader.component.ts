@@ -3,7 +3,7 @@ import { LoaderService } from './loader.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'hrcatalyst-loader',
+  selector: 'hrc-loader',
   templateUrl: './loader.component.html',
   styleUrls: ['./loader.component.css']
 })

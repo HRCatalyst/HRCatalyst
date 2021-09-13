@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Company } from '@hrcatalyst/shared-feature';
+import { Company } from '@hrc/shared-feature';
 
 @Component({
-  selector: 'hrcatalyst-company',
+  selector: 'hrc-company',
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.css']
 })

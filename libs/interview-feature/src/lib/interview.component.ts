@@ -3,13 +3,13 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import { FormBase, Interview, InterviewEdit, IQuestion, Question } from '@hrcatalyst/shared-feature';
+import { FormBase, Interview, InterviewEdit, IQuestion, Question } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { loadAllQuestions, QuestionState } from '@hrcatalyst/question-feature';
-import * as questionEntity from '@hrcatalyst/question-feature';
+import { loadAllQuestions, QuestionState } from '@hrc/question-feature';
+import * as questionEntity from '@hrc/question-feature';
 
 @Component({
-  selector: 'hrcatalyst-interview',
+  selector: 'hrc-interview',
   templateUrl: './interview.component.html',
   styleUrls: ['./interview.component.css']
 })

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'hrcatalyst-import',
+  selector: 'hrc-import',
   templateUrl: './import.component.html',
   styleUrls: ['./import.component.scss']
 })

@@ -5,7 +5,7 @@
       "projectType": "library",
       "root": "libs/associate-feature",
       "sourceRoot": "libs/associate-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -30,7 +30,7 @@
       "projectType": "library",
       "root": "libs/auth-feature",
       "sourceRoot": "libs/auth-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -55,7 +55,7 @@
       "projectType": "library",
       "root": "libs/campaign-feature",
       "sourceRoot": "libs/campaign-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -80,7 +80,7 @@
       "projectType": "library",
       "root": "libs/client-feature",
       "sourceRoot": "libs/client-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -105,7 +105,7 @@
       "projectType": "library",
       "root": "libs/company-feature",
       "sourceRoot": "libs/company-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -130,7 +130,7 @@
       "projectType": "library",
       "root": "libs/feedback-feature",
       "sourceRoot": "libs/feedback-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -155,7 +155,7 @@
       "projectType": "application",
       "root": "apps/feedback-tracker",
       "sourceRoot": "apps/feedback-tracker/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -277,7 +277,7 @@
       "projectType": "library",
       "root": "libs/home-feature",
       "sourceRoot": "libs/home-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -302,7 +302,7 @@
       "projectType": "library",
       "root": "libs/import-feature",
       "sourceRoot": "libs/import-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -327,7 +327,7 @@
       "projectType": "library",
       "root": "libs/interview-feature",
       "sourceRoot": "libs/interview-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -352,7 +352,7 @@
       "projectType": "library",
       "root": "libs/participant-feature",
       "sourceRoot": "libs/participant-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -377,7 +377,7 @@
       "projectType": "library",
       "root": "libs/question-feature",
       "sourceRoot": "libs/question-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -402,7 +402,7 @@
       "projectType": "library",
       "root": "libs/rater-feature",
       "sourceRoot": "libs/rater-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -427,7 +427,7 @@
       "projectType": "library",
       "root": "libs/shared-feature",
       "sourceRoot": "libs/shared-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",
@@ -452,7 +452,7 @@
       "projectType": "library",
       "root": "libs/user-feature",
       "sourceRoot": "libs/user-feature/src",
-      "prefix": "hrcatalyst",
+      "prefix": "hrc",
       "architect": {
         "test": {
           "builder": "@nrwl/jest:jest",

@@ -1,14 +1,14 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ClientState } from '@hrcatalyst/client-feature';
-import { CompanyState } from '@hrcatalyst/company-feature';
-import { ParticipantState } from '@hrcatalyst/participant-feature';
-import { Associate, Campaign, Client, Company, Feedback, Participant } from '@hrcatalyst/shared-feature';
+import { ClientState } from '@hrc/client-feature';
+import { CompanyState } from '@hrc/company-feature';
+import { ParticipantState } from '@hrc/participant-feature';
+import { Associate, Campaign, Client, Company, Feedback, Participant } from '@hrc/shared-feature';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { FeedbackState } from './+state/feedback.entity';
 
 @Component({
-  selector: 'hrcatalyst-feedbacklist',
+  selector: 'hrc-feedbacklist',
   templateUrl: './feedbacklist.component.html',
   styleUrls: ['./feedbacklist.component.css']
 })

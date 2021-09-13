@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
@@ -6,13 +6,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/feedback.reducer';
 import { FeedbackEffects } from './+state/feedback.effects';
 import { FeedbackComponent } from './feedback.component';
-import { Firestore } from '@angular/fire/firestore';
-import { ClientFeatureModule } from '@hrcatalyst/client-feature';
-import { CompanyFeatureModule } from '@hrcatalyst/company-feature';
-import { ParticipantFeatureModule } from '@hrcatalyst/participant-feature';
-//import { RaterFeatureModule } from '@hrcatalyst/rater-feature';
-import { QuestionFeatureModule } from '@hrcatalyst/question-feature';
-import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
+import { ClientFeatureModule } from '@hrc/client-feature';
+import { CompanyFeatureModule } from '@hrc/company-feature';
+import { ParticipantFeatureModule } from '@hrc/participant-feature';
+//import { RaterFeatureModule } from '@hrc/rater-feature';
+import { QuestionFeatureModule } from '@hrc/question-feature';
+import { SharedFeatureModule } from '@hrc/shared-feature';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @NgModule({
   imports: [
@@ -23,12 +23,12 @@ import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
         component: FeedbackComponent
       }
     ]),
+    SharedFeatureModule,
     ClientFeatureModule,
     CompanyFeatureModule,
     ParticipantFeatureModule,
 //    RaterFeatureModule,
     QuestionFeatureModule,
-    SharedFeatureModule,
     StoreModule.forFeature('feedback', reducer),
     EffectsModule.forFeature([FeedbackEffects]),
   ],
@@ -39,7 +39,11 @@ import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
     FeedbackComponent
   ],
   providers: [
-    Firestore
+    AngularFirestore
+  ],
+  schemas: [
+    NO_ERRORS_SCHEMA,
+    CUSTOM_ELEMENTS_SCHEMA
   ]
 })
 export class FeedbackFeatureModule {}

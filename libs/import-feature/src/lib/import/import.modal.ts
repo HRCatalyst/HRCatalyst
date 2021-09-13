@@ -3,17 +3,17 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 //import readXlsxFile from 'read-excel-file';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { Associate, Campaign, enumFeedbackStatus, enumRationship, Feedback, FEEDBACK_STATUS, FormBase, IImport, Import, Participant, Rater, RELATIONSHIP_DATA } from '@hrcatalyst/shared-feature';
-import { createRater, RaterState } from '@hrcatalyst/rater-feature';
-import { createParticipant, ParticipantState } from '@hrcatalyst/participant-feature';
+import { Associate, Campaign, enumFeedbackStatus, enumRationship, Feedback, FEEDBACK_STATUS, FormBase, IImport, Import, Participant, Rater, RELATIONSHIP_DATA } from '@hrc/shared-feature';
+import { createRater, RaterState } from '@hrc/rater-feature';
+import { createParticipant, ParticipantState } from '@hrc/participant-feature';
 import { loadImport, logImportError } from '../+state/import.actions';
-import { createFeedback, FeedbackState } from '@hrcatalyst/feedback-feature';
+import { createFeedback, FeedbackState } from '@hrc/feedback-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ImportState } from '@hrcatalyst/import-feature';
-import * as importEntity from '@hrcatalyst/import-feature';
+import { ImportState } from '@hrc/import-feature';
+import * as importEntity from '@hrc/import-feature';
 
 @Component({
-  selector: 'hrcatalyst-import',
+  selector: 'hrc-import',
   templateUrl: './import.modal.html',
   styleUrls: ['./import.modal.css']
 })

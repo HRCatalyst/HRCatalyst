@@ -6,8 +6,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/question.reducer';
 import { QuestionEffects } from './+state/question.effects';
 import { QuestionComponent } from './question.component';
-import { Firestore } from '@angular/fire/firestore';
-import { SharedFeatureModule } from '@hrcatalyst/shared-feature';
+import { Firestore } from '@angular/fire/compat/firestore';
+import { SharedFeatureModule } from '@hrc/shared-feature';
 
 @NgModule({
   imports: [

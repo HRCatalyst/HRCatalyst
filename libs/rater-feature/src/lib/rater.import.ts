@@ -3,15 +3,15 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 //import readXlsxFile from 'read-excel-file';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { Associate, Company, FormBase, IAssociate, Rater } from '@hrcatalyst/shared-feature';
+import { Associate, Company, FormBase, IAssociate, Rater } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RaterState } from './+state/rater.entity';
-import { CompanyState } from '@hrcatalyst/company-feature';
+import { CompanyState } from '@hrc/company-feature';
 import { createRater } from './+state/rater.actions';
 
 
 @Component({
-  selector: 'hrcatalyst-raterimport',
+  selector: 'hrc-raterimport',
   templateUrl: './rater.import.html',
   styleUrls: ['./rater.import.css']
 })

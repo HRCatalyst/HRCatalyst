@@ -3,9 +3,9 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as QuestionActions from './question.actions';
-import { LoaderService, Question } from '@hrcatalyst/shared-feature';
+import { LoaderService, Question } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
-import { Firestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { QuestionState } from './question.entity';
 
 
@@ -14,7 +14,7 @@ export class QuestionEffects {
 
   constructor(private actions$: Actions,
     private store: Store<QuestionState>,
-    private firestore: Firestore,
+    private firestore: AngularFirestore,
     private loader: LoaderService) {}
 
   load$ = createEffect(() => {

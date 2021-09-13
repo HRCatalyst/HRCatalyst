@@ -3,13 +3,13 @@ import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { RegistrationModel } from '@hrcatalyst/shared-feature';
-import { registrationAttempt, SignupComponent } from '@hrcatalyst/auth-feature';
-import { CompanyState } from '@hrcatalyst/company-feature';
-import { ImportModalComponent } from '@hrcatalyst/import-feature';
+import { RegistrationModel } from '@hrc/shared-feature';
+import { registrationAttempt, SignupComponent } from '@hrc/auth-feature';
+import { CompanyState } from '@hrc/company-feature';
+import { ImportModalComponent } from '@hrc/import-feature';
 
 @Component({
-  selector: 'hrcatalyst-home',
+  selector: 'hrc-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

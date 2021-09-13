@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { Store} from '@ngrx/store';
 import { ClientModalComponent } from './client.modal';
 import { Router } from '@angular/router';
-import { Client, Company, ConfirmationComponent } from '@hrcatalyst/shared-feature';
+import { Client, Company, ConfirmationComponent } from '@hrc/shared-feature';
 import { createClient, deleteClient, selectClient, updateClient } from './+state/client.actions';
 import { ClientState } from './+state/client.entity';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'hrcatalyst-client',
+  selector: 'hrc-client',
   templateUrl: './client.component.html',
   styleUrls: ['./client.component.css']
 })
