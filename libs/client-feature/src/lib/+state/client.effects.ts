@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Client } from './client.model';
-import { Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { LoaderService } from '@hrc/shared-feature';
 import { createClient, createClientFailire, createClientSuccess, deleteClient, deleteClientFailure, deleteClientSuccess, loadCompanyClients, loadCompanyClientsFailure, loadCompanyClientsSuccess, updateClient, updateClientFailure, updateClientSuccess } from './client.actions';
 import { of, Subject } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import { ClientState } from './client.entity';
 
 @Injectable()
@@ -24,23 +24,25 @@ export class ClientEffects {
     ofType(loadCompanyClients),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.getClients(x.ids)
-        .then((data) => {
-          const result = new Array<unknown>();
-          data.docs.forEach(x => {
-              return result.push({...x.data(), id: x.id});
+      return this.getClients(x.ids).pipe(
+        map((data) => {
+          const result = new Array<Client>();
+          data.forEach(x => {
+            return result.push({...x.doc.data(), id: x.doc.id});
           });
 
           this.store.dispatch(loadCompanyClientsSuccess({payload: result}));
           this.loader.isLoading.next(false);
-        })
-        .catch((err: any) => {
+          return loadCompanyClientsSuccess({payload: result});
+        }),
+        catchError((err, caught) => {
           this.loader.isLoading.next(false);
-          return of(loadCompanyClientsFailure({error: err}));
-        });
-      return of(x);
-    })
-  )});
+          this.store.dispatch(loadCompanyClientsFailure({error: err}));
+          return caught;
+        }));
+      })
+    )}
+  );
 
 
   create$ = createEffect(() => {
@@ -52,7 +54,7 @@ export class ClientEffects {
         .then(data => {
           this.loader.isLoading.next(false);
           this.store.dispatch(loadCompanyClients({ids: x.payload.companyId}));
-          return createClientSuccess({payload: data});
+          return createClientSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
@@ -101,26 +103,26 @@ export class ClientEffects {
   )});
 
   get() {
-    return this.firestore.collection<Client>('clients').snapshotChanges();
+    return collectionChanges<Client>(query<Client>(collection(this.firestore, 'clients') as CollectionReference<Client>));
   }
 
   getClients(id: string) {
-      return this.firestore.collection<Client>('clients').ref.where('companyId', '==', id).get();
+    return collectionChanges<Client>(query(collection(this.firestore, 'clients') as CollectionReference<Client>, where('id', '==', id)));
   }
 
   create(client: Client) {
     delete client.id;
     const g = Object.assign({}, client);
-    return this.firestore.collection<Client>('clients').add(g);
+    return addDoc(collection(this.firestore, 'clients'), g);
   }
 
   update(client: Client) {
     const g = Object.assign({}, client);
-    return this.firestore.doc('clients/' + client.id).update(g);
+    return updateDoc(doc(collection(this.firestore, 'clients') as CollectionReference<Client>, g.id), g);
   }
 
   delete(id: string) {
-    return this.firestore.doc('clients/' + id).delete();
+    return deleteDoc(doc(this.firestore, 'clients', id));
   }
 }
 

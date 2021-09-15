@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
 import * as ParticipantActions from './participant.actions';
-import { Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
 import { Associate, Feedback, LoaderService, Participant } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 import { ParticipantState } from './participant.entity';
@@ -22,31 +22,23 @@ export class ParticipantEffects {
     return this.actions$.pipe(
     ofType(ParticipantActions.loadParticipantCampaign),
     mergeMap(x => {
-        this.loader.isLoading.next(true);
-        this.getCampaign(x.payload)
-          .then((data) => {
-            const result = new Array<unknown>();
-            data.docs.forEach(d => result.push({ ...d.data(), id: d.id }));
+      this.loader.isLoading.next(true);
+      return this.getCampaign(x.payload).pipe(
+        map((data) => {
+          const result = new Array<Participant>();
+          data.forEach(d => result.push({ ...d.doc.data(), id: d.doc.id }));
 
-            this.store.dispatch(ParticipantActions.loadParticipantCampaignSuccess({payload: result}));
-            this.loader.isLoading.next(false);
-          })
-          .catch((err: any) => {
-            this.loader.isLoading.next(false);
-            return of(ParticipantActions.loadParticipantCampaignFailure({error: err}));
-          });
-        return of(x);
-      }),
-      map(() => {
-          return ParticipantActions.loadParticipantCampaignInprogress();
-      }),
-      catchError((err, caught) => {
-        this.store.dispatch(ParticipantActions.loadParticipantCampaignFailure(err));
-        this.loader.isLoading.next(false);
-        return caught;
-      })
-    );
-  });
+          this.store.dispatch(ParticipantActions.loadParticipantCampaignSuccess({payload: result}));
+          this.loader.isLoading.next(false);
+          return ParticipantActions.loadParticipantCampaignSuccess({payload: result});
+        }),
+        catchError((err, caught) => {
+          this.loader.isLoading.next(false);
+          this.store.dispatch(ParticipantActions.loadParticipantCampaignFailure({error: err}));
+          return caught;
+        }));
+      }))
+    });
 
   loadParticipants$ = createEffect(() => {
     return this.actions$.pipe(
@@ -56,22 +48,22 @@ export class ParticipantEffects {
       zip(this.getParticipants(x.payload.campaignId),
           this.getAssociates(x.payload.companyId),
           this.getFeedback(x.payload.campaignId)).subscribe(([participants, associates, feedbacks]) => {
-            const result = new Array<unknown>();
-              participants.docs.forEach(p => {
-                  return result.push({...p.data(), id: p.id});
+            const result = new Array<Participant>();
+              participants.forEach(p => {
+                  return result.push({...p.doc.data(), id: p.doc.id});
               });
 
               this.store.dispatch(ParticipantActions.loadCampaignParticipantsSuccess({payload: result}));
 
-              const partIds = participants.docs.map(p => p.data().associateId);
-              const assocs = associates.docs.filter(a => partIds.includes(a.id));
+              const partIds = participants.map(p => p.doc.data().associateId);
+              const assocs = associates.filter(a => partIds.includes(a.doc.id));
 
               const data = new Array<unknown>();
               assocs.forEach(r => {
-                  const d = r.data();
-                  const fb = feedbacks.docs.filter(f => f.data().participantId === r.id);
+                  const d = r.doc.data();
+                  const fb = feedbacks.filter(f => f.doc.data().participantId === r.doc.id);
 
-                  return data.push({...d, id: r.id, feedback: fb.length});
+                  return data.push({...d, id: r.doc.id, feedback: fb.length});
               });
               this.store.dispatch(ParticipantActions.loadCampaignAssociatesSuccess({payload: data}));
               this.loader.isLoading.next(false);
@@ -94,16 +86,15 @@ export class ParticipantEffects {
     ofType(ParticipantActions.createParticipant),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.create(x.payload)
+      return this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
-          return ParticipantActions.createParticipantSuccess({payload: data});
+          return ParticipantActions.createParticipantSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
           return ParticipantActions.createParticipantFailire({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -115,7 +106,7 @@ export class ParticipantEffects {
       this.update(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
-          return ParticipantActions.updateParticipantSuccess({payload: data});
+          return ParticipantActions.updateParticipantSuccess({payload: x.payload});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
@@ -130,59 +121,62 @@ export class ParticipantEffects {
     ofType(ParticipantActions.deleteParticipant),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.delete(x.payload.id ?? '')
+      return this.delete(x.payload.id ?? '')
         .then(() => {
           this.loader.isLoading.next(false);
-          return ParticipantActions.deleteParticipantSuccess({payload: x.payload.id});
+          return ParticipantActions.deleteParticipantSuccess({payload: x.payload});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
           return ParticipantActions.deleteParticipantFailure({error: err});
         });
-      return of(x);
     })
   )});
 
   get() {
-      const query = `participants${this.campaignYear}`;
-      return this.firestore.collection<Participant>(query).snapshotChanges();
+    const table = `participants${this.campaignYear}`;
+    return collectionChanges<Participant>(query<Participant>(collection(this.firestore, table) as CollectionReference<Participant>));
   }
 
   getParticipants(id: string) {
-      const query = `participants${this.campaignYear}`;
-      return this.firestore.collection<Participant>(query).ref.where('campaignId', '==', id).get();
+    const table = `participants${this.campaignYear}`;
+    return collectionChanges<Participant>(query(collection(this.firestore, table) as CollectionReference<Participant>,
+      where('campaignId', '==', id)));
   }
 
   getCampaign(id: string) {
-      const query = `participants${this.campaignYear}`;
-      return this.firestore.collection<Participant>(query).ref.where('associateId', '==', id).get();
+    const table = `participants${this.campaignYear}`;
+    return collectionChanges<Participant>(query(collection(this.firestore, table) as CollectionReference<Participant>,
+      where('associateId', '==', id)));
   }
 
   getAssociates(id: string) {
-      const query = `associates${this.campaignYear}`;
-      return this.firestore.collection<Associate>(query).ref.where('companyId', '==', id).get();
+    const table = `associates${this.campaignYear}`;
+    return collectionChanges<Associate>(query(collection(this.firestore, table) as CollectionReference<Associate>,
+      where('companyId', '==', id)));
   }
 
   getFeedback(id: string) {
-      const query = `feedbacks${this.campaignYear}`;
-      return this.firestore.collection<Feedback>(query).ref.where('campaignId', '==', id).get();
+    const table = `feedbacks${this.campaignYear}`;
+    return collectionChanges<Feedback>(query(collection(this.firestore, table) as CollectionReference<Feedback>,
+      where('campaignId', '==', id)));
   }
 
   create(participant: Participant) {
     delete participant.id;
     const g = Object.assign({}, participant);
-    const query = `participants${this.campaignYear}`;
-    return this.firestore.collection<Participant>(query).add(g);
+    const table = `participants${this.campaignYear}`;
+    return addDoc(collection(this.firestore, table), g);
   }
 
   update(participant: Participant) {
     const g = Object.assign({}, participant);
-    const query = `participants${this.campaignYear}/${participant.id}`;
-    return this.firestore.doc(query).update(g);
+    const table = `participants${this.campaignYear}`;
+    return updateDoc(doc(collection(this.firestore, table) as CollectionReference<Associate>, g.id), g);
   }
 
   delete(id: string) {
-      const query = `participants${this.campaignYear}/${id}`;
-      return this.firestore.doc(query).delete();
+    const table = `participants${this.campaignYear}`;
+    return deleteDoc(doc(this.firestore, table, id));
   }
 }

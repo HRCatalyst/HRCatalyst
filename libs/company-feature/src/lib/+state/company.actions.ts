@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 import { Company } from '@hrc/shared-feature';
-import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadCompanys = createAction(
   '[Company/API] Load Companys',
@@ -58,7 +57,7 @@ export const loadCompany = createAction(
 
 export const selectCompany = createAction(
   '[Company/API] Select Company',
-    props<{ payload: unknown }>()
+    props<{ payload: Company }>()
 );
 
 export const loadAllCompanys = createAction(
@@ -67,7 +66,7 @@ export const loadAllCompanys = createAction(
 
 export const loadAllCompanysSuccess = createAction(
   '[Company/API] Load All Companys Success',
-    props<{ payload: unknown }>()
+    props<{ payload: Company }>()
 );
 
 export const loadAllCompanysFailure = createAction(
@@ -82,7 +81,7 @@ export const createCompany = createAction(
 
 export const createCompanySuccess = createAction(
   '[Company/API] Create Company Success',
-  props<{ payload: DocumentReference }>()
+  props<{ payload: Company }>()
 );
 
 export const createCompanyFailire = createAction(
@@ -97,7 +96,7 @@ export const updateCompany = createAction(
 
 export const updateCompanySuccess = createAction(
   '[Company/API] Update Company Success',
-    props<{ payload: unknown }>()
+    props<{ payload: Company }>()
 );
 
 export const updateCompanyFailure = createAction(
@@ -112,7 +111,7 @@ export const deleteCompany = createAction(
 
 export const deleteCompanySuccess = createAction(
   '[Company/API] Delete Company Success',
-    props<{ payload: unknown }>()
+    props<{ payload: Company }>()
 );
 
 export const deleteCompanyFailure = createAction(

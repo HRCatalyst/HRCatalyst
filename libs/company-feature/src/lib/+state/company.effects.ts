@@ -5,7 +5,7 @@ import { CompanyState } from './company.entity';
 import { Company, LoaderService } from '@hrc/shared-feature';
 import { createCompany, createCompanyFailire, createCompanySuccess, deleteCompany, deleteCompanyFailure, deleteCompanySuccess, loadAllCompanys, loadAllCompanysFailure, loadAllCompanysSuccess, updateCompany, updateCompanyFailure, updateCompanySuccess } from './company.actions';
 import { Store } from '@ngrx/store';
-import { Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc } from '@angular/fire/firestore';
 import { of, Subject } from 'rxjs';
 
 
@@ -28,7 +28,7 @@ export class CompanyEffects {
       .pipe(
         map(data => {
           this.loader.isLoading.next(false);
-          return loadAllCompanysSuccess({payload: data});
+          return loadAllCompanysSuccess({payload: data.pop});
         }),
         catchError((err, caught) => {
           this.store.dispatch(loadAllCompanysFailure({error: err}));
@@ -46,7 +46,7 @@ export class CompanyEffects {
       this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
-          return createCompanySuccess({payload: data});
+          return createCompanySuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any)=> {
           this.loader.isLoading.next(false);
@@ -62,9 +62,9 @@ export class CompanyEffects {
     mergeMap(x => {
       this.loader.isLoading.next(true);
       this.update(x.payload)
-        .then(data => {
+        .then(() => {
           this.loader.isLoading.next(false);
-          return updateCompanySuccess({payload: data});
+          return updateCompanySuccess({payload: x.payload});
         })
         .catch((err: any)=> {
           this.loader.isLoading.next(false);
@@ -93,21 +93,21 @@ export class CompanyEffects {
   )});
 
   get() {
-      return this.firestore.collection<Company>('company').snapshotChanges();
+    return collectionChanges<Company>(query<Company>(collection(this.firestore, 'company') as CollectionReference<Company>));
   }
 
   create(company: Company) {
     delete company.id;
     const g = Object.assign({}, company);
-    return this.firestore.collection<Company>('company').add(g);
+    return addDoc(collection(this.firestore, 'company'), g);
   }
 
   update(company: Company) {
     const g = Object.assign({}, company);
-    return this.firestore.doc('company/' + company.id).update(g);
+    return updateDoc(doc(collection(this.firestore, 'company') as CollectionReference<Company>, g.id), g);
   }
 
   delete(id: string) {
-    return this.firestore.doc('company/' + id).delete();
+    return deleteDoc(doc(this.firestore, 'company', id));
   }
 }

@@ -1,6 +1,5 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { DocumentReference } from '@angular/fire/compat/firestore';
 
 import { Client, IClient } from './client.model';
 
@@ -83,12 +82,12 @@ export const selectClient = createAction(
 
 export const createClient = createAction(
   '[Client/API] Create Client',
-  props<{ payload: IClient }>()
+  props<{ payload: Client }>()
 );
 
 export const createClientSuccess = createAction(
   '[Client/API] Create Client Success',
-  props<{ payload: DocumentReference }>()
+  props<{ payload: Client }>()
 );
 
 export const createClientFailire = createAction(

@@ -1,8 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-
-import { IQuestion, Question } from '@hrc/shared-feature';
-import { DocumentReference } from '@angular/fire/compat/firestore';
+import { Question } from '@hrc/shared-feature';
 
 export const loadQuestions = createAction(
   '[Question/API] Load Questions',
@@ -78,12 +76,12 @@ export const loadAllQuestionsFailure = createAction(
 
 export const createQuestion = createAction(
   '[Question/API] CREATE_QUESTION',
-  props<{ payload: IQuestion}>()
+  props<{ payload: Question}>()
 );
 
 export const createQuestionSuccess = createAction(
   '[Question/API] CREATE_QUESTION_SUCCESS',
-  props<{ payload: DocumentReference}>()
+  props<{ payload: Question}>()
 );
 
 export const createQuestionFailire = createAction(
@@ -93,7 +91,7 @@ export const createQuestionFailire = createAction(
 
 export const updateQuestion = createAction(
   '[Question/API] UPDATE_QUESTION',
-  props<{ payload: IQuestion}>()
+  props<{ payload: Question}>()
 );
 
 export const updateQuestionSuccess = createAction(
@@ -108,7 +106,7 @@ export const updateQuestionFailure = createAction(
 
 export const deleteQuestion = createAction(
   '[Question/API] DELETE_QUESTION',
-  props<{ payload: IQuestion}>()
+  props<{ payload: Question}>()
 );
 
 export const deleteQuestionSuccess = createAction(

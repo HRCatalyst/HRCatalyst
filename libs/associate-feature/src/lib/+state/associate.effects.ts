@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, docSnapshots, Firestore, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, do, doc, Firestore, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, debounceTime, distinctUntilChanged, map, mergeMap, switchMap,  } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
@@ -26,7 +26,7 @@ export class AssociateEffects {
     ofType(loadAssociate),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.getById(x.payload).pipe(
+      return this.getById(x.payload).pipe(
         map(aoc => {
           this.loader.isLoading.next(false);
           return loadAssociateSuccess({ payload: aoc.values });
@@ -36,7 +36,6 @@ export class AssociateEffects {
           this.loader.isLoading.next(false);
           return caught;
         }));
-      return of(x);
     }))
   });
 
@@ -44,7 +43,7 @@ export class AssociateEffects {
     return this.actions$.pipe(
     ofType(loadCompanyAssociates),
     mergeMap(x => {
-       this.loader.isLoading.next(true);
+      this.loader.isLoading.next(true);
        this.getAssociates(x.payload).pipe(
         map((data) => {
           const result = new Array<Associate>();
@@ -91,7 +90,6 @@ export class AssociateEffects {
             this.loader.isLoading.next(false);
             return caught;
           }));
-        return of(x);
       })
     )}
   );
@@ -168,7 +166,8 @@ export class AssociateEffects {
 
   getAssociates(id: string) {
     const table = `associates${this.campaignYear}`;
-    return collectionChanges<Associate>(query(collection(this.firestore, table) as CollectionReference<Associate>, where('companyId', '==', id)));
+    return collectionChanges<Associate>(query(collection(this.firestore, table) as CollectionReference<Associate>,
+      where('companyId', '==', id)));
   };
 
   create(associate: Associate) {
@@ -180,12 +179,12 @@ export class AssociateEffects {
 
   update(associate: Associate) {
     const g = Object.assign({}, associate);
-    const table = `associates${this.campaignYear}/${associate.id}`;
+    const table = `associates${this.campaignYear}`;
     return updateDoc(doc(collection(this.firestore, table) as CollectionReference<Associate>, g.id), g);
   };
 
   delete(id: string) {
-    const table = `associates${this.campaignYear}/${id}`;
+    const table = `associates${this.campaignYear}`;
     return deleteDoc(doc(this.firestore, table, id));
   };
 }

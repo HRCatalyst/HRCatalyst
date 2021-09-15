@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
-
 import * as RaterActions from './rater.actions';
 import { Store } from '@ngrx/store';
-import { Associate, Feedback, IRater, LoaderService, Rater, SelectRaterParams, enumRationship} from '@hrc/shared-feature';
-import { Firestore } from '@angular/fire/firestore';
+import { Associate, Feedback, LoaderService, Rater, SelectRaterParams } from '@hrc/shared-feature';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
+import { RaterState } from './rater.entity';
 
 @Injectable()
 export class RaterEffects {
@@ -16,7 +16,7 @@ export class RaterEffects {
     private actions$: Actions,
     private firestore: Firestore,
     private loader: LoaderService,
-    private store: Store<IRater>
+    private store: Store<RaterState>
   ) {
     this.campaignYear = '2021';
   }
@@ -50,26 +50,26 @@ export class RaterEffects {
           this.getAssociates(x.payload.associate.companyId),
           this.getCampaignFeedback(x.payload.campaign.id ?? '')).subscribe(([raters, associates, feedbacks]) => {
             const result = new Array<unknown>();
-            raters.docs.forEach(r => {
-              return result.push({...r.data(), id: r.id});
+            raters.forEach(r => {
+              return result.push({...r.doc.data(), id: r.doc.id});
             });
 
             this.store.dispatch(RaterActions.loadParticipantRatersSuccess({payload: result}));
 
-            const partIds = raters.docs.map(p => p.data().associateId);
+            const partIds = raters.map(p => p.doc.data().associateId);
 
-            const assocs = associates.docs.filter(a => partIds.includes(a.id));
+            const assocs = associates.filter(a => partIds.includes(a.doc.id));
 
             const data = new Array<unknown>();
             assocs.forEach(a => {
-              const d = a.data();
-              const fb = feedbacks.docs.filter(f => f.data().raterId === a.id);
+              const d = a.doc.data();
+              const fb = feedbacks.filter(f => f.doc.data().raterId === a.doc.id);
 
-              return data.push({...d, id: a.id, feedback: fb.length});
+              return data.push({...d, id: a.doc.id, feedback: fb.length});
             });
             this.store.dispatch(RaterActions.loadParticipantAssociatesSuccess({payload: data}));
             this.loader.isLoading.next(false);
-            });
+          });
         return of(x);
       }),
       map(() => {
@@ -91,7 +91,7 @@ export class RaterEffects {
       this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
-          return RaterActions.createRaterSuccess({payload:data});
+          return RaterActions.createRaterSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
@@ -142,22 +142,22 @@ export class RaterEffects {
     ofType(RaterActions.loadRaterFeedback),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.getFeedback(x.payload)
-        .then(feedback => {
+      return this.getFeedback(x.payload).pipe(
+        map(feedback => {
           const result = new Array<unknown>();
-          feedback.docs.forEach(f => {
-              return result.push({...f.data(), id: f.id});
+          feedback.forEach(f => {
+              return result.push({...f.doc.data(), id: f.doc.id});
           });
           this.loader.isLoading.next(false);
           return RaterActions.loadRaterFeedbackSuccess({payload: result});
-        })
-        .catch((err: any) => {
+        }),
+        catchError((err, caught) => {
           this.loader.isLoading.next(false);
-          return RaterActions.loadRaterFeedbackFailure({error: err});
-        });
-        return of(x);
-      })
-  )});
+          this.store.dispatch(RaterActions.loadRaterFeedbackFailure({error: err}));
+          return caught;
+        }));
+      }))
+  });
 
   // colleagueToPeer$ = createEffect(() => {this.actions$.pipe(
   //     ofType(raterActions.RaterActionTypes.CHANGE_COLLEAGUE_TO_PEER),
@@ -186,52 +186,55 @@ export class RaterEffects {
   //     })));
 
   get() {
-      const query = `raters${this.campaignYear}`;
-      return this.firestore.collection<Rater>(query).snapshotChanges();
+    const table = `raters${this.campaignYear}`;
+    return collectionChanges<Rater>(query<Rater>(collection(this.firestore, table) as CollectionReference<Rater>));
   }
 
   getRaters(id: string) {
-      const query = `raters${this.campaignYear}`;
-      return this.firestore.collection<Rater>(query).ref.where('participantId', '==', id).get();
+    const table = `raters${this.campaignYear}`;
+    return collectionChanges<Rater>(query(collection(this.firestore, table) as CollectionReference<Rater>, where('id', '==', id)));
   }
 
   getCampaignFeedback(id: string) {
-      const query = `feedbacks${this.campaignYear}`;
-      return this.firestore.collection<Feedback>(query).ref.where('campaignId', '==', id).get();
-  }
+    const table = `feedbacks${this.campaignYear}`;
+    return collectionChanges<Feedback>(query(collection(this.firestore, table) as CollectionReference<Feedback>,
+      where('campaignId', '==', id)));
+}
 
   getFeedback(x: SelectRaterParams) {
-      const query = `feedbacks${this.campaignYear}`;
-      return this.firestore.collection<Feedback>(query).ref
-          .where('campaignId', '==', x.campaign.id)
-          .where('participantId', '==', x.participant.id)
-          .where('raterId', '==', x.rater.id)
-          .get();
+    const table = `feedbacks${this.campaignYear}`;
+    return collectionChanges<Feedback>(query(collection(this.firestore, table) as CollectionReference<Feedback>,
+        where('campaignId', '==', x.campaign.id),
+        where('participantId', '==', x.participant.id),
+        where('raterId', '==', x.rater.id)));
   }
 
   getAssociates(id: string) {
-      const query = `associates${this.campaignYear}`;
-      return this.firestore.collection<Associate>(query).ref.where('companyId', '==', id).get();
+    const table = `associates${this.campaignYear}`;
+    return collectionChanges<Associate>(query(collection(this.firestore, table) as CollectionReference<Associate>,
+      where('companyId', '==', id)));
   }
 
   create(rater: Rater) {
     delete rater.id;
     const g = Object.assign({}, rater);
-    const query = `raters${this.campaignYear}`;
-    return this.firestore.collection<Rater>(query).add(g);
+    const table = `raters${this.campaignYear}`;
+    return addDoc(collection(this.firestore, table), g);
   }
 
   update(rater: Rater) {
     const g = Object.assign({}, rater);
-    return this.firestore.doc(`raters${this.campaignYear}`).update(g);
+    const table = `raters${this.campaignYear}`;
+    return updateDoc(doc(collection(this.firestore, table) as CollectionReference<Rater>, g.id), g);
   }
 
   delete(id: string) {
-    return this.firestore.doc(`raters${this.campaignYear}/${id}`).delete();
+    const table = `raters${this.campaignYear}`;
+    return deleteDoc(doc(this.firestore, table, id));
   }
 
   // changeFeedbackRelationship() {
-  //   const query = `raters${this.campaignYear}`;
+  //   const table = `raters${this.campaignYear}`;
   //   const raters = this.firestore.collection<Rater>(query).ref
   //       .where('relationship', '==', enumRationship.COLLEAGUE).get();
 
@@ -255,26 +258,26 @@ export class RaterEffects {
   //   });
   // }
 
-  deDupRaters() {
-      const query = `raters${this.campaignYear}`;
-      const dedups = this.firestore.collection<Rater>(query).ref
-          .where('relationship', '>', enumRationship.UNKNOWN).get();
+//   deDupRaters() {
+//       const table = `raters${this.campaignYear}`;
+//       const dedups = this.firestore.collection<Rater>(query).ref
+//           .where('relationship', '>', enumRationship.UNKNOWN).get();
 
-      dedups.then(data => {
-          const raters = new Map();
-          data.forEach(r => {
-              const rater = <Rater>r.data();
-              rater.id = r.id;
+//       dedups.then(data => {
+//           const raters = new Map();
+//           data.forEach(r => {
+//               const rater = <Rater>r.data();
+//               rater.id = r.id;
 
-              const key = rater.associateId + rater.participantId;
-              if (raters.has(key)) {
-                  console.log(`duplicate rater: ${JSON.stringify(rater)}`);
-                  rater.relationship = enumRationship.UNKNOWN;
-//                    this.update(<Rater>(rater));
-              } else {
-                  raters.set(key, rater);
-              }
-          });
-      });
- }
+//               const key = rater.associateId + rater.participantId;
+//               if (raters.has(key)) {
+//                   console.log(`duplicate rater: ${JSON.stringify(rater)}`);
+//                   rater.relationship = enumRationship.UNKNOWN;
+// //                    this.update(<Rater>(rater));
+//               } else {
+//                   raters.set(key, rater);
+//               }
+//           });
+//       });
+//  }
 }

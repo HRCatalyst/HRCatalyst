@@ -1,8 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-
 import { IImport, Import, ImportSuccessResult } from '@hrc/shared-feature';
-import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadImports = createAction(
   '[Import/API] Load Imports',
@@ -91,12 +89,12 @@ export const loadAllImportsFailure = createAction(
 
 export const logImportError = createAction(
   '[Import/API] LOG_IMPORT_ERROR',
-  props<{ payload: IImport }>()
+  props<{ payload: Import }>()
 );
 
 export const logImportErrorSuccess = createAction(
   '[Import/API] LOG_IMPORT_ERROR_SUCCESS',
-  props<{ payload: DocumentReference }>()
+  props<{ payload: Import }>()
 );
 
 export const logImportErrorFailire = createAction(

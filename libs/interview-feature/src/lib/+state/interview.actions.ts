@@ -1,8 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-
-import { IInterview, Interview } from '@hrc/shared-feature';
-import { DocumentReference } from '@angular/fire/compat/firestore';
+import { Interview } from '@hrc/shared-feature';
 
 export const loadInterviews = createAction(
   '[Interview/API] Load Interviews',
@@ -93,7 +91,7 @@ export const createInterview = createAction(
 
 export const createInterviewSuccess = createAction(
   '[Interview/API] CREATE_INTERVIEW_SUCCESS',
-  props<{ payload: DocumentReference }>()
+  props<{ payload: Interview }>()
 );
 
 export const createInterviewFailire = createAction(
@@ -118,7 +116,7 @@ export const updateInterviewFailure = createAction(
 
 export const deleteInterviewEntity = createAction(
   '[Interview/API] DELETE_INTERVIEW',
-  props<{ payload: IInterview }>()
+  props<{ payload: Interview }>()
 );
 
 export const deleteInterviewSuccess = createAction(

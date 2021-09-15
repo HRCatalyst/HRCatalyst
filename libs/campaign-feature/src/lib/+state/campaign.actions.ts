@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 import { Campaign, CampaignYear } from '@hrc/shared-feature';
-import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadCampaigns = createAction(
   '[Campaign/API] Load Campaigns',

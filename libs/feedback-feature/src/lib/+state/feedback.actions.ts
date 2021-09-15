@@ -2,7 +2,6 @@ import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
 import { Feedback, IFeedback, SelectParticipantParams } from '@hrc/shared-feature';
-import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadFeedbacks = createAction(
   '[Feedback/API] Load Feedbacks',
@@ -107,12 +106,12 @@ export const loadParticipantAssociatesSuccess = createAction(
 
 export const createFeedback = createAction(
   '[Feedback/API] CREATE_FEEDBACK',
-  props<{ payload: IFeedback }>()
+  props<{ payload: Feedback }>()
 );
 
 export const createFeedbackSuccess = createAction(
   '[Feedback/API] CREATE_FEEDBACK_SUCCESS',
-  props<{  payload: DocumentReference }>()
+  props<{  payload: Feedback }>()
 );
 
 export const createFeedbackFailire = createAction(
@@ -122,7 +121,7 @@ export const createFeedbackFailire = createAction(
 
 export const updateFeedback = createAction(
   '[Feedback/API] UPDATE_FEEDBACK',
-  props<{  payload: IFeedback }>()
+  props<{  payload: Feedback }>()
 );
 
 export const updateFeedbackSuccess = createAction(

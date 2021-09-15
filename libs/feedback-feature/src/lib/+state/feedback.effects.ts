@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as FeedbackActions from './feedback.actions';
-import { Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { enumFeedbackStatus, Feedback, FEEDBACK_STATUS, LoaderService } from '@hrc/shared-feature';
 import { FeedbackState } from './feedback.entity';
@@ -42,33 +42,25 @@ export class FeedbackEffects {
     ofType(FeedbackActions.loadParticipantFeedback),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-        this.getFeedback(x.payload.campaign.id ?? '', x.payload.participant.associateId)
-        .then((data) => {
-          const result = new Array<unknown>();
-          data.docs.forEach(x => {
-              return result.push({...x.data(), id: x.id});
+      return this.getFeedback(x.payload.campaign.id ?? '', x.payload.participant.associateId).pipe(
+        map((data) => {
+          const result = new Array<Feedback>();
+          data.forEach(x => {
+              return result.push({...x.doc.data(), id: x.doc.id});
           });
 
           this.store.dispatch(FeedbackActions.loadParticipantFeedbackSuccess({payload: result}));
           this.loader.isLoading.next(false);
-        })
-        .catch((err: any) => {
+          return FeedbackActions.loadParticipantFeedbackSuccess({payload: result});
+        }),
+        catchError((err, caught) => {
           this.loader.isLoading.next(false);
-          return of(FeedbackActions.loadParticipantFeedbackFailure({error: err}));
-        });
-
-      return of(x);
-      }),
-      map(() => {
-          this.loader.isLoading.next(false);
-          return FeedbackActions.loadParticipantFeedbackInprogress();
-      }),
-      catchError((err, caught) => {
-        this.store.dispatch(FeedbackActions.loadParticipantFeedbackFailure({error: err}));
-        this.loader.isLoading.next(false);
-        return caught;
+          this.store.dispatch(FeedbackActions.loadParticipantFeedbackFailure({error: err}));
+          return caught;
+        }));
       })
-    )});
+    )}
+  );
 
   create$ = createEffect(() => {
     return this.actions$.pipe(
@@ -78,7 +70,7 @@ export class FeedbackEffects {
       this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
-          return FeedbackActions.createFeedbackSuccess({payload: data});
+          return FeedbackActions.createFeedbackSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
@@ -125,54 +117,55 @@ export class FeedbackEffects {
   )});
 
   get() {
-      const query = `feedbacks${this.campaignYear}`;
-      return this.firestore.collection<Feedback>(query).snapshotChanges();
+    const table = `feedbacks${this.campaignYear}`;
+    return collectionChanges<Feedback>(query<Feedback>(collection(this.firestore, table) as CollectionReference<Feedback>));
   }
 
   getFeedback(campaignId: string, participantId: string) {
-      const query = `feedbacks${this.campaignYear}`;
-      return this.firestore.collection<Feedback>(query).ref
-          .where('campaignId', '==', campaignId)
-          .where('participantId', '==', participantId)
-          .get();
+    const table = `feedbacks${this.campaignYear}`;
+    return collectionChanges<Feedback>(query(collection(this.firestore, table) as CollectionReference<Feedback>,
+      where('campaignId', '==', campaignId),
+      where('participantId', '==', participantId)));
   }
 
   getErrors() {
-      const query = `feedbacks${this.campaignYear}`;
-      return this.firestore.collection<Feedback>(query).snapshotChanges();
+    const table = `feedbacks${this.campaignYear}`;
+    return collectionChanges<Feedback>(query<Feedback>(collection(this.firestore, table) as CollectionReference<Feedback>));
   }
 
   create(feedback: Feedback) {
     delete feedback.id;
     const g = Object.assign({}, feedback);
-    const query = `feedbacks${this.campaignYear}`;
-    return this.firestore.collection<Feedback>(query).add(g);
+    const table = `feedbacks${this.campaignYear}`;
+    return addDoc(collection(this.firestore, table), g);
   }
 
   update(feedback: Feedback) {
     const g = Object.assign({}, feedback);
-    const query = `feedbacks${this.campaignYear}/${feedback.id}`;
-    return this.firestore.doc(query).update(g);
+    const table = `feedbacks${this.campaignYear}`;
+    return updateDoc(doc(collection(this.firestore, table) as CollectionReference<Feedback>, g.id), g);
   }
 
   delete(id: string) {
-    const query = `feedbacks${this.campaignYear}/${id}`;
-    return this.firestore.doc(query).delete();
+    const table = `feedbacks${this.campaignYear}`;
+    return deleteDoc(doc(this.firestore, table, id));
   }
 
   changePendingToReceived() {
-      const query = `feedbacks${this.campaignYear}`;
-      const feedback = this.firestore.collection<Feedback>(query).ref
-          .where('status', '==', 'Pending').get();
+    const table = `feedbacks${this.campaignYear}`;
+    const feedback = collectionChanges<Feedback>(query(collection(this.firestore, table) as CollectionReference<Feedback>,
+      where('status', '==', 'Pending')));
 
-      feedback.then(data => {
-          data.docs.forEach(i => {
-              const f = i.data();
-              f.id = i.id;
-              f.status = FEEDBACK_STATUS[enumFeedbackStatus.RECEIVED].name;
+    feedback.pipe(
+      map(data => {
+        data.forEach(i => {
+          const f = i.doc.data();
+          f.id = i.doc.id;
+          f.status = FEEDBACK_STATUS[enumFeedbackStatus.RECEIVED].name;
 
-              this.update(<Feedback>(f));
-          });
-      });
+          this.update(<Feedback>(f));
+        });
+      })
+    )
   }
 }

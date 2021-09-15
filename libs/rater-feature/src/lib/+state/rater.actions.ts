@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { IRater, Rater, SelectParticipantParams, SelectRaterParams } from '@hrc/shared-feature';
-import { DocumentReference } from '@angular/fire/compat/firestore';
+import { Rater, SelectParticipantParams, SelectRaterParams } from '@hrc/shared-feature';
 
 export const loadRaters = createAction(
   '[Rater/API] Load Raters',
@@ -102,12 +101,12 @@ export const selectRater = createAction(
 
 export const createRater = createAction(
   '[Rater/API] CREATE_RATER',
-  props<{ payload: IRater}>()
+  props<{ payload: Rater}>()
 );
 
 export const createRaterSuccess = createAction(
   '[Rater/API] CREATE_RATER_SUCCESS',
-  props<{ payload: DocumentReference}>()
+  props<{ payload: Rater}>()
 );
 
 export const createRaterFailire = createAction(
@@ -117,7 +116,7 @@ export const createRaterFailire = createAction(
 
 export const updateRater = createAction(
   '[Rater/API] UPDATE_RATER',
-  props<{ payload: IRater}>()
+  props<{ payload: Rater}>()
 );
 
 export const updateRaterSuccess = createAction(
@@ -132,7 +131,7 @@ export const updateRaterFailure = createAction(
 
 export const deleteRater = createAction(
   '[Rater/API] DELETE_RATER',
-  props<{ payload: IRater}>()
+  props<{ payload: Rater}>()
 );
 
 export const deleteRaterSuccess = createAction(

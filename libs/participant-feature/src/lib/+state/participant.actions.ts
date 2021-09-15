@@ -1,8 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-
-import { CampaignParticipantsParams, IParticipant, Participant, SelectParticipantParams } from '@hrc/shared-feature';
-import { DocumentReference } from '@angular/fire/compat/firestore';
+import { CampaignParticipantsParams, Participant, SelectParticipantParams } from '@hrc/shared-feature';
 
 export const loadParticipants = createAction(
   '[Participant/API] Load Participants',
@@ -106,12 +104,12 @@ export const selectParticipant = createAction(
 
 export const createParticipant = createAction(
   '[Participant/API] CREATE_PARTICIPANT',
-  props<{ payload: IParticipant}>()
+  props<{ payload: Participant}>()
 );
 
 export const createParticipantSuccess = createAction(
   '[Participant/API] CREATE_PARTICIPANT_SUCCESS',
-  props<{ payload: DocumentReference}>()
+  props<{ payload: Participant}>()
 );
 
 export const createParticipantFailire = createAction(
@@ -121,12 +119,12 @@ export const createParticipantFailire = createAction(
 
 export const updateParticipant = createAction(
   '[Participant/API] UPDATE_PARTICIPANT',
-  props<{ payload: IParticipant}>()
+  props<{ payload: Participant}>()
 );
 
 export const updateParticipantSuccess = createAction(
   '[Participant/API] UPDATE_PARTICIPANT_SUCCESS',
-  props<{ payload: unknown}>()
+  props<{ payload: Participant}>()
 );
 
 export const updateParticipantFailure = createAction(
@@ -136,12 +134,12 @@ export const updateParticipantFailure = createAction(
 
 export const deleteParticipant = createAction(
   '[Participant/API] DELETE_PARTICIPANT',
-  props<{ payload: IParticipant}>()
+  props<{ payload: Participant}>()
 );
 
 export const deleteParticipantSuccess = createAction(
   '[Participant/API] DELETE_PARTICIPANT_SUCCESS',
-  props<{ payload: unknown}>()
+  props<{ payload: Participant}>()
 );
 
 export const deleteParticipantFailure = createAction(

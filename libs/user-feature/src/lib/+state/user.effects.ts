@@ -3,9 +3,10 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as UserActions from './user.actions';
-import { Firestore } from '@angular/fire/firestore';
-import { IUser, LoaderService, User } from '@hrc/shared-feature';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
+import { LoaderService, User } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
+import { UserState } from './user.entity';
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class UserEffects {
       private actions$: Actions,
       private firestore: Firestore,
       private loader: LoaderService,
-      private store: Store<IUser>
+      private store: Store<UserState>
     ) {
 
     }
@@ -47,7 +48,7 @@ export class UserEffects {
         this.loader.isLoading.next(true);
         this.create(x.payload)
           .then(data => {
-            return UserActions.createUserSuccess({payload: data});
+            return UserActions.createUserSuccess({payload: {...x.payload, id: data.id}});
           })
           .catch((err: any) => {
             this.loader.isLoading.next(false);
@@ -80,7 +81,7 @@ export class UserEffects {
       ofType(UserActions.deleteUser),
       mergeMap(x => {
         this.loader.isLoading.next(true);
-        this.delete(x.payload.id ?? '')
+        return this.delete(x.payload.id ?? '')
           .then(() => {
             this.loader.isLoading.next(false);
             return UserActions.deleteUserSuccess({payload: x.payload.id});
@@ -89,40 +90,34 @@ export class UserEffects {
             this.loader.isLoading.next(false);
             return UserActions.deleteUserFailure({error: err});
           });
-          return of(x);
         })
     )});
 
     get() {
-        return this.firestore.collection<User>('users').snapshotChanges();
+      return collectionChanges<User>(query<User>(collection(this.firestore, 'users') as CollectionReference<User>));
+
     }
 
     loadById(id: string) {
-        return this.firestore.doc('users/' + id).get();
+      return collectionChanges<User>(query(collection(this.firestore, 'users') as CollectionReference<User>, where('id', '==', id)));
     }
 
     create(user: User) {
-      const usr = new User;
-
       delete user.id;
-      usr.first_name = user.first_name;
-      usr.last_name = user.last_name;
-      usr.email_address = user.email_address;
-      usr.phone_number = user.phone_number;
-      usr.role = user.role;
-      usr.uid = user.uid;
-
-      const g = Object.assign({}, usr);
-      return this.firestore.collection<User>('users').add(g);
+      const g = Object.assign({}, user);
+      const table = `users`;
+      return addDoc(collection(this.firestore, table), g);
     }
 
     update(user: User) {
       const g = Object.assign({}, user);
-      return this.firestore.doc('users/' + user.id).update(g);
+      const table = `users`;
+      return updateDoc(doc(collection(this.firestore, table) as CollectionReference<User>, g.id), g);
     }
 
     delete(id: string) {
-      return this.firestore.doc('users/' + id).delete();
+      const table = `users`;
+      return deleteDoc(doc(this.firestore, table, id));
     }
 
 }

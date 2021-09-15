@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { IUser, User } from '@hrc/shared-feature';
-import { DocumentReference } from '@angular/fire/compat/firestore';
+import { User } from '@hrc/shared-feature';
 
 export const loadUsers = createAction(
   '[User/API] Load Users',
@@ -68,12 +67,12 @@ export const loadAllUsersFailure = createAction(
 
 export const createUser = createAction(
   '[User/API] CREATE_USER',
-  props<{ payload:  IUser}>()
+  props<{ payload:  User}>()
 );
 
 export const createUserSuccess = createAction(
   '[User/API] CREATE_USER_SUCCESS',
-  props<{ payload:  DocumentReference}>()
+  props<{ payload:  User}>()
 );
 
 export const createUserFailure = createAction(
@@ -83,7 +82,7 @@ export const createUserFailure = createAction(
 
 export const updateUser = createAction(
   '[User/API] UPDATE_USER',
-  props<{ payload:  IUser}>()
+  props<{ payload:  User}>()
 );
 
 export const updateUserSuccess = createAction(
@@ -98,7 +97,7 @@ export const updateUserFailure = createAction(
 
 export const deleteUser = createAction(
   '[User/API] DELETE_USER',
-  props<{ payload:  IUser}>()
+  props<{ payload:  User}>()
 );
 
 export const deleteUserSuccess = createAction(

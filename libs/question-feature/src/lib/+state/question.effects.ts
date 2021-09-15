@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import * as QuestionActions from './question.actions';
 import { LoaderService, Question } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
-import { Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc } from '@angular/fire/firestore';
 import { QuestionState } from './question.entity';
 
 
@@ -44,7 +44,7 @@ export class QuestionEffects {
       this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
-          return QuestionActions.createQuestionSuccess({payload: data});
+          return QuestionActions.createQuestionSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
             this.loader.isLoading.next(false);
@@ -92,21 +92,21 @@ export class QuestionEffects {
   )});
 
   get() {
-      return this.firestore.collection<Question>('questions').snapshotChanges();
+    return collectionChanges<Question>(query<Question>(collection(this.firestore, 'questions') as CollectionReference<Question>));
   }
 
   create(question: Question) {
     delete question.id;
     const g = Object.assign({}, question);
-    return this.firestore.collection<Question>('questions').add(g);
+    return addDoc(collection(this.firestore, 'questions'), g);
   }
 
   update(question: Question) {
     const g = Object.assign({}, question);
-    return this.firestore.doc('questions/' + question.id).update(g);
+    return updateDoc(doc(collection(this.firestore, 'questions') as CollectionReference<Question>, g.id), g);
   }
 
   delete(id: string) {
-    return this.firestore.doc('questions/' + id).delete();
+    return deleteDoc(doc(this.firestore, 'questions', id));
   }
 }

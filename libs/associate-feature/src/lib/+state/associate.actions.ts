@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 import { Associate } from '@hrc/shared-feature';
-import { DocumentReference } from '@angular/fire/compat/firestore';
 
 export const loadAssociates = createAction(
   '[Associate] Load Associates',
