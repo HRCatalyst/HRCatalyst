@@ -57,7 +57,7 @@ export const loadCompany = createAction(
 
 export const selectCompany = createAction(
   '[Company/API] Select Company',
-    props<{ payload: Company }>()
+    props<{ payload?: Company }>()
 );
 
 export const loadAllCompanys = createAction(
@@ -66,7 +66,7 @@ export const loadAllCompanys = createAction(
 
 export const loadAllCompanysSuccess = createAction(
   '[Company/API] Load All Companys Success',
-    props<{ payload: Company }>()
+    props<{ payload: Company[]}>()
 );
 
 export const loadAllCompanysFailure = createAction(

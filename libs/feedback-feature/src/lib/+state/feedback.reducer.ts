@@ -1,3 +1,4 @@
+import { Feedback } from '@hrc/shared-feature';
 import { createReducer, on } from '@ngrx/store';
 import * as FeedbackActions from './feedback.actions';
 import { adapter, initialState } from './feedback.entity';
@@ -38,9 +39,10 @@ export const reducer = createReducer(
   on(FeedbackActions.loadFeedback,
     state => { return state; }
   ),
-  on(FeedbackActions.loadFeedbackSuccess,
-    state => { return state; }
-  ),
+  on(FeedbackActions.loadFeedbackSuccess, (state, action) => {
+    state = adapter.removeAll(state);
+    return adapter.addMany(action.payload, state);
+  }),
   on(FeedbackActions.loadFeedbackFailure,
     state => { return state; }
   ),
@@ -59,9 +61,14 @@ export const reducer = createReducer(
   on(FeedbackActions.loadParticipantFeedbackInprogress,
     state => { return state; }
   ),
-  on(FeedbackActions.loadParticipantFeedbackSuccess,
-    state => { return state; }
-  ),
+  on(FeedbackActions.loadParticipantFeedbackSuccess, (state, action) => {
+    const feedbacks = action.payload.map(e => {
+      return {
+          ...e
+      } as Feedback;
+    });
+    return {...state, feedback: feedbacks};
+  }),
   on(FeedbackActions.loadParticipantFeedbackFailure,
     state => { return state; }
   ),

@@ -1,3 +1,4 @@
+import { Client } from '@hrc/shared-feature';
 import { createReducer, on } from '@ngrx/store';
 import * as ClientActions from './client.actions';
 import { adapter, initialState } from './client.entity';
@@ -44,14 +45,20 @@ export const reducer = createReducer(
   on(ClientActions.loadCompanyClientsInprogress,
     state => { return state; }
   ),
-  on(ClientActions.loadCompanyClientsSuccess,
-    state => { return state; }
-  ),
+  on(ClientActions.loadCompanyClientsSuccess, (state, action) => {
+    const clients = action.payload.map(e => {
+      return {
+          id: e.id, ...e
+      } as Client;
+    });
+    state = adapter.removeAll(state);
+    return adapter.addMany(clients, state);
+  }),
   on(ClientActions.loadCompanyClientsFailure,
     state => { return state; }
   ),
-  on(ClientActions.selectClient,
-    state => { return state; }
+  on(ClientActions.selectClient, (state, action) => {
+    return {...state, selectedClient: action.payload}; }
   ),
   on(ClientActions.createClient,
     state => { return state; }

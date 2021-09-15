@@ -1,3 +1,4 @@
+import { Associate, AssociateSearchResult } from '@hrc/shared-feature';
 import { createReducer, on } from '@ngrx/store';
 import * as AssociateActions from './associate.actions';
 import { adapter, initialState } from './associate.entity';
@@ -34,14 +35,13 @@ export const reducer = createReducer(
   on(AssociateActions.clearAssociates,
     state => adapter.removeAll(state)
   ),
-
   on(AssociateActions.loadAssociate, state => {
-    return state;
+    return {...state, selectedAssociate: undefined};
   }),
   on(AssociateActions.loadAssociateSuccess, (state, action) => {
-    return state;
+    return {...state, selectedAssociate: action.payload};
   }),
-  on(AssociateActions.loadAssociateFailure, (state, error) => {
+  on(AssociateActions.loadAssociateFailure, state => {
     return state;
   }),
   on(AssociateActions.loadCompanyAssociates, state => {
@@ -51,45 +51,60 @@ export const reducer = createReducer(
     return state;
   }),
   on(AssociateActions.loadCompanyAssociatesSuccess, (state, action) => {
-    return state;
+    const associates = action.payload.map(e => {
+      return {
+          id: e.id, ...e
+      } as Associate;
+    });
+    state = adapter.removeAll(state);
+    return adapter.addMany(associates, state);
   }),
   on(AssociateActions.loadCompanyAssociatesFailure, (state, error) => {
+    console.log(error);
     return state;
   }),
   on(AssociateActions.searchAssociates, state => {
-    return state;
+    return {...state, searchResult: undefined, selectedAssociate: undefined};
   }),
-  on(AssociateActions.searchAssociatesInprogress, (state, action) => {
+  on(AssociateActions.searchAssociatesInprogress, (state) => {
     return state;
   }),
   on(AssociateActions.searchAssociatesSuccess, (state, action) => {
-    return state;
+    const associates = action.payload.map(e => {
+      return {
+          id: e.id,
+          last: e.lastName,
+          first: e.firstName,
+          email: e.emailAddress
+      } as AssociateSearchResult;
+  });
+  return {...state, searchResult: associates};
   }),
-  on(AssociateActions.searchAssociatesFailure, (state, error) => {
-    return state;
+  on(AssociateActions.searchAssociatesFailure, state => {
+    return {...state, searchResult: undefined};;
   }),
-  on(AssociateActions.selectAssociate, state => {
-    return state;
+  on(AssociateActions.selectAssociate, (state, action) => {
+    return {...state, selectedAssociate: action.payload};
   }),
   on(AssociateActions.createAssociate, state => {
     return state;
   }),
-  on(AssociateActions.createAssociateSuccess, (state, action) => {
+  on(AssociateActions.createAssociateSuccess, state => {
     return state;
   }),
-  on(AssociateActions.createAssociateFailire, (state, error) => {
+  on(AssociateActions.createAssociateFailire, state => {
     return state;
   }),
-  on(AssociateActions.updateAssociateSuccess, (state, action) => {
+  on(AssociateActions.updateAssociateSuccess, state => {
     return state;
   }),
-  on(AssociateActions.updateAssociateFailure, (state, error) => {
+  on(AssociateActions.updateAssociateFailure, state => {
     return state;
   }),
-  on(AssociateActions.deleteAssociateSuccess, (state, action) => {
+  on(AssociateActions.deleteAssociateSuccess, state => {
     return state;
   }),
-  on(AssociateActions.deleteAssociateFailure, (state, error) => {
+  on(AssociateActions.deleteAssociateFailure, state => {
     return state;
   })
 );

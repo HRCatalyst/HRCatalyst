@@ -58,7 +58,7 @@ export const loadAssociate = createAction(
 
 export const loadAssociateSuccess = createAction(
   '[Associate] Load Associate Success',
-  props<{ payload: unknown }>()
+  props<{ payload: Associate }>()
 );
 
 export const loadAssociateFailure = createAction(
@@ -77,7 +77,7 @@ export const loadCompanyAssociatesInprogress = createAction(
 
 export const loadCompanyAssociatesSuccess = createAction(
   '[Associate] Load Company Associate Success',
-  props<{ payload: unknown }>()
+  props<{ payload: Associate[] }>()
 );
 
 export const loadCompanyAssociatesFailure = createAction(
@@ -96,7 +96,7 @@ export const searchAssociatesInprogress = createAction(
 
 export const searchAssociatesSuccess = createAction(
   '[Associate] Search Associate Success',
-  props<{ payload: unknown }>()
+  props<{ payload: Associate[] }>()
 );
 
 export const searchAssociatesFailure = createAction(
@@ -106,7 +106,7 @@ export const searchAssociatesFailure = createAction(
 
 export const selectAssociate = createAction(
   '[Associate] Select Associate',
-  props<{ payload: unknown }>()
+  props<{ payload?: Associate }>()
 );
 
 export const createAssociate = createAction(

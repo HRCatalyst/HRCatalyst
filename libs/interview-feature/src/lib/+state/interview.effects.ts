@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
-
 import * as InterviewActions from './interview.actions';
-import { Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
 import { Associate, Campaign, enumFeedbackType, Feedback, IAssociate, IFeedback, Interview, InterviewParticipant, LoaderService, Participant, Rater } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 import { createFeedback } from '@hrc/feedback-feature';
@@ -30,67 +29,66 @@ export class InterviewEffects {
         this.getInterviews(x.payload),
         this.getAssociates()).subscribe(([campaigns, participants, raters, interviews, associates]) => {
           const result = new Array<InterviewParticipant>();
-          raters.docs.forEach(p => {
-            if (p.data().relationship > 0) {
+          raters.forEach(p => {
+            if (p.doc.data().relationship > 0) {
               const ia = new InterviewParticipant();
-              ia.participantId = p.data().participantId;
+              ia.participantId = p.doc.data().participantId;
 
-              const part = participants.find(i => i.payload.doc.data().associateId === ia.participantId);
+              const part = participants.find(i => i.doc.data().associateId === ia.participantId);
               if (part != null) {
-                const campaign = campaigns.find(y => y.payload.doc.id === part.payload.doc.data().campaignId);
+                const campaign = campaigns.find(y => y.doc.id === part.doc.data().campaignId);
                 if (campaign != null) {
-                    ia.campaignId = campaign.payload.doc.id;
-                    ia.campaignName = campaign.payload.doc.data().name;
+                    ia.campaignId = campaign.doc.id;
+                    ia.campaignName = campaign.doc.data().name;
                 }
               }
 
-              ia.associateId = p.data().associateId;
-              ia.relationship = p.data().relationship;
+              ia.associateId = p.doc.data().associateId;
+              ia.relationship = p.doc.data().relationship;
 
-              const itv = interviews.docs.filter(i => i.data().participantId === ia.participantId
-                    && i.data().raterId === ia.associateId);
+              const itv = interviews.filter(i => i.doc.data().participantId === ia.participantId
+                    && i.doc.data().raterId === ia.associateId);
 
               ia.interview = Array<Interview>();
               itv.forEach(v => {
                 const iv = new Interview();
 
-              iv.id = v.id;
-              iv.interviewer = v.data().interviewer;
+              iv.id = v.doc.id;
+              iv.interviewer = v.doc.data().interviewer;
               iv.campaignId = ia.campaignId;
               iv.campaignName = ia.campaignName;
-              iv.participantId = v.data().participantId;
-              iv.participantEmail = v.data().participantEmail;
-              iv.participantFirst = v.data().participantFirst;
-              iv.participantLast = v.data().participantLast;
-              iv.participantTitle = v.data().participantTitle;
-              iv.participantNotes = v.data().participantNotes;
-              iv.raterId = v.data().raterId;
-              iv.raterEmail = v.data().raterEmail;
-              iv.raterFirst = v.data().raterFirst;
-              iv.raterLast = v.data().raterLast;
-              iv.raterTitle = v.data().raterTitle;
-              iv.raterNotes = v.data().raterNotes;
-              iv.relationship = v.data().relationship;
-              iv.dateReceived = v.data().dateReceived;
-              iv.dateCreated = v.data().dateCreated;
-              iv.status = v.data().status;
-              iv.type = v.data().type;
-              iv.question = v.data().question;
-              iv.answer = v.data().answer;
+              iv.participantId = v.doc.data().participantId;
+              iv.participantEmail = v.doc.data().participantEmail;
+              iv.participantFirst = v.doc.data().participantFirst;
+              iv.participantLast = v.doc.data().participantLast;
+              iv.participantTitle = v.doc.data().participantTitle;
+              iv.participantNotes = v.doc.data().participantNotes;
+              iv.raterId = v.doc.data().raterId;
+              iv.raterEmail = v.doc.data().raterEmail;
+              iv.raterFirst = v.doc.data().raterFirst;
+              iv.raterLast = v.doc.data().raterLast;
+              iv.raterTitle = v.doc.data().raterTitle;
+              iv.raterNotes = v.doc.data().raterNotes;
+              iv.relationship = v.doc.data().relationship;
+              iv.dateReceived = v.doc.data().dateReceived;
+              iv.dateCreated = v.doc.data().dateCreated;
+              iv.status = v.doc.data().status;
+              iv.type = v.doc.data().type;
+              iv.question = v.doc.data().question;
+              iv.answer = v.doc.data().answer;
 
               ia.interview?.push(iv);
             });
 
             ia.status = ia.interview.length > 0 ? ia.interview[0].status : 'Pending';
-
-            const assocs = associates.filter(a => a.payload.doc.id === ia.participantId);
+            const assocs = associates.filter(a => a.doc.id === ia.participantId);
 
             if (assocs.length > 0) {
-                ia.first = assocs[0].payload.doc.data().firstName;
-                ia.last = assocs[0].payload.doc.data().lastName;
-                ia.participantEmail = assocs[0].payload.doc.data().emailAddress;
-                ia.title = assocs[0].payload.doc.data().title;
-                ia.notes = assocs[0].payload.doc.data().notes;
+              ia.first = assocs[0].doc.data().firstName;
+              ia.last = assocs[0].doc.data().lastName;
+              ia.participantEmail = assocs[0].doc.data().emailAddress;
+              ia.title = assocs[0].doc.data().title;
+              ia.notes = assocs[0].doc.data().notes;
             }
 
             result.push(ia);
@@ -118,28 +116,27 @@ export class InterviewEffects {
     ofType(InterviewActions.createInterview),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.create(x.payload)
+      return this.create(x.payload)
         .then(data => {
           if (x.payload.status === 'Declined' || x.payload.status === 'Submitted') {
               this.addFeedback(x.payload);
           }
           this.loader.isLoading.next(false);
-          return InterviewActions.createInterviewSuccess({payload: data});
+          return InterviewActions.createInterviewSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
           return InterviewActions.createInterviewFailire({error: err});
         });
-        return of(x);
-      })
-    )});
+    })
+  )});
 
   update$ = createEffect(() => {
     return this.actions$.pipe(
     ofType(InterviewActions.updateInterview),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.update(x.payload)
+      return this.update(x.payload)
         .then(data => {
           if (x.payload.status === 'Declined' || x.payload.status === 'Submitted') {
               this.addFeedback(x.payload);
@@ -151,7 +148,6 @@ export class InterviewEffects {
           this.loader.isLoading.next(false);
           return InterviewActions.updateInterviewFailure({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -160,7 +156,7 @@ export class InterviewEffects {
     ofType(InterviewActions.deleteInterview),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.delete(x.id ?? '')
+      return this.delete(x.id ?? '')
         .then(() => {
           this.loader.isLoading.next(false);
           return InterviewActions.deleteInterviewSuccess({payload: x.id});
@@ -169,66 +165,70 @@ export class InterviewEffects {
           this.loader.isLoading.next(false);
           return InterviewActions.deleteInterviewFailure({error: err});
         });
-        return of(x);
-      })
-    )});
+    })
+  )});
 
   get() {
-      const query = `interviews${this.campaignYear}`;
-      return this.firestore.collection<Interview>(query).snapshotChanges();
+    const table = `interviews${this.campaignYear}`;
+    return collectionChanges<Interview>(query<Interview>(collection(this.firestore, table) as CollectionReference<Interview>));
+
   }
 
   getById(id: string) {
-      const query = `interviews${this.campaignYear}/${id}`;
-      return this.firestore.doc(query).get();
+    const table = `interviews${this.campaignYear}`;
+    return collectionChanges<Interview>(query(collection(this.firestore, table) as CollectionReference<Interview>,
+      where('id', '==', id)));
   }
 
   getCampaigns() {
-      const query = `campaigns${this.campaignYear}`;
-      return this.firestore.collection<Campaign>(query).snapshotChanges();
+    const table = `campaigns${this.campaignYear}`;
+    return collectionChanges<Campaign>(query<Campaign>(collection(this.firestore, table) as CollectionReference<Campaign>));
   }
 
   getParticipants() {
-      const query = `participants${this.campaignYear}`;
-      return this.firestore.collection<Participant>(query).snapshotChanges();
+    const table = `participants${this.campaignYear}`;
+    return collectionChanges<Participant>(query<Participant>(collection(this.firestore, table) as CollectionReference<Participant>));
   }
 
   getParticipant(id: string) {
-      const query = `participants${this.campaignYear}`;
-      return this.firestore.collection<Participant>(query).ref.where('associateId', '==', id).get();
+    const table = `participants${this.campaignYear}`;
+    return collectionChanges<Participant>(query(collection(this.firestore, table) as CollectionReference<Participant>,
+      where('associateId', '==', id)));
   }
 
   getAssociates() {
-      const query = `associates${this.campaignYear}`;
-      return this.firestore.collection<Associate>(query).snapshotChanges();
+    const table = `associates${this.campaignYear}`;
+    return collectionChanges<Associate>(query<Associate>(collection(this.firestore, table) as CollectionReference<Associate>));
   }
 
   getRaters(id: string) {
-      const query = `raters${this.campaignYear}`;
-      return this.firestore.collection<Rater>(query).ref.where('associateId', '==', id).get();
+    const table = `raters${this.campaignYear}`;
+    return collectionChanges<Rater>(query(collection(this.firestore, table) as CollectionReference<Rater>,
+      where('associateId', '==', id)));
   }
 
   getInterviews(id: string) {
-      const query = `interviews${this.campaignYear}`;
-      return this.firestore.collection<Interview>(query).ref.where('raterId', '==', id).get();
+    const table = `interviews${this.campaignYear}`;
+    return collectionChanges<Interview>(query(collection(this.firestore, table) as CollectionReference<Interview>,
+      where('raterId', '==', id)));
   }
 
   create(interview: Interview) {
-      delete interview.id;
-      const g = Object.assign({}, interview);
-      const query = `interviews${this.campaignYear}`;
-      return this.firestore.collection<Interview>(query).add(g);
+    delete interview.id;
+    const g = Object.assign({}, interview);
+    const table = `interviews${this.campaignYear}`;
+    return addDoc(collection(this.firestore, table), g);
   }
 
   update(interview: Interview) {
-      const g = Object.assign({}, interview);
-      const query = `interviews${this.campaignYear}/${interview.id}`;
-      return this.firestore.doc(query).update(g);
+    const g = Object.assign({}, interview);
+    const table = `interviews${this.campaignYear}`;
+    return updateDoc(doc(collection(this.firestore, table) as CollectionReference<Interview>, interview.id), g);
   }
 
   delete(id: string) {
-      const query = `interviews${this.campaignYear}/${id}`;
-      return this.firestore.doc(query).delete();
+    const table = `interviews${this.campaignYear}`;
+    return deleteDoc(doc(this.firestore, table, id));
   }
 
   addFeedback(interview: Interview) {

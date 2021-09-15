@@ -24,9 +24,13 @@ export class FeedbackEffects {
       this.loader.isLoading.next(true);
       return this.get()
         .pipe(
-          map(feedback => {
+          map(data => {
             this.loader.isLoading.next(false);
-            return FeedbackActions.loadFeedbackSuccess({payload: feedback});
+            const result = new Array<Feedback>();
+            data.forEach(x => {
+              return result.push({...x.doc.data(), id: x.doc.id});
+            });
+            return FeedbackActions.loadFeedbackSuccess({payload: result});
           }),
           catchError((err, caught) => {
             this.store.dispatch(FeedbackActions.loadFeedbackFailure({error: err}));
@@ -88,7 +92,7 @@ export class FeedbackEffects {
       this.update(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
-          return FeedbackActions.updateFeedbackSuccess({payload: data});
+          return FeedbackActions.updateFeedbackSuccess({payload: x.payload});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);

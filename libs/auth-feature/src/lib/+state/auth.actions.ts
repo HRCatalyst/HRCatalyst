@@ -124,7 +124,7 @@ export const registrationAttempt = createAction(
 
 export const registrationSuccess = createAction(
   '[Auth/API] Registration Success',
-  props<{ payload: unknown }>()
+  props<{ payload: IFirebaseUser }>()
 );
 
 export const registrationFailure = createAction(

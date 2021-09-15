@@ -58,7 +58,7 @@ export const loadCampaign = createAction(
 
 export const loadCampaignSuccess = createAction(
   '[Campaign/API] Load Campaign Success',
-  props<{payload: unknown}>()
+  props<{payload: Campaign}>()
 );
 
 export const loadCampaignFailure = createAction(
@@ -72,7 +72,7 @@ export const loadAllCampaigns = createAction(
 
 export const loadAllCampaignsSuccess = createAction(
   '[Campaign/API] Load All Campaigns Success',
-  props<{payload: unknown}>()
+  props<{payload: Campaign[]}>()
 );
 
 export const loadAllCampaignsFailure = createAction(
@@ -86,7 +86,7 @@ export const loadCampaignYears = createAction(
 
 export const loadCampaignYearsSuccess = createAction(
   '[Campaign/API] Load Campaign Years Success',
-  props<{payload: unknown}>()
+  props<{payload: CampaignYear[]}>()
 );
 
 export const loadCampaignYearsFailure = createAction(
@@ -101,12 +101,12 @@ export const selectCampaign = createAction(
 
 export const setActiveCampaign = createAction(
   '[Campaign/API] Set Active Campaign',
-  props<{payload: any}>()
+  props<{payload: CampaignYear}>()
 );
 
 export const selectCampaignYear = createAction(
   '[Campaign/API] Select Campaign Year',
-  props<{payload: unknown}>()
+  props<{payload: CampaignYear}>()
 );
 
 export const loadClientCampaigns = createAction(
@@ -165,7 +165,7 @@ export const deleteCampaign = createAction(
 
 export const deleteCampaignSuccess = createAction(
   '[Campaign/API] Delete Campaign Success',
-  props<{payload: unknown}>()
+  props<{payload: Campaign}>()
 );
 
 export const deleteCampaignFailure = createAction(
@@ -210,7 +210,7 @@ export const deleteCampaignYear = createAction(
 
 export const deleteCampaignYearSuccess = createAction(
   '[Campaign/API] Delete Campaign Year Success',
-  props<{payload: unknown}>()
+  props<{payload: CampaignYear}>()
 );
 
 export const deleteCampaignYearFailure = createAction(

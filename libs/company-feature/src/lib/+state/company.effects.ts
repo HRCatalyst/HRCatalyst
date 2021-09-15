@@ -28,7 +28,11 @@ export class CompanyEffects {
       .pipe(
         map(data => {
           this.loader.isLoading.next(false);
-          return loadAllCompanysSuccess({payload: data.pop});
+          const result = new Array<Company>();
+          data.forEach(x => {
+            return result.push({...x.doc.data(), id: x.doc.id});
+          });
+          return loadAllCompanysSuccess({payload: result});
         }),
         catchError((err, caught) => {
           this.store.dispatch(loadAllCompanysFailure({error: err}));

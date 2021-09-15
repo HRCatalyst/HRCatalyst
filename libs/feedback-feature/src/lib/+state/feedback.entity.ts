@@ -1,11 +1,15 @@
-import { Feedback } from "@hrc/shared-feature";
+import { Associate, Campaign, Feedback } from "@hrc/shared-feature";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
 
 export const feedbacksFeatureKey = 'feedbacks';
 
 export interface FeedbackState  extends EntityState<Feedback> {
+  selectedCampaign?: Campaign;
   selectedFeedback?: Feedback;
+  selectedParticipant?: Associate;
+  selectedRater?: Associate;
+  feedback?: Feedback[];
 }
 
 export function selectfeedbackId(a: Feedback): string {
@@ -22,8 +26,11 @@ export const adapter: EntityAdapter<Feedback> = createEntityAdapter<Feedback>({
 });
 
 export const initialState: FeedbackState = adapter.getInitialState({
-  // additional entity state properties
-  selectedFeedback: undefined
+  selectedCampaign: undefined,
+  selectedFeedback: undefined,
+  selectedParticipant: undefined,
+  selectedRater: undefined,
+  feedback: undefined
 });
 
 // Create the default selectors

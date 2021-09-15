@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, do, doc, Firestore, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, debounceTime, distinctUntilChanged, map, mergeMap, switchMap,  } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
@@ -29,7 +29,7 @@ export class AssociateEffects {
       return this.getById(x.payload).pipe(
         map(aoc => {
           this.loader.isLoading.next(false);
-          return loadAssociateSuccess({ payload: aoc.values });
+          return loadAssociateSuccess({ payload: aoc.values[0] });
         }),
         catchError((err, caught) => {
           this.store.dispatch(loadAssociateFailure(err));
@@ -83,7 +83,11 @@ export class AssociateEffects {
               || a.doc.data().emailAddress.toLowerCase().startsWith(x.payload.toLowerCase())));
 
             this.loader.isLoading.next(false);
-            return of(searchAssociatesSuccess({ payload: assoc}));
+            const result = new Array<Associate>();
+            assoc.forEach(x => {
+              return result.push({...x.doc.data(), id: x.doc.id});
+            });
+            return of(searchAssociatesSuccess({ payload: result}));
           }),
           catchError((err, caught) => {
             this.store.dispatch(searchAssociatesFailure(err));

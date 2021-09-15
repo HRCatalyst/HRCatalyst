@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Feedback, IFeedback, SelectParticipantParams } from '@hrc/shared-feature';
+import { Associate, Feedback, IFeedback, SelectParticipantParams } from '@hrc/shared-feature';
 
 export const loadFeedbacks = createAction(
   '[Feedback/API] Load Feedbacks',
@@ -58,7 +58,7 @@ export const loadFeedback = createAction(
 
 export const loadFeedbackSuccess = createAction(
   '[Feedback/API] LOAD_FEEDBACK_SUCCESS',
-  props<{ payload: unknown }>()
+  props<{ payload: Feedback[] }>()
 );
 
 export const loadFeedbackFailure = createAction(
@@ -72,7 +72,7 @@ export const loadFeedbackErrors = createAction(
 
 export const loadFeedbackErrorsSuccess = createAction(
   '[Feedback/API] LOAD_FEEDBACK_ERRORS_SUCCESS',
-  props<{ payload: unknown }>()
+  props<{ payload: Feedback[] }>()
 );
 
 export const loadFeedbackErrorsFailure = createAction(
@@ -91,7 +91,7 @@ export const loadParticipantFeedbackInprogress = createAction(
 
 export const loadParticipantFeedbackSuccess = createAction(
   '[Feedback/API] LOAD_PARTICIPANT_FEEDBACK_SUCCESS',
-  props<{ payload: unknown }>()
+  props<{ payload: Feedback[] }>()
 );
 
 export const loadParticipantFeedbackFailure = createAction(
@@ -101,7 +101,7 @@ export const loadParticipantFeedbackFailure = createAction(
 
 export const loadParticipantAssociatesSuccess = createAction(
   '[Feedback/API] LOAD_PARTICIPANT_ASSOCIATES_SUCCESS',
-  props<{ payload: unknown }>()
+  props<{ payload: Associate[] }>()
 );
 
 export const createFeedback = createAction(
@@ -126,7 +126,7 @@ export const updateFeedback = createAction(
 
 export const updateFeedbackSuccess = createAction(
   '[Feedback/API] UPDATE_FEEDBACK_SUCCESS',
-  props<{ payload: unknown }>()
+  props<{ payload: Feedback }>()
 );
 
 export const updateFeedbackFailure = createAction(
@@ -136,12 +136,12 @@ export const updateFeedbackFailure = createAction(
 
 export const deleteFeedback = createAction(
   '[Feedback/API] DELETE_FEEDBACK',
-  props<{  payload: IFeedback }>()
+  props<{  payload: Feedback }>()
 );
 
 export const deleteFeedbackSuccess = createAction(
   '[Feedback/API] DELETE_FEEDBACK_SUCCESS',
-  props<{ payload: unknown }>()
+  props<{ payload: Feedback }>()
 );
 
 export const deleteFeedbackFailure = createAction(

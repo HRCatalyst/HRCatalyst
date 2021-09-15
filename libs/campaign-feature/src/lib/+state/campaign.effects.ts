@@ -47,7 +47,9 @@ export class CampaignEffects {
       return this.getById(x.payload).pipe(
         map(camp => {
           this.loader.isLoading.next(false);
-          return CampaignActions.loadCampaignSuccess({payload: camp.pop});
+          const result = new Array<Campaign>();
+          camp.forEach(d => result.push({ ...d.doc.data(), id: d.doc.id }));
+          return CampaignActions.loadCampaignSuccess({payload: result[0]});
         }),
         catchError((err, caught) => {
           this.store.dispatch(CampaignActions.loadCampaignFailure({error: err}));
@@ -66,7 +68,9 @@ export class CampaignEffects {
       return this.get().pipe(
         map(camp => {
             this.loader.isLoading.next(false);
-            return CampaignActions.loadAllCampaignsSuccess({payload: camp});
+            const result = new Array<Campaign>();
+            camp.forEach(d => result.push({ ...d.doc.data(), id: d.doc.id }));
+            return CampaignActions.loadAllCampaignsSuccess({payload: result});
         }),
         catchError((err, caught) => {
             this.store.dispatch(CampaignActions.loadAllCampaignsFailure({error: err}));
@@ -143,7 +147,7 @@ export class CampaignEffects {
       return this.delete(x.payload.id ?? '')
         .then(() => {
           this.loader.isLoading.next(false);
-          return deleteCampaignSuccess({payload: x.payload.id});
+          return deleteCampaignSuccess({payload: x.payload});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
@@ -161,13 +165,14 @@ export class CampaignEffects {
       .pipe(
         map(Years => {
           this.loader.isLoading.next(false);
-
           const active = Years.filter(c => c.doc.data().active === true);
           if (active.length > 0) {
             const year = {id: active[0].doc.id, ...active[0].doc.data()};
             this.store.dispatch(setActiveCampaign({payload: year}));
           }
-          return loadCampaignYearsSuccess({payload: Years});
+          const result = new Array<CampaignYear>();
+          Years.forEach(d => result.push({ ...d.doc.data(), id: d.doc.id }));
+          return loadCampaignYearsSuccess({payload: result});
         }),
         catchError((err, caught) => {
           this.store.dispatch(loadCampaignYearsFailure({error: err}));
@@ -226,11 +231,11 @@ export class CampaignEffects {
       return this.deleteYear(x.payload.id ?? '')
         .then(() => {
           this.loader.isLoading.next(false);
-          return deleteCampaignSuccess({payload: 0});
+          return CampaignActions.deleteCampaignYearSuccess({payload: x.payload});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
-          return deleteCampaignFailure({error: err});
+          return CampaignActions.deleteCampaignYearFailure({error: err});
         });
     })
   )});

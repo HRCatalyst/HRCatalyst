@@ -66,8 +66,8 @@ export const loadCompanyClientsInprogress = createAction(
 );
 
 export const loadCompanyClientsSuccess = createAction(
-  '[Client/API] Load Company Clienta Soccess',
-  props<{ payload: unknown }>()
+  '[Client/API] Load Company Clients Soccess',
+  props<{ payload: Client[] }>()
 );
 
 export const loadCompanyClientsFailure = createAction(
@@ -77,7 +77,7 @@ export const loadCompanyClientsFailure = createAction(
 
 export const selectClient = createAction(
   '[Client/API] Select Client',
-  props<{ payload: unknown }>()
+  props<{ payload?: Client }>()
 );
 
 export const createClient = createAction(

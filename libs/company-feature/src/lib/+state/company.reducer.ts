@@ -1,3 +1,4 @@
+import { Company } from '@hrc/shared-feature';
 import { createReducer, on } from '@ngrx/store';
 import * as CompanyActions from './company.actions';
 import { adapter, initialState } from './company.entity';
@@ -38,15 +39,22 @@ export const reducer = createReducer(
    on(CompanyActions.loadCompany,
     state => { return state; }
   ),
-   on(CompanyActions.selectCompany,
-    state => { return state; }
-  ),
+   on(CompanyActions.selectCompany, (state, action) => {
+     return {...state, selectedCompany: action.payload};
+  }),
   on(CompanyActions.loadAllCompanys,
     state => { return state; }
   ),
-  on(CompanyActions.loadAllCompanysSuccess,
-    state => { return state; }
-  ),
+  on(CompanyActions.loadAllCompanysSuccess, (state, action) => {
+    const companys = action.payload.map(e => {
+      return {
+      id: e.id,
+      ...e
+      } as Company;
+    });
+    state = adapter.removeAll(state);
+    return adapter.addMany(companys, state);
+  }),
   on(CompanyActions.loadAllCompanysFailure,
     state => { return state; }
   ),
