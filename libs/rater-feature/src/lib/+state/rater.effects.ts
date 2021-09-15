@@ -6,7 +6,7 @@ import { of, zip } from 'rxjs';
 import * as RaterActions from './rater.actions';
 import { Store } from '@ngrx/store';
 import { Associate, Feedback, IRater, LoaderService, Rater, SelectRaterParams, enumRationship} from '@hrc/shared-feature';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 
 @Injectable()
 export class RaterEffects {
@@ -14,7 +14,7 @@ export class RaterEffects {
 
   constructor(
     private actions$: Actions,
-    private firestore: AngularFirestore,
+    private firestore: Firestore,
     private loader: LoaderService,
     private store: Store<IRater>
   ) {

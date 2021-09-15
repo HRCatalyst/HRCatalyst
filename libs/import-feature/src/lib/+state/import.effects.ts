@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Associate, Campaign, IImport, Import, ImportSuccessResult, LoaderService, Participant, Rater } from '@hrc/shared-feature';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
@@ -12,7 +12,7 @@ import { deleteImport, deleteImportFailure, deleteImportSuccess, loadAllImports,
 export class ImportEffects {
   campaignYear: string = Date.now.toString();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
       private loader: LoaderService, private store: Store<IImport>) {
         this.campaignYear = '2021';
   }

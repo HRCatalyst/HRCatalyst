@@ -3,8 +3,8 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 import { Observable, Subject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import { Auth } from './+state/auth.reducer';
 import { selectAuthState } from './+state/auth.selectors';
+import { AuthState } from './+state/auth.entity';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class AuthGuard implements OnDestroy, CanActivate {
   authenticated = false;
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private store: Store<Auth>, private router: Router) {
+  constructor(private store: Store<AuthState>, private router: Router) {
     this.store.pipe(select(selectAuthState))
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {

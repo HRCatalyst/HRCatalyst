@@ -7,10 +7,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { SharedFeatureModule } from '@hrc/shared-feature';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AuthModule } from '@angular/fire/auth';
+import { FirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { enableIndexedDbPersistence, Firestore, getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { enableIndexedDbPersistence, getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 
 @NgModule({
@@ -28,13 +29,13 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
         enableIndexedDbPersistence(firestore);
         return firestore;
     }),
-    AngularFireAuth,
+    AuthModule,
+    FirestoreModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({})
   ],
   providers: [
-    Firestore
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

@@ -4,7 +4,7 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
 
 import * as InterviewActions from './interview.actions';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Associate, Campaign, enumFeedbackType, Feedback, IAssociate, IFeedback, Interview, InterviewParticipant, LoaderService, Participant, Rater } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 import { createFeedback } from '@hrc/feedback-feature';
@@ -14,7 +14,7 @@ import { createFeedback } from '@hrc/feedback-feature';
 export class InterviewEffects {
   campaignYear: string = Date.now.toString();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
       private store: Store<IAssociate>, private feedbackStore: Store<IFeedback>, private loader: LoaderService) {
         this.campaignYear = '2021';
   }

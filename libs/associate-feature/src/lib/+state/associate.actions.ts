@@ -117,7 +117,7 @@ export const createAssociate = createAction(
 
 export const createAssociateSuccess = createAction(
   '[Associate] Create Associate Success',
-  props<{ payload: DocumentReference }>()
+  props<{ payload: Associate }>()
 );
 
 export const createAssociateFailire = createAction(

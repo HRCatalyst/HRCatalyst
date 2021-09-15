@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { FormBase, IParticipant, Participant } from '@hrc/shared-feature';
+import { Associate, FormBase, IParticipant, Participant } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -15,7 +15,7 @@ export class ParticipantModalComponent extends FormBase {
 
   // associateState$: Observable<IAssociate[]>;
   // associateSubscription: Subscription;
-  // associates: Associate[];
+  associates?: Associate[];
 
   constructor(public dialogRef: MatDialogRef<ParticipantModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IParticipant

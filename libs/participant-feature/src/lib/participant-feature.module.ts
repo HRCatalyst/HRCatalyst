@@ -5,9 +5,11 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/participant.reducer';
 import { ParticipantEffects } from './+state/participant.effects';
-import { Firestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { ParticipantComponent } from './participant.component';
 import { SharedFeatureModule } from '@hrc/shared-feature';
+import { ParticipantImportComponent } from './participant.import';
+import { ParticipantModalComponent } from './participant.modal';
 
 @NgModule({
   imports: [
@@ -23,10 +25,17 @@ import { SharedFeatureModule } from '@hrc/shared-feature';
     EffectsModule.forFeature([ParticipantEffects]),
   ],
   declarations: [
-    ParticipantComponent
+    ParticipantComponent,
+    ParticipantModalComponent,
+    ParticipantImportComponent
+  ],
+  entryComponents: [
+    ParticipantImportComponent,
+    ParticipantModalComponent
   ],
   exports: [
-    ParticipantComponent
+    ParticipantComponent,
+    ParticipantImportComponent
   ],
   providers: [
     Firestore

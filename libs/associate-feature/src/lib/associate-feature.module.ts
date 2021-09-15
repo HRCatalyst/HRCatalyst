@@ -7,10 +7,12 @@ import { AssociateEffects } from './+state/associate.effects';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { SharedFeatureModule } from '@hrc/shared-feature';
-import { AuthFeatureModule } from '@hrc/auth-feature';
-import { Firestore } from '@angular/fire/compat/firestore';
+//import { AuthFeatureModule } from '@hrc/auth-feature';
+import { Firestore } from '@angular/fire/firestore';
 import { AssociateComponent } from './associate.component';
 import { CampaignFeatureModule } from '@hrc/campaign-feature';
+import { AssociateImportModalComponent } from './associate.import.modal';
+import { AssociateModalComponent } from './associate.modal';
 
 @NgModule({
   imports: [
@@ -22,16 +24,24 @@ import { CampaignFeatureModule } from '@hrc/campaign-feature';
       }
     ]),
     SharedFeatureModule,
-    AuthFeatureModule,
+//    AuthFeatureModule,
     CampaignFeatureModule,
     StoreModule.forFeature('associate', reducer),
     EffectsModule.forFeature([AssociateEffects]),
   ],
   declarations: [
-    AssociateComponent
+    AssociateComponent,
+    AssociateImportModalComponent,
+    AssociateModalComponent
+  ],
+  entryComponents: [
+    AssociateImportModalComponent,
+    AssociateModalComponent
   ],
   exports: [
-    AssociateComponent
+    AssociateComponent,
+    AssociateImportModalComponent,
+    AssociateModalComponent
   ],
   providers: [
     Firestore

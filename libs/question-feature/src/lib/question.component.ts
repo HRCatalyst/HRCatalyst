@@ -103,13 +103,13 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  onSelectionChanged() {
+  onSelectionChanged($event) {
     const selectedRows = this.gridApi.getSelectedRows();
 
     this.hasQuestion = selectedRows.length > 0;
   }
 
-  onRowDoubleClicked(row:any) {
+  onRowDoubleClicked(row: any) {
     if (row) {
       console.log(row);
     }

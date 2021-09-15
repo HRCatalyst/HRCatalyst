@@ -6,12 +6,11 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/auth.reducer';
 import { AuthEffects } from './+state/auth.effects';
-import { SharedFeatureModule } from '@hrc/shared-feature';import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { AngularFireFunctionsModule } from '@angular/fire/compat/functions';
+import { SharedFeatureModule } from '@hrc/shared-feature';
+import { Firestore, FirestoreModule } from '@angular/fire/firestore';
+import { AuthModule } from '@angular/fire/auth';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   imports: [
@@ -19,23 +18,23 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     SharedFeatureModule,
-    AngularFireModule,
-    AngularFirestore,
-    AngularFireAuthModule,
-    AngularFireStorageModule,
-    AngularFireFunctionsModule,
+    FirestoreModule,
+    AuthModule,
     RouterModule.forChild([
       {
         path: '',
         component: LoginComponent
       }
     ]),
-    SharedFeatureModule,
     StoreModule.forFeature('auth', reducer),
     EffectsModule.forFeature([AuthEffects]),
   ],
   declarations: [
-    LoginComponent
+    LoginComponent,
+    SignupComponent
+  ],
+  entryComponents: [
+    SignupComponent
   ],
   exports: [
     LoginComponent
@@ -43,6 +42,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   schemas: [
     NO_ERRORS_SCHEMA,
     CUSTOM_ELEMENTS_SCHEMA
+  ],
+  providers: [
+    Firestore
   ]
 })
 export class AuthFeatureModule {}

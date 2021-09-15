@@ -1,21 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { InterviewComponent } from './interview.component';
-import { Associate, ConfirmationComponent, Interview, InterviewParticipant, IUser, RELATIONSHIP_DATA } from '@hrc/shared-feature';
+import { Associate, ConfirmationComponent, Interview, InterviewEdit, InterviewParticipant, IUser, RELATIONSHIP_DATA } from '@hrc/shared-feature';
 import { InterviewState } from './+state/interview.entity';
-import { AssociateState, searchAssociates } from '@hrc/associate-feature';
-import { loadInterviewParticipantsSuccess } from './+state/interview.actions';
+import { createInterview, updateInterview } from './+state/interview.actions';
 
 @Component({
   selector: 'hrc-interviewlist',
   templateUrl: './interviewlist.component.html',
   styleUrls: ['./interviewlist.component.css']
 })
-export class InterviewListComponent implements OnDestroy, OnInit {
+export class InterviewListComponent implements OnDestroy {
   private onDestroy$: Subject<void> = new Subject<void>();
   user$?: IUser;
   selectedAssociate?: Associate = undefined;
@@ -29,25 +28,25 @@ export class InterviewListComponent implements OnDestroy, OnInit {
     { headerName: 'Interview Status', field: 'status', sortable: true },
   ];
 
-  private gridApi? = undefined;
+  private gridApi?: any;
 
-  constructor(private dialog: MatDialog, private store: Store<IAuth>, private interviewStore: Store<InterviewState>,
-    private associateStore: Store<AssociateState>, private router: Router) {
-    this.store.pipe(select((state: any) => state))
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((state) => {
-        if (state.auth.settings != null) {
-          this.user$ = state.auth.settings;
-        }
-    });
+  constructor(private dialog: MatDialog, private interviewStore: Store<InterviewState>,
+    private router: Router) {
+    // this.store.pipe(select((state: any) => state))
+    //   .pipe(takeUntil(this.onDestroy$))
+    //   .subscribe((state) => {
+    //     if (state.auth.settings != null) {
+    //       this.user$ = state.auth.settings;
+    //     }
+    // });
 
-    this.associateStore.pipe(select((state: any) => state))
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((state) => {
-        if (state.associate.selectedAssociate != null) {
-          this.selectedAssociate = state.associate.selectedAssociate;
-        }
-    });
+    // this.associateStore.pipe(select((state: any) => state))
+    //   .pipe(takeUntil(this.onDestroy$))
+    //   .subscribe((state) => {
+    //     if (state.associate.selectedAssociate != null) {
+    //       this.selectedAssociate = state.associate.selectedAssociate;
+    //     }
+    // });
 
     this.interviewStore.pipe(select((state: any) => state))
       .pipe(takeUntil(this.onDestroy$))
@@ -58,22 +57,20 @@ export class InterviewListComponent implements OnDestroy, OnInit {
     });
   }
 
-  ngOnInit() {
-  }
-
   ngOnDestroy() {
     this.onDestroy$.next();
   }
 
   onGridReady(params) {
     this.gridApi = params.api;
-    this.gridApi.sizeColumnsToFit();
+    this.gridApi?.sizeColumnsToFit();
   }
 
-  onSelectionChanged() {
-    const selectedRows = this.gridApi.getSelectedRows();
+  onSelectionChanged($event) {
+    const selectedRows = this.gridApi?.getSelectedRows();
 
     if (selectedRows.length > 0) {
+      console.log(`getSelectedRows ${selectedRows}`);
     }
   }
 
@@ -84,7 +81,7 @@ export class InterviewListComponent implements OnDestroy, OnInit {
 
     const iv = new InterviewEdit();
 
-    iv.interviewer = this.user$.first_name + ' ' + this.user$.last_name;
+    iv.interviewer = this.user$?.first_name + ' ' + this.user$?.last_name;
     iv.campaignId = row.data.campaignId === undefined ? '' : row.data.campaignId;
     iv.campaignName = row.data.campaignName === undefined ? '' : row.data.campaignName;
     iv.participantId = row.data.participantId;
@@ -94,11 +91,11 @@ export class InterviewListComponent implements OnDestroy, OnInit {
     iv.participantTitle = row.data.title;
     iv.participantNotes = row.data.notes;
     iv.raterId = row.data.associateId;
-    iv.raterEmail = this.selectedAssociate.emailAddress;
-    iv.raterFirst = this.selectedAssociate.firstName;
-    iv.raterLast = this.selectedAssociate.lastName;
-    iv.raterTitle = this.selectedAssociate.title;
-    iv.raterNotes = this.selectedAssociate.notes;
+    iv.raterEmail = this.selectedAssociate?.emailAddress ?? '';
+    iv.raterFirst = this.selectedAssociate?.firstName;
+    iv.raterLast = this.selectedAssociate?.lastName;
+    iv.raterTitle = this.selectedAssociate?.title;
+    iv.raterNotes = this.selectedAssociate?.notes;
     iv.relationship = RELATIONSHIP_DATA[row.data.relationship].name;
     iv.interviews = row.data.interview;
 
@@ -149,14 +146,14 @@ export class InterviewListComponent implements OnDestroy, OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The confirmation dialog was closed');
       let id = '';
-      this.interviews.forEach(i => {
-        id = i.raterId;
+      this.interviews?.forEach(i => {
+        id = i.raterId ?? '';
         if ( i instanceof Interview) {
           i.status = result === true ? i.status : 'Draft';
           if (i.id !== undefined) {
-            this.interviewStore.dispatch(new UpdateInterviewAction(i));
+            this.interviewStore.dispatch(updateInterview({payload: i}));
           } else {
-            this.interviewStore.dispatch(new CreateInterviewAction(i));
+            this.interviewStore.dispatch(createInterview({payload: i}));
           }
         }
       });
@@ -166,13 +163,13 @@ export class InterviewListComponent implements OnDestroy, OnInit {
 
   onBackClicked() {
     this.selectedAssociate = undefined;
-    this.store.dispatch(searchAssociates({payload: ''}));
-    this.store.dispatch(loadInterviewParticipantsSuccess({payload: []}));
+//    this.store.dispatch(searchAssociates({payload: ''}));
+//    this.interviewStore.dispatch(loadInterviewParticipantsSuccess({payload: []}));
     this.router.navigate(['/associate']);
   }
 
   onRefresh(id) {
-    this.associateStore.dispatch(new LoadAssociateAction(id));
-    this.associateStore.dispatch(new LoadInterviewParticipantsAction(id));
+//    this.associateStore.dispatch(new LoadAssociateAction(id));
+//    this.associateStore.dispatch(new LoadInterviewParticipantsAction(id));
   }
 }

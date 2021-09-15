@@ -119,7 +119,7 @@ export class ClientComponent {
     }
   }
 
-  onSelectionChanged() {
+  onSelectionChanged($event) {
     const selectedRows = this.gridApi.getSelectedRows();
 
     this.hasClient = selectedRows.length > 0;

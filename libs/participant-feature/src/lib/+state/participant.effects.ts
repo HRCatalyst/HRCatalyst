@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
 import * as ParticipantActions from './participant.actions';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Associate, Feedback, LoaderService, Participant } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 import { ParticipantState } from './participant.entity';
@@ -13,7 +13,7 @@ import { ParticipantState } from './participant.entity';
 export class ParticipantEffects {
   campaignYear: string = Date.now.toString();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<ParticipantState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }

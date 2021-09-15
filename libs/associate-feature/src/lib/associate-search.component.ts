@@ -73,7 +73,7 @@ export class AssociateSearchComponent implements OnDestroy, OnInit {
     this.router.navigate(['/home']);
   }
 
-  onSelectionChanged() {
+  onSelectionChanged($event) {
     const selectedRows = this.gridApi.getSelectedRows();
     if (selectedRows) {
       console.log(selectedRows);

@@ -147,11 +147,11 @@ export class RaterComponent implements OnDestroy {
       }
     }
 
-    // dedupRaters() {
-    //   this.raterStore.dispatchdedupRatersAction());
-    // }
+    dedupRaters() {
+//      this.raterStore.dispatch(dedupRatersAction());
+    }
 
-    onSelectionChanged() {
+    onSelectionChanged($event) {
       const selectedRows = this.gridApi.getSelectedRows();
 
       this.hasRater = selectedRows.length > 0;

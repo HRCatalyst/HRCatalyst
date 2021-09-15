@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Client } from './client.model';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { LoaderService } from '@hrc/shared-feature';
 import { createClient, createClientFailire, createClientSuccess, deleteClient, deleteClientFailure, deleteClientSuccess, loadCompanyClients, loadCompanyClientsFailure, loadCompanyClientsSuccess, updateClient, updateClientFailure, updateClientSuccess } from './client.actions';
@@ -14,7 +14,7 @@ export class ClientEffects {
   campaignYear: string = Date.now.toString();
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<ClientState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }

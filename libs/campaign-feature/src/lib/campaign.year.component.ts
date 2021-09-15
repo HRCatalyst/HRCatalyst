@@ -111,7 +111,7 @@ export class CampaignYearComponent implements OnDestroy, OnInit {
     }
   }
 
-  onSelectionChanged() {
+  $event) {
     const selectedRows = this.gridApi.getSelectedRows();
 
     this.hasYear = selectedRows.length > 0;

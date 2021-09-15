@@ -31,7 +31,8 @@ export class CampaignComponent implements OnDestroy {
   private gridApi?: any;
 
   private onDestroy$: Subject<void> = new Subject<void>();
-  campaigns?: Dictionary<Campaign>;
+  entities?: Dictionary<Campaign>;
+  campaigns?: Campaign[];
 
   constructor(private dialog: MatDialog, private campaignStore: Store<CampaignState>,
     private clientStore: Store<ClientState>, private router: Router) {
@@ -46,7 +47,7 @@ export class CampaignComponent implements OnDestroy {
       this.campaignStore.select(selectCampaignState)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {
-        this.campaigns = state.entities;
+        this.entities = state.entities;
       });
   }
 
@@ -123,7 +124,7 @@ export class CampaignComponent implements OnDestroy {
     }
   }
 
-  onSelectionChanged() {
+  onSelectionChanged($event) {
     const selectedRows = this.gridApi.getSelectedRows();
 
     this.hasCampaign = selectedRows.length > 0;

@@ -1,5 +1,5 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
-import { FormBase, IRater, Rater, RELATIONSHIP_DATA } from '@hrc/shared-feature';
+import { Component, Inject } from '@angular/core';
+import { Associate, FormBase, IRater, Rater, RELATIONSHIP_DATA } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -18,7 +18,7 @@ export class RaterModalComponent extends FormBase {
 
   // associateState$: Observable<IAssociate[]>;
   // associateSubscription$: Subscription;
-  // associates?: Associate[];
+  associates?: Associate[];
 
   constructor(public dialogRef: MatDialogRef<RaterModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IRater

@@ -32,10 +32,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AgGridModule } from 'ag-grid-angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatCardModule,
     MatDialogModule,
     MatFormFieldModule,
@@ -56,7 +59,7 @@ import { AgGridModule } from 'ag-grid-angular';
     MatSlideToggleModule,
     MatTooltipModule,
     FlexLayoutModule,
-    AgGridModule,
+    AgGridModule.withComponents([]),
     RouterModule.forChild([
       /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
     ]),
@@ -68,6 +71,8 @@ import { AgGridModule } from 'ag-grid-angular';
     LoaderComponent
   ],
   exports: [
+    FormsModule,
+    ReactiveFormsModule,
     ConfirmationComponent,
     LoaderComponent,
     MatCardModule,

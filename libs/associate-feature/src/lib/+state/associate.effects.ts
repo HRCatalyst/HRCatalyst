@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, docSnapshots, Firestore, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, debounceTime, distinctUntilChanged, map, mergeMap, switchMap,  } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
-
 import { Associate } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 import { LoaderService } from '@hrc/shared-feature';
 import { AssociateState } from './associate.entity';
 import { createAssociate, createAssociateFailire, createAssociateSuccess, deleteAssociate, deleteAssociateFailure, deleteAssociateSuccess, loadAssociate, loadAssociateFailure, loadAssociateSuccess, loadCompanyAssociates, loadCompanyAssociatesFailure, loadCompanyAssociatesInprogress, loadCompanyAssociatesSuccess, searchAssociates, searchAssociatesFailure, searchAssociatesSuccess, updateAssociate, updateAssociateFailure, updateAssociateSuccess } from './associate.actions';
-
 
 @Injectable()
 export class AssociateEffects {
@@ -18,7 +16,7 @@ export class AssociateEffects {
 
   constructor(private actions$: Actions,
               private store: Store<AssociateState>,
-              private firestore: AngularFirestore,
+              private firestore: Firestore,
               private loader: LoaderService) {
       this.campaignYear = '2021';
   };
@@ -27,19 +25,18 @@ export class AssociateEffects {
     return this.actions$.pipe(
     ofType(loadAssociate),
     mergeMap(x => {
-        this.loader.isLoading.next(true);
-        this.getById(x.payload)
-          .pipe(
-            map(aoc => {
-              this.loader.isLoading.next(false);
-              return loadAssociateSuccess({ payload: aoc.data() });
-            }),
-            catchError((err, caught) => {
-              this.store.dispatch(loadAssociateFailure(err));
-              this.loader.isLoading.next(false);
-              return caught;
-            }));
-        return of(x);
+      this.loader.isLoading.next(true);
+      this.getById(x.payload).pipe(
+        map(aoc => {
+          this.loader.isLoading.next(false);
+          return loadAssociateSuccess({ payload: aoc.values });
+        }),
+        catchError((err, caught) => {
+          this.store.dispatch(loadAssociateFailure(err));
+          this.loader.isLoading.next(false);
+          return caught;
+        }));
+      return of(x);
     }))
   });
 
@@ -48,21 +45,22 @@ export class AssociateEffects {
     ofType(loadCompanyAssociates),
     mergeMap(x => {
        this.loader.isLoading.next(true);
-       this.getAssociates(x.payload)
-        .then((data) => {
-          const result = new Array<unknown>();
-          data.docs.forEach(d => {
-              result.push({...d.data(), id: d.id});
+       this.getAssociates(x.payload).pipe(
+        map((data) => {
+          const result = new Array<Associate>();
+          data.forEach(d => {
+              result.push({...d.doc.data(), id: d.doc.id});
           });
 
           this.store.dispatch(loadCompanyAssociatesSuccess({payload: result}));
           this.loader.isLoading.next(false);
           return of(loadCompanyAssociatesSuccess({payload: result}));
-        })
-        .catch((err: any) => {
+        }),
+        catchError((err, caught) => {
           this.loader.isLoading.next(false);
-          return of(loadCompanyAssociatesFailure({error: err}));
-        });
+          this.store.dispatch(loadCompanyAssociatesFailure({error: err}));
+          return caught;
+        }));
         return of(loadCompanyAssociatesInprogress());
       })
     )
@@ -80,10 +78,10 @@ export class AssociateEffects {
           switchMap(associates => {
             const assoc = associates.filter(a =>
               x.payload.length > 0 &&
-              (a.payload.doc.id === x.payload
-              || a.payload.doc.data().lastName.toLowerCase().startsWith(x.payload.toLowerCase())
-              || a.payload.doc.data().firstName.toLowerCase().startsWith(x.payload.toLowerCase())
-              || a.payload.doc.data().emailAddress.toLowerCase().startsWith(x.payload.toLowerCase())));
+              (a.doc.id === x.payload
+              || a.doc.data().lastName.toLowerCase().startsWith(x.payload.toLowerCase())
+              || a.doc.data().firstName.toLowerCase().startsWith(x.payload.toLowerCase())
+              || a.doc.data().emailAddress.toLowerCase().startsWith(x.payload.toLowerCase())));
 
             this.loader.isLoading.next(false);
             return of(searchAssociatesSuccess({ payload: assoc}));
@@ -107,7 +105,7 @@ export class AssociateEffects {
         .then(data => {
           this.loader.isLoading.next(false);
           this.store.dispatch(loadCompanyAssociates({payload: x.payload.companyId}));
-          return createAssociateSuccess({payload: data});
+          return createAssociateSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
@@ -159,36 +157,35 @@ export class AssociateEffects {
   });
 
   get() {
-    const query = `associates${this.campaignYear}`;
-    return this.firestore.collection<Associate>(query).snapshotChanges();
+    const table = `associates${this.campaignYear}`;
+    return collectionChanges<Associate>(query<Associate>(collection(this.firestore, table) as CollectionReference<Associate>));
   };
 
   getById(id: string) {
-    const query = `associates${this.campaignYear}/${id}`;
-    return this.firestore.doc(query).get();
+    const table = `associates${this.campaignYear}`;
+    return collectionChanges<Associate>(query(collection(this.firestore, table) as CollectionReference<Associate>, where('id', '==', id)));
   };
 
   getAssociates(id: string) {
-      const query = `associates${this.campaignYear}`;
-      return this.firestore.collection<Associate>(query).ref.where('companyId', '==', id).get();
+    const table = `associates${this.campaignYear}`;
+    return collectionChanges<Associate>(query(collection(this.firestore, table) as CollectionReference<Associate>, where('companyId', '==', id)));
   };
 
   create(associate: Associate) {
     delete associate.id;
     const g = Object.assign({}, associate);
-    const query = `associates${this.campaignYear}`;
-    return this.firestore.collection<Associate>(query).add(g);
+    const table = `associates${this.campaignYear}`;
+    return addDoc(collection(this.firestore, table), g);
   };
 
   update(associate: Associate) {
     const g = Object.assign({}, associate);
-    const query = `associates${this.campaignYear}/${associate.id}`;
-    return this.firestore.doc(query).update(g);
+    const table = `associates${this.campaignYear}/${associate.id}`;
+    return updateDoc(doc(collection(this.firestore, table) as CollectionReference<Associate>, g.id), g);
   };
 
   delete(id: string) {
-    const query = `associates${this.campaignYear}/${id}`;
-    return this.firestore.doc(query).delete();
+    const table = `associates${this.campaignYear}/${id}`;
+    return deleteDoc(doc(this.firestore, table, id));
   };
-
 }

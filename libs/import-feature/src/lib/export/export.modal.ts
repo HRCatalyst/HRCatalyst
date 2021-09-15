@@ -1,39 +1,26 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
-import { FormBase } from 'src/app/shared/form.base';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject} from '@angular/core';
+
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Associate, Campaign, Feedback, FormBase, IImport, Participant, Rater } from '@hrc/shared-feature';
 //import readXlsxFile from 'read-excel-file';
-import { schemaExportFeedback, enumExportFeedback } from './export.schema';
-import { Feedback } from 'src/app/feedback/feedback.interface';
 import { Observable } from 'rxjs';
-import { Associate } from 'src/app/associate/associate.interface';
-import * as participantEntity from 'src/app/participant/participant.entity';
-import * as importEntity from 'src/app/import/import.entity';
-import * as feedbackEntity from 'src/app/feedback/feedback.entity';
-import * as raterEntity from 'src/app/rater/rater.entity';
-import { Store, select } from '@ngrx/store';
-import { Participant } from 'src/app/participant/participant.interface';
-import { Campaign } from 'src/app/campaign/campaign.interface';
-import { IImport } from 'src/app/import/import.interface';
-import { LoadImportAction } from 'src/app/import/import.action';
-import { enumFeedbackStatus, FEEDBACK_STATUS } from 'src/app/feedback/feedback.data';
-import { Rater } from 'src/app/rater/rater.interface';
 
 @Component({
   selector: 'hrc-export',
   templateUrl: './export.modal.html',
   styleUrls: ['./export.modal.css']
 })
-export class ExportModalComponent extends FormBase implements OnInit {
-  files: File | FileList;
+export class ExportModalComponent extends FormBase {
+  files?: File | FileList;
 
-  feedback: Feedback[] = null;
+  feedback?: Feedback[] = undefined;
 
-  importState$: Observable<IImport[]>;
-  associates: Associate[];
-  participants: Participant[];
-  campaigns: Campaign[];
-  raters: Rater[];
+  importState$?: Observable<IImport[]>;
+  associates?: Associate[];
+  participants?: Participant[];
+  campaigns?: Campaign[];
+  raters?: Rater[];
 
   form = new FormGroup({
       'file': new FormControl([null, Validators.required])
@@ -61,10 +48,6 @@ export class ExportModalComponent extends FormBase implements OnInit {
     //       this.raters = state.import.raters;
     //   }
     // });
-  }
-
-  ngOnInit() {
-    // this.importStore.dispatch(new LoadImportAction());
   }
 
   onSave() {

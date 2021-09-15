@@ -12,7 +12,9 @@ import { ParticipantFeatureModule } from '@hrc/participant-feature';
 //import { RaterFeatureModule } from '@hrc/rater-feature';
 import { QuestionFeatureModule } from '@hrc/question-feature';
 import { SharedFeatureModule } from '@hrc/shared-feature';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { FeedbackModalComponent } from './feedback.modal';
+import { FeedbackErrorsModalComponent } from './feedbackerrors.modal';
 
 @NgModule({
   imports: [
@@ -33,13 +35,19 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
     EffectsModule.forFeature([FeedbackEffects]),
   ],
   declarations: [
-    FeedbackComponent
+    FeedbackComponent,
+    FeedbackModalComponent,
+    FeedbackErrorsModalComponent
+  ],
+  entryComponents: [
+    FeedbackModalComponent,
+    FeedbackErrorsModalComponent
   ],
   exports: [
     FeedbackComponent
   ],
   providers: [
-    AngularFirestore
+    Firestore
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

@@ -151,7 +151,7 @@ export class FeedbackComponent implements OnDestroy {
     }
   }
 
-  onSelectionChanged() {
+  onSelectionChanged($event) {
     const selectedRows = this.gridApi.getSelectedRows();
 
     this.hasFeedback = selectedRows.length > 0;

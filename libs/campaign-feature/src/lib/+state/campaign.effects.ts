@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
-
 import * as CampaignActions from './campaign.actions';
 import { Campaign, CampaignYear, LoaderService } from '@hrc/shared-feature';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
 import { createCampaign,
           createCampaignFailire,
           createCampaignSuccess,
@@ -20,7 +19,6 @@ import { createCampaign,
           loadCampaignYearsFailure,
           loadCampaignYearsSuccess,
           loadClientCampaigns,
-          loadClientCampaignsFailure,
           setActiveCampaign,
           updateCampaign,
           updateCampaignFailure,
@@ -36,7 +34,7 @@ export class CampaignEffects {
   campaignYear: string = Date.now.toString();
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private actions$: Actions, private firestore: AngularFirestore,
+  constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<CampaignState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }
@@ -45,20 +43,18 @@ export class CampaignEffects {
     return this.actions$.pipe(
     ofType(CampaignActions.loadCampaign),
     mergeMap(x => {
-        this.loader.isLoading.next(true);
-        return this.getById(x.payload)
-          .pipe(
-            map(camp => {
-              this.loader.isLoading.next(false);
-              return CampaignActions.loadCampaignSuccess({payload: camp.data()});
-            }),
-            catchError((err, caught) => {
-              this.store.dispatch(CampaignActions.loadCampaignFailure({error: err}));
-              this.loader.isLoading.next(false);
-              return caught;
-            }));
-      return of(x);
-    })
+      this.loader.isLoading.next(true);
+      return this.getById(x.payload).pipe(
+        map(camp => {
+          this.loader.isLoading.next(false);
+          return CampaignActions.loadCampaignSuccess({payload: camp.pop});
+        }),
+        catchError((err, caught) => {
+          this.store.dispatch(CampaignActions.loadCampaignFailure({error: err}));
+          this.loader.isLoading.next(false);
+          return caught;
+        }));
+      })
     )
   });
 
@@ -66,19 +62,18 @@ export class CampaignEffects {
     return this.actions$.pipe(
     ofType(CampaignActions.loadAllCampaigns),
     mergeMap(() => {
-          this.loader.isLoading.next(true);
-          return this.get()
-              .pipe(
-                map(camp => {
-                    this.loader.isLoading.next(false);
-                    return CampaignActions.loadAllCampaignsSuccess({payload: camp});
-                }),
-                catchError((err, caught) => {
-                    this.store.dispatch(CampaignActions.loadAllCampaignsFailure({error: err}));
-                    this.loader.isLoading.next(false);
-                    return caught;
-                })
-          );
+      this.loader.isLoading.next(true);
+      return this.get().pipe(
+        map(camp => {
+            this.loader.isLoading.next(false);
+            return CampaignActions.loadAllCampaignsSuccess({payload: camp});
+        }),
+        catchError((err, caught) => {
+            this.store.dispatch(CampaignActions.loadAllCampaignsFailure({error: err}));
+            this.loader.isLoading.next(false);
+            return caught;
+        })
+      );
       })
   )});
 
@@ -86,23 +81,24 @@ export class CampaignEffects {
     return this.actions$.pipe(
     ofType(CampaignActions.loadClientCampaigns),
     mergeMap(x => {
-        this.loader.isLoading.next(true);
-        this.getCampaigns(x.payload)
-          .then((data) => {
-            const result = new Array<unknown>();
-            data.docs.forEach(d => result.push({ ...d.data(), id: d.id }));
+      this.loader.isLoading.next(true);
+      return this.getCampaigns(x.payload).pipe(
+        map((data) => {
+          const result = new Array<Campaign>();
+          data.forEach(d => result.push({ ...d.doc.data(), id: d.doc.id }));
 
-            this.store.dispatch(CampaignActions.loadClientCampaignsSuccess({payload: result}));
-            this.loader.isLoading.next(false);
-            return CampaignActions.loadClientCampaignsSuccess({payload: result});
-          })
-          .catch((err: any) => {
-            this.loader.isLoading.next(false);
-            return of(loadClientCampaignsFailure({error: err}));
-          });
-        return of(x);
-      })
-  )});
+          this.store.dispatch(CampaignActions.loadClientCampaignsSuccess({payload: result}));
+          this.loader.isLoading.next(false);
+          return CampaignActions.loadClientCampaignsSuccess({payload: result});
+        }),
+        catchError((err, caught) => {
+          this.loader.isLoading.next(false);
+          this.store.dispatch(CampaignActions.loadClientCampaignsFailure({error: err}));
+          return caught;
+        })
+      )})
+    )
+  });
 
   create$ = createEffect(() => {
     return this.actions$.pipe(
@@ -113,13 +109,12 @@ export class CampaignEffects {
         .then(data => {
           this.loader.isLoading.next(false);
           this.store.dispatch(loadClientCampaigns({payload: x.payload.clientId}));
-          return createCampaignSuccess({payload: data});
+          return createCampaignSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
           return createCampaignFailire({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -137,7 +132,6 @@ export class CampaignEffects {
             this.loader.isLoading.next(false);
             return updateCampaignFailure({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -155,7 +149,6 @@ export class CampaignEffects {
           this.loader.isLoading.next(false);
           return deleteCampaignFailure({error: err});
         });
-    return of(x);
     })
   )});
 
@@ -163,26 +156,25 @@ export class CampaignEffects {
     return this.actions$.pipe(
     ofType(loadCampaignYears),
     mergeMap(() => {
-        this.loader.isLoading.next(true);
-        return this.getYears()
-        .pipe(
-          map(Years => {
-              this.loader.isLoading.next(false);
+      this.loader.isLoading.next(true);
+      return this.getYears()
+      .pipe(
+        map(Years => {
+          this.loader.isLoading.next(false);
 
-              const active = Years.filter(c => c.payload.doc.data().active === true);
-              if (active.length > 0) {
-                const year = {id: active[0].payload.doc.id, ...active[0].payload.doc.data()};
-                this.store.dispatch(setActiveCampaign({payload: year}));
-              }
-              return loadCampaignYearsSuccess({payload: Years});
-          }),
-          catchError((err, caught) => {
-            this.store.dispatch(loadCampaignYearsFailure({error: err}));
-            this.loader.isLoading.next(false);
-            return caught;
-          })
-        )
-      return [];
+          const active = Years.filter(c => c.doc.data().active === true);
+          if (active.length > 0) {
+            const year = {id: active[0].doc.id, ...active[0].doc.data()};
+            this.store.dispatch(setActiveCampaign({payload: year}));
+          }
+          return loadCampaignYearsSuccess({payload: Years});
+        }),
+        catchError((err, caught) => {
+          this.store.dispatch(loadCampaignYearsFailure({error: err}));
+          this.loader.isLoading.next(false);
+          return caught;
+        })
+      )
     })
   )});
 
@@ -197,11 +189,11 @@ export class CampaignEffects {
       return this.createYear(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
-          return createCampaignYearSuccess({payload: data});
+          return createCampaignYearSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
-            this.loader.isLoading.next(false);
-            return createCampaignYearFailire({error: err});
+          this.loader.isLoading.next(false);
+          return createCampaignYearFailire({error: err});
         });
     })
   )});
@@ -211,109 +203,111 @@ export class CampaignEffects {
     ofType(updateCampaignYear),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-        if (x.payload.active) {
-          this.clearActiveYears(x.payload.id ?? '');
-        }
-        return this.updateYear(x.payload)
-          .then(() => {
-            this.loader.isLoading.next(false);
-            return updateCampaignYearSuccess({payload: x.payload});
-          })
-          .catch((err: any) => {
-            this.loader.isLoading.next(false);
-            return updateCampaignYearFailure({error: err});
-          });
+      if (x.payload.active) {
+        this.clearActiveYears(x.payload.id ?? '');
+      }
+      return this.updateYear(x.payload)
+        .then(() => {
+          this.loader.isLoading.next(false);
+          return updateCampaignYearSuccess({payload: x.payload});
+        })
+        .catch((err: any) => {
+          this.loader.isLoading.next(false);
+          return updateCampaignYearFailure({error: err});
+        });
     })
   )});
 
   deleteYear$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(deleteCampaignYear),
-      mergeMap(x => {
-          this.loader.isLoading.next(true);
-          return this.deleteYear(x.payload.id ?? '')
-            .then(() => {
-              this.loader.isLoading.next(false);
-              return deleteCampaignSuccess({payload: 0});
-            })
-            .catch((err: any) => {
-              this.loader.isLoading.next(false);
-              return deleteCampaignFailure({error: err});
-            });
+    ofType(deleteCampaignYear),
+    mergeMap(x => {
+      this.loader.isLoading.next(true);
+      return this.deleteYear(x.payload.id ?? '')
+        .then(() => {
+          this.loader.isLoading.next(false);
+          return deleteCampaignSuccess({payload: 0});
+        })
+        .catch((err: any) => {
+          this.loader.isLoading.next(false);
+          return deleteCampaignFailure({error: err});
+        });
     })
   )});
 
   get() {
-    const query = `campaigns${this.campaignYear}`;
-    return this.firestore.collection<Campaign>(query).snapshotChanges();
+    const table = `campaigns${this.campaignYear}`;
+    return collectionChanges<Campaign>(query<Campaign>(collection(this.firestore, table) as CollectionReference<Campaign>));
   }
 
   getById(id: string) {
-    const query = `campaigns${this.campaignYear}/${id}`;
-    return this.firestore.doc(query).get();
+    const table = `campaigns${this.campaignYear}`;
+    return collectionChanges<Campaign>(query(collection(this.firestore, table) as CollectionReference<Campaign>, where('id', '==', id)));
   }
 
   getCampaigns(id: string) {
-    const query = `campaigns${this.campaignYear}`;
-    return this.firestore.collection<Campaign>(query).ref.where('clientId', '==', id).get();
+    const table = `campaigns${this.campaignYear}`;
+    return collectionChanges<Campaign>(query(collection(this.firestore, table) as CollectionReference<Campaign>, where('clientId', '==', id)));
   }
 
   create(campaign: Campaign) {
     delete campaign.id;
     const g = Object.assign({}, campaign);
-    const query = `campaigns${this.campaignYear}`;
-    return this.firestore.collection<Campaign>(query).add(g);
+    const table = `campaigns${this.campaignYear}`;
+    return addDoc(collection(this.firestore, table), g);
   }
 
   update(campaign: Campaign) {
     const g = Object.assign({}, campaign);
-    const query = `campaigns${this.campaignYear}/${campaign.id}`;
-    return this.firestore.doc(query).update(g);
+    const table = `campaigns${this.campaignYear}/${campaign.id}`;
+    return updateDoc(doc(collection(this.firestore, table) as CollectionReference<Campaign>, g.id), g);
   }
 
   delete(id: string) {
-    const query = `campaigns${this.campaignYear}/${id}`;
-    return this.firestore.doc(query).delete();
+    const table = `campaigns${this.campaignYear}/${id}`;
+    return deleteDoc(doc(this.firestore, table, id));
   }
 
   // campaign year
   getYears() {
-    return this.firestore.collection<CampaignYear>('years').snapshotChanges();
+    return collectionChanges<CampaignYear>(query<CampaignYear>(collection(this.firestore, 'years') as CollectionReference<CampaignYear>));
   }
 
   createYear(year: CampaignYear) {
     delete year.id;
     const g = Object.assign({}, year);
-    return this.firestore.collection<CampaignYear>('years').add(g);
+    return addDoc(collection(this.firestore, 'years'), g);
   }
 
   updateYear(year: CampaignYear) {
     const g = Object.assign({}, year);
-    const query = `years/${year.id}`;
-
-    return this.firestore.doc(query).update(g);
+    const table = `years/${year.id}`;
+    return updateDoc(doc(collection(this.firestore, table) as CollectionReference<Campaign>, g.id), g);
   }
 
   clearActiveYears(key: string) {
-    this.firestore.collection<CampaignYear>('years').ref.where('active', '==', true).get().then((data) => {
-      data.docs.forEach(d => {
-        if (d.id !== key) {
-          const year = { ...d.data(), id: d.id } as CampaignYear;
-          year.active = false;
-          this.updateYear(year);
-        }
-
-      });
-    })
-    .catch((err: any)or => {
-      this.loader.isLoading.next(false);
-      return of(updateCampaignFailure(error));
-    });
+    collectionChanges<CampaignYear>(query(collection(this.firestore, 'years') as CollectionReference<CampaignYear>,
+    where('active', '==', true))).pipe(
+      map((data) => {
+        data.forEach(d => {
+          if (d.doc.id !== key) {
+            const year = { ...d.doc.data(), id: d.doc.id } as CampaignYear;
+            year.active = false;
+            this.updateYear(year);
+          }
+        });
+      }),
+      catchError((err, caught) => {
+        this.loader.isLoading.next(false);
+        this.store.dispatch(updateCampaignFailure({error: err}));
+        return caught;
+      })
+    )
   }
 
   deleteYear(id: string) {
-    const query = `years/${id}`;
-    return this.firestore.doc(query).delete();
+    const table = `years/${id}`;
+    return deleteDoc(doc(this.firestore, table, id));
   }
 }
 

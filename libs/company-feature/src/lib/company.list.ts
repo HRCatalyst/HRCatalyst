@@ -109,7 +109,7 @@ export class CompanyListComponent implements OnDestroy, OnInit {
     this.gridApi.sizeColumnsToFit();
   }
 
-  onSelectionChanged() {
+  onSelectionChanged($event) {
     const selectedRows = this.gridApi.getSelectedRows();
 
     this.hasCompany = selectedRows.length > 0;

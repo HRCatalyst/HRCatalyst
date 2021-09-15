@@ -6,8 +6,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/question.reducer';
 import { QuestionEffects } from './+state/question.effects';
 import { QuestionComponent } from './question.component';
-import { Firestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { SharedFeatureModule } from '@hrc/shared-feature';
+import { QuestionModalComponent } from './question.modal';
 
 @NgModule({
   imports: [
@@ -23,10 +24,15 @@ import { SharedFeatureModule } from '@hrc/shared-feature';
     EffectsModule.forFeature([QuestionEffects]),
   ],
   declarations: [
-    QuestionComponent
+    QuestionComponent,
+    QuestionModalComponent
+  ],
+  entryComponents: [
+    QuestionModalComponent
   ],
   exports: [
-    QuestionComponent
+    QuestionComponent,
+    QuestionModalComponent
   ],
   providers: [
     Firestore

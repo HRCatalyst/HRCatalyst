@@ -1,17 +1,16 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { enumFeedbackType, Feedback, FEEDBACK_STATUS, FEEDBACK_TYPE, FormBase, IQuestion, Question, RELATIONSHIP_DATA } from '@hrc/shared-feature';
+import { enumFeedbackType, Feedback, FEEDBACK_STATUS, FEEDBACK_TYPE, FormBase, Question, RELATIONSHIP_DATA } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { QuestionState, selectQuestionState } from '@hrc/question-feature';
+import { QuestionState } from '@hrc/question-feature';
 
 @Component({
   selector: 'hrc-feedbackerrors.modal',
   templateUrl: './feedbackerrors.modal.html',
   styleUrls: ['./feedbackerrors.modal.css']
 })
-export class FeedbackErrorsModalComponent extends FormBase implements OnDestroy {
+export class FeedbackErrorsModalComponent extends FormBase {
   form = new FormGroup({
     'participant_email': new FormControl('', [Validators.required]),
     'rater_email': new FormControl('', [Validators.required]),
@@ -26,21 +25,21 @@ export class FeedbackErrorsModalComponent extends FormBase implements OnDestroy 
   types = FEEDBACK_TYPE;
   relationships = RELATIONSHIP_DATA;
 
-  questionState$: Observable<IQuestion[]>;
-  questionSubscription$: Subscription;
+  // questionState$: Observable<IQuestion[]>;
+  // questionSubscription$: Subscription;
   questions?: Question[];
 
   constructor(public dialogRef: MatDialogRef<FeedbackErrorsModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Feedback, private questionStore: Store<QuestionState>) {
       super();
 
-      this.questionState$ = this.questionStore.select(selectQuestionState);
+      // this.questionState$ = this.questionStore.select(selectQuestionState);
 
-      this.questionSubscription$ = this.questionState$.subscribe((state) => {
-        if (state.length > 0) {
-          this.questions = state;
-        }
-      });
+      // this.questionSubscription$ = this.questionState$.subscribe((state) => {
+      //   if (state.length > 0) {
+      //     this.questions = state;
+      //   }
+      // });
 
       if (data !== null) {
         data.type = data.type !== undefined ? data.type : this.types[enumFeedbackType.WRITTEN].name;
@@ -55,11 +54,11 @@ export class FeedbackErrorsModalComponent extends FormBase implements OnDestroy 
       }
   }
 
-  ngOnDestroy() {
-    if (this.questionSubscription$ != null) {
-      this.questionSubscription$.unsubscribe();
-    }
-  }
+  // ngOnDestroy() {
+  //   if (this.questionSubscription$ != null) {
+  //     this.questionSubscription$.unsubscribe();
+  //   }
+  // }
 
   onSubmit() {
     this.onSave();

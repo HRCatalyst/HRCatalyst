@@ -1,7 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-// import { Company } from 'src/app/company/company.interface';
-// import * as associateEntity from 'src/app/associate/associate.entity';
-// import { Associate, IAssociate } from 'src/app/associate/associate.interface';
+import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AssociateModalComponent } from './associate.modal';
@@ -36,7 +33,8 @@ export class AssociateComponent implements OnDestroy {
   private onDestroy$: Subject<void> = new Subject<void>();
   private gridApi: any;
 
-  associates?: Dictionary<Associate>;
+  associates?: Associate[];
+  entities?: Dictionary<Associate>;
 
   constructor(private dialog: MatDialog, private associateStore: Store<AssociateState>, private router: Router) {
       const nav = this.router.getCurrentNavigation();
@@ -49,7 +47,7 @@ export class AssociateComponent implements OnDestroy {
       this.associateStore.pipe(select(selectAssociateState))
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {
-        this.associates = state.entities;
+        this.entities = state.entities;
       });
     }
 
@@ -122,7 +120,7 @@ export class AssociateComponent implements OnDestroy {
       this.gridApi.sizeColumnsToFit();
     }
 
-    onSelectionChanged() {
+    onSelectionChanged($event) {
       const selectedRows = this.gridApi.getSelectedRows();
 
       this.hasAssociate = selectedRows.length > 0;

@@ -185,7 +185,7 @@ export class FeedbackErrorsComponent implements OnInit {
     this.gridApi.sizeColumnsToFit();
   }
 
-  onSelectionChanged() {
+  onSelectionChanged($event) {
     const selectedRows = this.gridApi.getSelectedRows();
 
     this.hasErrors = selectedRows.length > 0;

@@ -101,7 +101,7 @@ export const loginSuccess = createAction(
 
 export const loginFailure = createAction(
   '[Auth/API] Login Failure',
-  props<{ payload: unknown }>()
+  props<{ error: unknown }>()
 );
 
 export const logoutAttempt = createAction(
@@ -114,7 +114,7 @@ export const logoutSuccess = createAction(
 
 export const logoutFailure = createAction(
   '[Auth/API] Logout Failure',
-  props<{ payload: unknown }>()
+  props<{ error: unknown }>()
 );
 
 export const registrationAttempt = createAction(
@@ -129,7 +129,7 @@ export const registrationSuccess = createAction(
 
 export const registrationFailure = createAction(
   '[Auth/API] Registration Failure',
-  props<{ payload: unknown }>()
+  props<{ error: unknown }>()
 );
 
 

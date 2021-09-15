@@ -145,7 +145,7 @@ export class ParticipantComponent implements OnDestroy {
       }
     }
 
-    onSelectionChanged() {
+    onSelectionChanged($event) {
       const selectedRows = this.gridApi.getSelectedRows();
 
       this.hasParticipant = selectedRows.length > 0;

@@ -5,9 +5,11 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/rater.reducer';
 import { RaterEffects } from './+state/rater.effects';
-import { Firestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { RaterComponent } from './rater.component';
 import { SharedFeatureModule } from '@hrc/shared-feature';
+import { RaterModalComponent } from './rater.modal';
+import { RaterImportComponent } from './rater.import';
 
 @NgModule({
   imports: [
@@ -23,10 +25,18 @@ import { SharedFeatureModule } from '@hrc/shared-feature';
     EffectsModule.forFeature([RaterEffects])
   ],
   declarations: [
-    RaterComponent
+    RaterComponent,
+    RaterImportComponent,
+    RaterModalComponent
+  ],
+  entryComponents: [
+    RaterModalComponent,
+    RaterImportComponent
   ],
   exports: [
-    RaterComponent
+    RaterComponent,
+    RaterImportComponent,
+    RaterModalComponent
   ],
   providers: [
     Firestore

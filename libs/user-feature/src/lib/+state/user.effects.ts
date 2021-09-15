@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as UserActions from './user.actions';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { IUser, LoaderService, User } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 
@@ -13,7 +13,7 @@ export class UserEffects {
 
   constructor(
       private actions$: Actions,
-      private firestore: AngularFirestore,
+      private firestore: Firestore,
       private loader: LoaderService,
       private store: Store<IUser>
     ) {

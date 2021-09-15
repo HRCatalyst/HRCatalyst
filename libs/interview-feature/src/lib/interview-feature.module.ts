@@ -5,7 +5,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/interview.reducer';
 import { InterviewEffects } from './+state/interview.effects';
-import { Firestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { InterviewComponent } from './interview.component';
 import { FeedbackFeatureModule } from '@hrc/feedback-feature';
 import { QuestionFeatureModule } from '@hrc/question-feature';
@@ -27,6 +27,9 @@ import { SharedFeatureModule } from '@hrc/shared-feature';
     EffectsModule.forFeature([InterviewEffects]),
   ],
   declarations: [
+    InterviewComponent
+  ],
+  entryComponents: [
     InterviewComponent
   ],
   exports: [

@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import * as QuestionActions from './question.actions';
 import { LoaderService, Question } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { QuestionState } from './question.entity';
 
 
@@ -14,7 +14,7 @@ export class QuestionEffects {
 
   constructor(private actions$: Actions,
     private store: Store<QuestionState>,
-    private firestore: AngularFirestore,
+    private firestore: Firestore,
     private loader: LoaderService) {}
 
   load$ = createEffect(() => {

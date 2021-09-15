@@ -117,7 +117,7 @@ export class FeedbackListComponent implements OnDestroy {
     return this.selectedAssociate?.lastName + '-' + this.selectedAssociate?.firstName + '-' + this.uniqueID();
   }
 
-  onSelectionChanged() {
+  onSelectionChanged($event) {
     const selectedRows = this.gridApi.getSelectedRows();
 
     if (selectedRows.length > 0) {

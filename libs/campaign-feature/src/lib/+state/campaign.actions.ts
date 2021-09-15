@@ -121,7 +121,7 @@ export const loadClientCampaignsInprogress = createAction(
 
 export const loadClientCampaignsSuccess = createAction(
   '[Campaign/API] Load Client Campaigns Success',
-  props<{payload: unknown}>()
+  props<{payload: Campaign[]}>()
 );
 
 export const loadClientCampaignsFailure = createAction(
@@ -136,7 +136,7 @@ export const createCampaign = createAction(
 
 export const createCampaignSuccess = createAction(
   '[Campaign/API] Create Campaign Success',
-  props<{payload: DocumentReference}>()
+  props<{payload: Campaign}>()
 );
 
 export const createCampaignFailire = createAction(
@@ -181,7 +181,7 @@ export const createCampaignYear = createAction(
 
 export const createCampaignYearSuccess = createAction(
   '[Campaign/API] Create Campaign Year Success',
-  props<{payload: DocumentReference}>()
+  props<{payload: CampaignYear}>()
 );
 
 export const createCampaignYearFailire = createAction(
