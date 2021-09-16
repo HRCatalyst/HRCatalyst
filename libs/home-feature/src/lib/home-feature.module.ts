@@ -6,7 +6,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/home.reducer';
 import { HomeEffects } from './+state/home.effects';
 import { HomeComponent } from './home.component';
-import { Firestore } from '@angular/fire/firestore';
+import { FirestoreModule } from '@angular/fire/firestore';
 import { ImportFeatureModule } from '@hrc/import-feature';
 import { SharedFeatureModule } from '@hrc/shared-feature';
 import { QuestionFeatureModule } from '@hrc/question-feature';
@@ -20,6 +20,7 @@ import { QuestionFeatureModule } from '@hrc/question-feature';
         component: HomeComponent
       }
     ]),
+    FirestoreModule,
     ImportFeatureModule,
     QuestionFeatureModule,
     SharedFeatureModule,
@@ -33,7 +34,6 @@ import { QuestionFeatureModule } from '@hrc/question-feature';
     HomeComponent
   ],
   providers: [
-    Firestore
   ]
 })
 export class HomeFeatureModule {}

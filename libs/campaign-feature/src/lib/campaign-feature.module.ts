@@ -6,7 +6,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/campaign.reducer';
 import { CampaignEffects } from './+state/campaign.effects';
 import { CampaignComponent } from './campaign.component';
-import { Firestore } from '@angular/fire/firestore';
+import { FirestoreModule } from '@angular/fire/firestore';
 import { CompanyFeatureModule } from '@hrc/company-feature';
 import { ClientFeatureModule } from '@hrc/client-feature';
 import { FeedbackFeatureModule } from '@hrc/feedback-feature';
@@ -29,6 +29,7 @@ import { CampaignYearModalComponent } from './campaign.year.modal';
     FeedbackFeatureModule,
     ImportFeatureModule,
     SharedFeatureModule,
+    FirestoreModule,
     StoreModule.forFeature('campaign', reducer),
     EffectsModule.forFeature([CampaignEffects]),
   ],
@@ -45,7 +46,6 @@ import { CampaignYearModalComponent } from './campaign.year.modal';
     CampaignComponent
   ],
   providers: [
-    Firestore
   ]
 })
 export class CampaignFeatureModule {}

@@ -33,6 +33,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AgGridModule } from 'ag-grid-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
@@ -59,6 +60,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatSlideToggleModule,
     MatTooltipModule,
     FlexLayoutModule,
+    FirestoreModule,
     AgGridModule.withComponents([]),
     RouterModule.forChild([
       /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */

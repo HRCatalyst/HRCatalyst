@@ -1,18 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
 import { reducer } from './+state/associate.reducer';
 import { AssociateEffects } from './+state/associate.effects';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { SharedFeatureModule } from '@hrc/shared-feature';
-//import { AuthFeatureModule } from '@hrc/auth-feature';
-import { Firestore } from '@angular/fire/firestore';
 import { AssociateComponent } from './associate.component';
 import { CampaignFeatureModule } from '@hrc/campaign-feature';
 import { AssociateImportModalComponent } from './associate.import.modal';
 import { AssociateModalComponent } from './associate.modal';
+import { FirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
@@ -24,7 +22,7 @@ import { AssociateModalComponent } from './associate.modal';
       }
     ]),
     SharedFeatureModule,
-//    AuthFeatureModule,
+    FirestoreModule,
     CampaignFeatureModule,
     StoreModule.forFeature('associate', reducer),
     EffectsModule.forFeature([AssociateEffects]),
@@ -44,7 +42,6 @@ import { AssociateModalComponent } from './associate.modal';
     AssociateModalComponent
   ],
   providers: [
-    Firestore
   ]
 })
 export class AssociateFeatureModule {}

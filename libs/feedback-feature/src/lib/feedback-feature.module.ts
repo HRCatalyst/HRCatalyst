@@ -9,10 +9,9 @@ import { FeedbackComponent } from './feedback.component';
 import { ClientFeatureModule } from '@hrc/client-feature';
 import { CompanyFeatureModule } from '@hrc/company-feature';
 import { ParticipantFeatureModule } from '@hrc/participant-feature';
-//import { RaterFeatureModule } from '@hrc/rater-feature';
 import { QuestionFeatureModule } from '@hrc/question-feature';
 import { SharedFeatureModule } from '@hrc/shared-feature';
-import { Firestore } from '@angular/fire/firestore';
+import { FirestoreModule } from '@angular/fire/firestore';
 import { FeedbackModalComponent } from './feedback.modal';
 import { FeedbackErrorsModalComponent } from './feedbackerrors.modal';
 
@@ -25,6 +24,7 @@ import { FeedbackErrorsModalComponent } from './feedbackerrors.modal';
         component: FeedbackComponent
       }
     ]),
+    FirestoreModule,
     SharedFeatureModule,
     ClientFeatureModule,
     CompanyFeatureModule,
@@ -47,7 +47,6 @@ import { FeedbackErrorsModalComponent } from './feedbackerrors.modal';
     FeedbackComponent
   ],
   providers: [
-    Firestore
   ],
   schemas: [
     NO_ERRORS_SCHEMA,

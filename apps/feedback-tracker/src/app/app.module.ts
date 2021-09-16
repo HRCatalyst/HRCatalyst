@@ -8,7 +8,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { SharedFeatureModule } from '@hrc/shared-feature';
 import { AuthModule } from '@angular/fire/auth';
-import { FirestoreModule } from '@angular/fire/firestore';
+import { Firestore, FirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { enableIndexedDbPersistence, getFirestore, provideFirestore } from '@angular/fire/firestore';

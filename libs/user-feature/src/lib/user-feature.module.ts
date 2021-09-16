@@ -6,8 +6,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { UserEffects } from './+state/user.effects';
 import { reducer } from './+state/user.reducer';
 import { UserComponent } from './user.component';
-import { Firestore } from '@angular/fire/firestore';
 import { SharedFeatureModule } from '@hrc/shared-feature';
+import { FirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
@@ -18,6 +18,7 @@ import { SharedFeatureModule } from '@hrc/shared-feature';
         component: UserComponent
       }
     ]),
+    FirestoreModule,
     SharedFeatureModule,
     StoreModule.forFeature('user', reducer),
     EffectsModule.forFeature([UserEffects]),
@@ -29,7 +30,6 @@ import { SharedFeatureModule } from '@hrc/shared-feature';
     UserComponent
   ],
   providers: [
-    Firestore
   ]
 })
 export class UserFeatureModule {}

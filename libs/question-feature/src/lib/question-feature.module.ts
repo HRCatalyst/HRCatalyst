@@ -6,7 +6,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/question.reducer';
 import { QuestionEffects } from './+state/question.effects';
 import { QuestionComponent } from './question.component';
-import { Firestore } from '@angular/fire/firestore';
+import { FirestoreModule } from '@angular/fire/firestore';
 import { SharedFeatureModule } from '@hrc/shared-feature';
 import { QuestionModalComponent } from './question.modal';
 
@@ -19,6 +19,7 @@ import { QuestionModalComponent } from './question.modal';
         component: QuestionComponent
       }
     ]),
+    FirestoreModule,
     SharedFeatureModule,
     StoreModule.forFeature('question', reducer),
     EffectsModule.forFeature([QuestionEffects]),
@@ -35,7 +36,6 @@ import { QuestionModalComponent } from './question.modal';
     QuestionModalComponent
   ],
   providers: [
-    Firestore
   ]
 })
 export class QuestionFeatureModule {}

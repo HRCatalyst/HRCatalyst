@@ -5,10 +5,10 @@ import { ClientEffects } from './+state/client.effects';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/client.reducer';
-import { Firestore } from '@angular/fire/firestore';
 import { ClientComponent } from './client.component';
 import { SharedFeatureModule } from '@hrc/shared-feature';
 import { ClientModalComponent } from './client.modal';
+import { FirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
@@ -19,6 +19,7 @@ import { ClientModalComponent } from './client.modal';
         component: ClientComponent
       }
     ]),
+    FirestoreModule,
     SharedFeatureModule,
     StoreModule.forFeature('client', reducer),
     EffectsModule.forFeature([ClientEffects]),
@@ -34,7 +35,6 @@ import { ClientModalComponent } from './client.modal';
     ClientComponent
   ],
   providers: [
-    Firestore
   ]
 })
 export class ClientFeatureModule {}

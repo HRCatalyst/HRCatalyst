@@ -6,7 +6,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from './+state/import.reducer';
 import { ImportEffects } from './+state/import.effects';
-import { Firestore } from '@angular/fire/firestore';
+import { FirestoreModule } from '@angular/fire/firestore';
 import { ImportModalComponent } from './import/import.modal';
 import { FeedbackFeatureModule } from '@hrc/feedback-feature';
 import { RaterFeatureModule } from '@hrc/rater-feature';
@@ -23,6 +23,7 @@ import { ExportModalComponent } from './export/export.modal';
         component: ImportComponent
       }
     ]),
+    FirestoreModule,
     FeedbackFeatureModule,
     RaterFeatureModule,
     ParticipantFeatureModule,
@@ -44,7 +45,6 @@ import { ExportModalComponent } from './export/export.modal';
     ImportModalComponent
   ],
   providers: [
-    Firestore
   ]
 })
 export class ImportFeatureModule {}
