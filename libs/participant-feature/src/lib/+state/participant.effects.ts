@@ -68,10 +68,7 @@ export class ParticipantEffects {
               this.store.dispatch(ParticipantActions.loadCampaignAssociatesSuccess({payload: data}));
               this.loader.isLoading.next(false);
             });
-        return of(x);
-      }),
-      map(() => {
-          return ParticipantActions.loadCampaignParticipantsInprogress();
+        return of(ParticipantActions.loadCampaignParticipantsInprogress());
       }),
       catchError((err, caught) => {
         this.store.dispatch(ParticipantActions.loadCampaignParticipantsFailure(err));
@@ -103,7 +100,7 @@ export class ParticipantEffects {
     ofType(ParticipantActions.updateParticipant),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.update(x.payload)
+      return this.update(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
           return ParticipantActions.updateParticipantSuccess({payload: x.payload});
@@ -112,7 +109,6 @@ export class ParticipantEffects {
           this.loader.isLoading.next(false);
           return ParticipantActions.updateParticipantFailure({error: err});
         });
-      return of(x);
     })
   )});
 

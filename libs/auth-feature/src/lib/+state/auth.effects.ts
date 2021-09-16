@@ -46,24 +46,16 @@ export class AuthEffects {
     ofType(AuthActions.loadSettings),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.get(x.id).pipe(
+      return this.get(x.id).pipe(
         map((data) => {
-          if (data.length > 0) {
-            const item = data.pop()?.doc.data();
-            if (item) {
-              this.store.dispatch(AuthActions.loadSettingsSuccess({ payload: item }));
-            }
-            this.loader.isLoading.next(false);
-            return of(item);
-          }
-          return of(data);
+          this.loader.isLoading.next(false);
+          return AuthActions.loadSettingsSuccess({ payload: data.pop()?.doc.data() });
         }),
         catchError((err, caught) => {
           this.loader.isLoading.next(false);
           this.store.dispatch(AuthActions.loadSettingsFailure({ error: err}));
           return caught;
         }));
-        return of(x);
       })
   ));
 

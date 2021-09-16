@@ -47,7 +47,7 @@ export class CompanyEffects {
     ofType(createCompany),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.create(x.payload)
+      return this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
           return createCompanySuccess({payload: {...x.payload, id: data.id}});
@@ -56,7 +56,6 @@ export class CompanyEffects {
           this.loader.isLoading.next(false);
           return createCompanyFailire({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -65,7 +64,7 @@ export class CompanyEffects {
     ofType(updateCompany),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.update(x.payload)
+      return this.update(x.payload)
         .then(() => {
           this.loader.isLoading.next(false);
           return updateCompanySuccess({payload: x.payload});
@@ -74,7 +73,6 @@ export class CompanyEffects {
           this.loader.isLoading.next(false);
           return updateCompanyFailure({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -83,7 +81,7 @@ export class CompanyEffects {
     ofType(deleteCompany),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.delete(x.payload.id ?? '')
+      return this.delete(x.payload.id ?? '')
         .then(() => {
           this.loader.isLoading.next(false);
           return deleteCompanySuccess({payload: x.payload});
@@ -92,7 +90,6 @@ export class CompanyEffects {
           this.loader.isLoading.next(false);
           return deleteCompanyFailure({error: err});
         });
-      return of(x);
     })
   )});
 

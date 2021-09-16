@@ -31,11 +31,11 @@ export class LoginComponent implements OnDestroy {
       }
       if (state.settings != null && this.settings !== state.settings) {
         this.settings = state.settings;
-        // if (state.auth.settings.role === 1) {
-        this.router.navigate(['/home']);
-        // } else {
-        //   this.router.navigate(['/associate']);
-        // }
+        if (state.settings.role === '1') {
+          this.router.navigate(['/home']);
+        } else {
+          this.router.navigate(['/associate']);
+        }
       }
       });
   }

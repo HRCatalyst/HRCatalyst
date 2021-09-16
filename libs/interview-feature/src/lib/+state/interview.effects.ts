@@ -94,14 +94,10 @@ export class InterviewEffects {
             result.push(ia);
           }
         });
-
         this.store.dispatch(InterviewActions.loadInterviewParticipantsSuccess({payload: result}));
         this.loader.isLoading.next(false);
       });
-        return of(x);
-      }),
-      map(() => {
-          return InterviewActions.loadInterviewParticipantsInprogress();
+        return of(InterviewActions.loadInterviewParticipantsInprogress());
       }),
       catchError((err, caught) => {
         this.store.dispatch(InterviewActions.loadInterviewParticipantsFailure({error: err}));

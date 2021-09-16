@@ -50,8 +50,6 @@ export class AssociateEffects {
           data.forEach(d => {
               result.push({...d.doc.data(), id: d.doc.id});
           });
-
-          this.store.dispatch(loadCompanyAssociatesSuccess({payload: result}));
           this.loader.isLoading.next(false);
           return of(loadCompanyAssociatesSuccess({payload: result}));
         }),
@@ -103,17 +101,16 @@ export class AssociateEffects {
     ofType(createAssociate),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.create(x.payload)
+      return this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
-          this.store.dispatch(loadCompanyAssociates({payload: x.payload.companyId}));
           return createAssociateSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
           return createAssociateFailire({ error: err });
         })
-        return of(x);
+
       })
     )
   });
@@ -123,17 +120,15 @@ export class AssociateEffects {
     ofType(updateAssociate),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-        this.update(x.payload)
+      return this.update(x.payload)
           .then(() => {
             this.loader.isLoading.next(false);
-            this.store.dispatch(loadCompanyAssociates({payload: x.payload.companyId}));
             return updateAssociateSuccess({payload: x.payload});
           })
           .catch((err: any) => {
             this.loader.isLoading.next(false);
             return updateAssociateFailure({error: err });
           })
-          return of(x);
       })
     )
   });
@@ -143,17 +138,15 @@ export class AssociateEffects {
       ofType(deleteAssociate),
       mergeMap(x => {
         this.loader.isLoading.next(true);
-        this.delete(x.payload.id ?? '')
+        return this.delete(x.payload.id ?? '')
           .then(() => {
             this.loader.isLoading.next(false);
-            this.store.dispatch(loadCompanyAssociates({payload: x.payload.companyId}));
             return deleteAssociateSuccess({payload: x.payload});
           })
           .catch((err: any) => {
             this.loader.isLoading.next(false);
             return deleteAssociateFailure({error: err});
           })
-          return of(x);
         })
     )
   });

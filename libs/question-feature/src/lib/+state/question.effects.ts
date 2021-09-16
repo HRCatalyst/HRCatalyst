@@ -41,7 +41,7 @@ export class QuestionEffects {
     ofType(QuestionActions.createQuestion),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.create(x.payload)
+      return this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
           return QuestionActions.createQuestionSuccess({payload: {...x.payload, id: data.id}});
@@ -50,7 +50,6 @@ export class QuestionEffects {
             this.loader.isLoading.next(false);
             return QuestionActions.createQuestionFailire({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -59,7 +58,7 @@ export class QuestionEffects {
     ofType(QuestionActions.updateQuestion),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.update(x.payload)
+      return this.update(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
           return QuestionActions.updateQuestionSuccess({payload: data});
@@ -68,7 +67,6 @@ export class QuestionEffects {
           this.loader.isLoading.next(false);
           return QuestionActions.updateQuestionFailure({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -77,7 +75,7 @@ export class QuestionEffects {
     ofType(QuestionActions.deleteQuestion),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.delete(x.payload.id ?? '')
+      return this.delete(x.payload.id ?? '')
         .then(() => {
           this.loader.isLoading.next(false);
           return QuestionActions.deleteQuestionSuccess({payload: x.payload.id});
@@ -85,9 +83,7 @@ export class QuestionEffects {
         .catch((err: any) => {
           this.loader.isLoading.next(false);
           return QuestionActions.deleteQuestionFailure({error: err});
-          return of(x);
         });
-      return of(x);
     })
   )});
 

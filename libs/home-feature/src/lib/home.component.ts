@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -16,11 +16,10 @@ import { ImportModalComponent } from '@hrc/import-feature';
 export class HomeComponent implements OnDestroy {
   welcomeUser = '';
   role = 0;
-//  admin_interview = false;
 
   rootSubscription$: Subscription;
   constructor(private dialog: MatDialog, private router: Router, private store: Store<CompanyState>) {
-    const nav = this.router.getCurrentNavigation();
+ //   const nav = this.router.getCurrentNavigation();
 
     this.rootSubscription$ = this.store.pipe(select((state: any) => state)).subscribe((state) => {
         if (state.auth.settings != null) {

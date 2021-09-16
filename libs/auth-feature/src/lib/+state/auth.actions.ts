@@ -10,7 +10,7 @@ export const loadAuths = createAction(
 
 export const loadAuthsSuccess = createAction(
   '[Auth/API] Load Auths Success',
-  props<{ payload: User[] }>()
+  props<{ payload?: User[] }>()
 );
 
 export const loadAuthsFailure = createAction(
@@ -77,7 +77,7 @@ export const loginRequired = createAction(
 
 export const loadSettingsSuccess = createAction(
   '[Auth/API] Load Settings Success',
-  props<{ payload: User }>()
+  props<{ payload?: User }>()
 );
 
 export const loadSettingsFailure = createAction(

@@ -20,49 +20,21 @@ export class ImportEffects {
   loadDependencies$ = createEffect(() => {
     return this.actions$.pipe(
     ofType(loadImport),
-    mergeMap(x => {
+    mergeMap(()=> {
       this.loader.isLoading.next(true);
-        zip(this.getParticipants(),
+      zip(this.getParticipants(),
           this.getRaters(),
           this.getAssociates(),
           this.getCampaigns()).subscribe(([participants, raters, associates, campaigns]) => {
-            const p = participants.map(e => {
-              return {
-                id: e.doc.id,
-                ...e.doc.data()
-                } as Participant;
-            });
-
-            const r = raters.map(e => {
-              return {
-                id: e.doc.id,
-                ...e.doc.data()
-                } as Rater;
-            });
-
-            const a = associates.map(e => {
-              return {
-                //id: e.payload.doc.id,
-                ...e.doc.data()
-              } as Associate;
-            });
-
-            const c = campaigns.map(e => {
-              return {
-                id: e.doc.id,
-                ...e.doc.data()
-                } as Campaign;
-            });
-
+            const p = participants.map(e => { return { id: e.doc.id, ...e.doc.data() } as Participant; });
+            const r = raters.map(e => { return { id: e.doc.id, ...e.doc.data() } as Rater });
+            const a = associates.map(e => { return { id: e.doc.id, ...e.doc.data() } as Associate; });
+            const c = campaigns.map(e => { return { id: e.doc.id, ...e.doc.data() } as Campaign; });
             const results = new ImportSuccessResult(c, p, r, a);
-
-            this.store.dispatch(loadImportSuccess({payload: results}));
             this.loader.isLoading.next(false);
+            return loadImportSuccess({payload: results});
           });
-        return of(x);
-      }),
-      map(() => {
-          return loadImportInprogress();
+          return of(loadImportInprogress());
       }),
       catchError((err, caught) => {
         this.store.dispatch(loadImportFailure({error: err}));

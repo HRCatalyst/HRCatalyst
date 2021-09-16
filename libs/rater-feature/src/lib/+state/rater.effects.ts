@@ -70,10 +70,7 @@ export class RaterEffects {
             this.store.dispatch(RaterActions.loadParticipantAssociatesSuccess({payload: data}));
             this.loader.isLoading.next(false);
           });
-        return of(x);
-      }),
-      map(() => {
-          return RaterActions.loadParticipantRatersInprogress();
+        return of(RaterActions.loadParticipantRatersInprogress());
       }),
       catchError((err, caught) => {
         this.store.dispatch(RaterActions.loadParticipantRatersFailure({error: err}));
@@ -88,7 +85,7 @@ export class RaterEffects {
     ofType(RaterActions.createRater),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.create(x.payload)
+      return this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
           return RaterActions.createRaterSuccess({payload: {...x.payload, id: data.id}});
@@ -97,7 +94,6 @@ export class RaterEffects {
           this.loader.isLoading.next(false);
           return RaterActions.createRaterFailire({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -106,7 +102,7 @@ export class RaterEffects {
     ofType(RaterActions.updateRater),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.update(x.payload)
+      return this.update(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
           return RaterActions.updateRaterSuccess({payload: data});
@@ -115,7 +111,6 @@ export class RaterEffects {
           this.loader.isLoading.next(false);
           return RaterActions.updateRaterFailure({error: err});
         });
-        return of(x);
       })
   )});
 
@@ -124,7 +119,7 @@ export class RaterEffects {
     ofType(RaterActions.deleteRater),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.delete(x.payload.id ?? '')
+      return this.delete(x.payload.id ?? '')
         .then(() => {
           this.loader.isLoading.next(false);
           return RaterActions.deleteRaterSuccess({payload: x.payload.id});
@@ -133,7 +128,6 @@ export class RaterEffects {
           this.loader.isLoading.next(false);
           return RaterActions.deleteRaterFailure({error: err});
         });
-        return of(x);
       })
   )});
 
@@ -146,7 +140,7 @@ export class RaterEffects {
         map(feedback => {
           const result = new Array<unknown>();
           feedback.forEach(f => {
-              return result.push({...f.doc.data(), id: f.doc.id});
+            return result.push({...f.doc.data(), id: f.doc.id});
           });
           this.loader.isLoading.next(false);
           return RaterActions.loadRaterFeedbackSuccess({payload: result});

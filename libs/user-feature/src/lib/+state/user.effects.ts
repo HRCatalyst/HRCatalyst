@@ -46,7 +46,7 @@ export class UserEffects {
       ofType(UserActions.createUser),
       mergeMap(x => {
         this.loader.isLoading.next(true);
-        this.create(x.payload)
+        return this.create(x.payload)
           .then(data => {
             return UserActions.createUserSuccess({payload: {...x.payload, id: data.id}});
           })
@@ -54,7 +54,6 @@ export class UserEffects {
             this.loader.isLoading.next(false);
             return UserActions.createUserFailure({error: err});
           });
-          return of(x);
         })
     )});
 
@@ -63,7 +62,7 @@ export class UserEffects {
       ofType(UserActions.updateUser),
       mergeMap(x => {
         this.loader.isLoading.next(true);
-        this.update(x.payload)
+        return this.update(x.payload)
           .then(data => {
             this.loader.isLoading.next(false);
             return UserActions.updateUserSuccess({payload: data});
@@ -72,7 +71,6 @@ export class UserEffects {
             this.loader.isLoading.next(false);
             return UserActions.updateUserFailure({error: err});
           });
-          return of(x);
         })
     )});
 

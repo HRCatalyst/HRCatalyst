@@ -50,17 +50,15 @@ export class ClientEffects {
     ofType(createClient),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.create(x.payload)
+      return this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
-          this.store.dispatch(loadCompanyClients({ids: x.payload.companyId}));
           return createClientSuccess({payload: {...x.payload, id: data.id}});
         })
         .catch((err: any) => {
           this.loader.isLoading.next(false);
-          return of(createClientFailire({error: err}));
+          return createClientFailire({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -69,7 +67,7 @@ export class ClientEffects {
     ofType(updateClient),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.update(x.payload)
+      return this.update(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
           this.store.dispatch(loadCompanyClients({ids: x.payload.companyId}));
@@ -79,7 +77,6 @@ export class ClientEffects {
             this.loader.isLoading.next(false);
             return updateClientFailure({error: err});
         });
-        return of(x);
       })
   )});
 
@@ -88,7 +85,7 @@ export class ClientEffects {
       ofType(deleteClient),
       mergeMap(x => {
         this.loader.isLoading.next(true);
-        this.delete(x.payload.id ?? '')
+        return this.delete(x.payload.id ?? '')
           .then(() => {
             this.loader.isLoading.next(false);
             this.store.dispatch(loadCompanyClients({ids: x.payload.companyId}));
@@ -98,7 +95,6 @@ export class ClientEffects {
             this.loader.isLoading.next(false);
             return deleteClientFailure({error: err});
           });
-        return of(x);
       })
   )});
 

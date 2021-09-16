@@ -71,7 +71,7 @@ export class FeedbackEffects {
     ofType(FeedbackActions.createFeedback),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.create(x.payload)
+      return this.create(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
           return FeedbackActions.createFeedbackSuccess({payload: {...x.payload, id: data.id}});
@@ -80,7 +80,6 @@ export class FeedbackEffects {
           this.loader.isLoading.next(false);
           return FeedbackActions.createFeedbackFailire({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -89,7 +88,7 @@ export class FeedbackEffects {
     ofType(FeedbackActions.updateFeedback),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.update(x.payload)
+      return this.update(x.payload)
         .then(data => {
           this.loader.isLoading.next(false);
           return FeedbackActions.updateFeedbackSuccess({payload: x.payload});
@@ -98,7 +97,6 @@ export class FeedbackEffects {
           this.loader.isLoading.next(false);
           return FeedbackActions.updateFeedbackFailure({error: err});
         });
-      return of(x);
     })
   )});
 
@@ -107,7 +105,7 @@ export class FeedbackEffects {
     ofType(FeedbackActions.deleteFeedback),
     mergeMap(x => {
       this.loader.isLoading.next(true);
-      this.delete(x.payload.id ?? '')
+      return this.delete(x.payload.id ?? '')
         .then(() => {
           this.loader.isLoading.next(false);
           return FeedbackActions.deleteFeedbackSuccess({payload: x.payload});
@@ -116,7 +114,6 @@ export class FeedbackEffects {
           this.loader.isLoading.next(false);
           return FeedbackActions.deleteFeedbackFailure({error: err});
         });
-      return of(x);
     })
   )});
 
