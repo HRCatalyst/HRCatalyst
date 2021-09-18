@@ -1,39 +1,39 @@
 import { createReducer, on } from '@ngrx/store';
 import * as QuestionActions from './question.actions';
-import { adapter, initialState } from './question.entity';
+import { questionEntity } from '@hrc/shared-feature';
 
 
 export const reducer = createReducer(
-  initialState,
+  questionEntity.initialState,
   on(QuestionActions.addQuestion,
-    (state, action) => adapter.addOne(action.question, state)
+    (state, action) => questionEntity.adapter.addOne(action.question, state)
   ),
   on(QuestionActions.upsertQuestion,
-    (state, action) => adapter.upsertOne(action.question, state)
+    (state, action) => questionEntity.adapter.upsertOne(action.question, state)
   ),
   on(QuestionActions.addQuestions,
-    (state, action) => adapter.addMany(action.questions, state)
+    (state, action) => questionEntity.adapter.addMany(action.questions, state)
   ),
   on(QuestionActions.upsertQuestions,
-    (state, action) => adapter.upsertMany(action.questions, state)
+    (state, action) => questionEntity.adapter.upsertMany(action.questions, state)
   ),
   on(QuestionActions.updateQuestionEntity,
-    (state, action) => adapter.updateOne(action.question, state)
+    (state, action) => questionEntity.adapter.updateOne(action.question, state)
   ),
   on(QuestionActions.updateQuestions,
-    (state, action) => adapter.updateMany(action.questions, state)
+    (state, action) => questionEntity.adapter.updateMany(action.questions, state)
   ),
   on(QuestionActions.deleteQuestionEntity,
-    (state, action) => adapter.removeOne(action.id, state)
+    (state, action) => questionEntity.adapter.removeOne(action.id, state)
   ),
   on(QuestionActions.deleteQuestions,
-    (state, action) => adapter.removeMany(action.ids, state)
+    (state, action) => questionEntity.adapter.removeMany(action.ids, state)
   ),
   on(QuestionActions.loadQuestions,
-    (state, action) => adapter.setAll(action.questions, state)
+    (state, action) => questionEntity.adapter.setAll(action.questions, state)
   ),
   on(QuestionActions.clearQuestions,
-    state => adapter.removeAll(state)
+    state => questionEntity.adapter.removeAll(state)
   ),
   on(QuestionActions.loadQuestion,
     state => { return state; }

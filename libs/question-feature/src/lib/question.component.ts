@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { QuestionModalComponent } from './question.modal';
-import { ConfirmationComponent, Question } from '@hrc/shared-feature';
-import { QuestionState } from './+state/question.entity';
+import { ConfirmationComponent, Question, questionEntity } from '@hrc/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
 import { createQuestion, deleteQuestion, loadAllQuestions } from './+state/question.actions';
 
@@ -26,7 +25,7 @@ export class QuestionComponent implements OnInit {
   welcomeUser = '';
   hasQuestion = false;
 
-  constructor(private dialog: MatDialog, private store: Store<QuestionState>, private router: Router) {
+  constructor(private dialog: MatDialog, private store: Store<questionEntity.QuestionState>, private router: Router) {
     // this.questionState$ = this.store.select(selectQuestionState);
     // this.questionSubscription$ = this.questionState$.subscribe((state) => {
     //   if (state.length > 0) {

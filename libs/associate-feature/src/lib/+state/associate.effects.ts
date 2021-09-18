@@ -3,10 +3,9 @@ import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, debounceTime, distinctUntilChanged, map, mergeMap, switchMap,  } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
-import { Associate } from '@hrc/shared-feature';
+import { Associate, associateEntity } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 import { LoaderService } from '@hrc/shared-feature';
-import { AssociateState } from './associate.entity';
 import { createAssociate, createAssociateFailire, createAssociateSuccess, deleteAssociate, deleteAssociateFailure, deleteAssociateSuccess, loadAssociate, loadAssociateFailure, loadAssociateSuccess, loadCompanyAssociates, loadCompanyAssociatesFailure, loadCompanyAssociatesInprogress, loadCompanyAssociatesSuccess, searchAssociates, searchAssociatesFailure, searchAssociatesSuccess, updateAssociate, updateAssociateFailure, updateAssociateSuccess } from './associate.actions';
 
 @Injectable()
@@ -15,7 +14,7 @@ export class AssociateEffects {
   private onDestroy$: Subject<void> = new Subject<void>();
 
   constructor(private actions$: Actions,
-              private store: Store<AssociateState>,
+              private store: Store<associateEntity.AssociateState>,
               private firestore: Firestore,
               private loader: LoaderService) {
       this.campaignYear = '2021';

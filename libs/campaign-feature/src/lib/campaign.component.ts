@@ -3,15 +3,15 @@ import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { CampaignModalComponent } from './campaign.modal';
-import { Campaign, Client, Company, ConfirmationComponent } from '@hrc/shared-feature';
+import { Campaign, Client, Company, ConfirmationComponent, campaignEntity } from '@hrc/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
 import { createCampaign, deleteCampaign, loadClientCampaigns, selectCampaign, updateCampaign } from './+state/campaign.actions';
 import { Dictionary } from '@ngrx/entity';
-import { selectCampaignState } from './+state/campaign.selectors';
+// import { selectCampaignState } from './+state/campaign.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { selectCompany } from '@hrc/company-feature';
-import { ClientState } from '@hrc/client-feature';
-import { CampaignState } from './+state/campaign.entity';
+// import { ClientState } from '@hrc/client-feature';
+// import { CampaignState } from './+state/campaign.entity';
 
 @Component({
   selector: 'hrc-campaign',
@@ -34,21 +34,21 @@ export class CampaignComponent implements OnDestroy {
   entities?: Dictionary<Campaign>;
   campaigns?: Campaign[];
 
-  constructor(private dialog: MatDialog, private campaignStore: Store<CampaignState>,
-    private clientStore: Store<ClientState>, private router: Router) {
+  constructor(private dialog: MatDialog, private store: Store<campaignEntity.CampaignState>,
+    private router: Router) {
       const xtra = this.router.getCurrentNavigation()?.extras.state;
 
       if (xtra != null) {
         this.selectedCompany = xtra.company;
         this.selectedClient = xtra.client;
-        this.clientStore.dispatch(loadClientCampaigns({payload: this.selectedClient?.id ?? ''}));
-      }
+      //   this.clientStore.dispatch(loadClientCampaigns({payload: this.selectedClient?.id ?? ''}));
+       }
 
-      this.campaignStore.select(selectCampaignState)
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((state) => {
-        this.entities = state.entities;
-      });
+      // this.campaignStore.select(selectCampaignState)
+      // .pipe(takeUntil(this.onDestroy$))
+      // .subscribe((state) => {
+      //   this.entities = state.entities;
+      // });
   }
 
 
@@ -71,9 +71,9 @@ export class CampaignComponent implements OnDestroy {
       console.log('The campaign dialog was closed');
       if (result instanceof Campaign) {
         if (result.id !== undefined) {
-          this.campaignStore.dispatch(updateCampaign({payload: result}));
+          this.store.dispatch(updateCampaign({payload: result}));
         } else {
-          this.campaignStore.dispatch(createCampaign({payload: result}));
+          this.store.dispatch(createCampaign({payload: result}));
         }
       }
     });
@@ -89,7 +89,7 @@ export class CampaignComponent implements OnDestroy {
       console.log('The confirmation dialog was closed');
       if (result === true) {
         const selectedRows = this.gridApi.getSelectedRows();
-        this.campaignStore.dispatch(deleteCampaign({payload: selectedRows[0]}));
+        this.store.dispatch(deleteCampaign({payload: selectedRows[0]}));
       }
     });
   }
@@ -133,7 +133,7 @@ export class CampaignComponent implements OnDestroy {
   onRowDoubleClicked(row: any) {
     const params = selectCampaign({payload: row.data});
 
-    this.campaignStore.dispatch(params);
+    this.store.dispatch(params);
 
     this.router.navigate(['/participant'], { state: { company: this.selectedCompany, client: this.selectedClient, campaign: row.data } });
   }

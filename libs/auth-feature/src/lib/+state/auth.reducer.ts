@@ -1,39 +1,39 @@
 import { createReducer, on } from '@ngrx/store';
 import * as AuthActions from './auth.actions';
-import { adapter, initialState } from './auth.entity';
+import { authEntity } from '@hrc/shared-feature';
 
 
 export const reducer = createReducer(
-  initialState,
+  authEntity.initialState,
   on(AuthActions.addAuth,
-    (state, action) => adapter.addOne(action.auth, state)
+    (state, action) => authEntity.adapter.addOne(action.auth, state)
   ),
   on(AuthActions.upsertAuth,
-    (state, action) => adapter.upsertOne(action.auth, state)
+    (state, action) => authEntity.adapter.upsertOne(action.auth, state)
   ),
   on(AuthActions.addAuths,
-    (state, action) => adapter.addMany(action.auths, state)
+    (state, action) => authEntity.adapter.addMany(action.auths, state)
   ),
   on(AuthActions.upsertAuths,
-    (state, action) => adapter.upsertMany(action.auths, state)
+    (state, action) => authEntity.adapter.upsertMany(action.auths, state)
   ),
   on(AuthActions.updateAuth,
-    (state, action) => adapter.updateOne(action.auth, state)
+    (state, action) => authEntity.adapter.updateOne(action.auth, state)
   ),
   on(AuthActions.updateAuths,
-    (state, action) => adapter.updateMany(action.auths, state)
+    (state, action) => authEntity.adapter.updateMany(action.auths, state)
   ),
   on(AuthActions.deleteAuth,
-    (state, action) => adapter.removeOne(action.id, state)
+    (state, action) => authEntity.adapter.removeOne(action.id, state)
   ),
   on(AuthActions.deleteAuths,
-    (state, action) => adapter.removeMany(action.ids, state)
+    (state, action) => authEntity.adapter.removeMany(action.ids, state)
   ),
   on(AuthActions.loadAuths,
-    (state, action) => adapter.setAll(action.auths, state)
+    (state, action) => authEntity.adapter.setAll(action.auths, state)
   ),
   on(AuthActions.clearAuths,
-    state => adapter.removeAll(state)
+    state => authEntity.adapter.removeAll(state)
   ),
   on(AuthActions.loadSettings, state => {
     return state;

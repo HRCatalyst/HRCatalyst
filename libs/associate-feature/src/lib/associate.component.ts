@@ -4,12 +4,10 @@ import { select, Store } from '@ngrx/store';
 import { AssociateModalComponent } from './associate.modal';
 import { Router } from '@angular/router';
 import { AssociateImportModalComponent } from './associate.import.modal';
-import { Associate, Company, ConfirmationComponent } from '@hrc/shared-feature';
+import { Associate, Company, ConfirmationComponent, associateEntity, selectAssociateState } from '@hrc/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
-import { AssociateState } from './+state/associate.entity';
 import { createAssociate, deleteAssociate, loadCompanyAssociates, selectAssociate, updateAssociate } from './+state/associate.actions';
 import { takeUntil } from 'rxjs/operators';
-import { selectAssociateState } from './+state/associate.selectors';
 import { Dictionary } from '@ngrx/entity';
 
 @Component({
@@ -36,7 +34,7 @@ export class AssociateComponent implements OnDestroy {
   associates?: Associate[];
   entities?: Dictionary<Associate>;
 
-  constructor(private dialog: MatDialog, private associateStore: Store<AssociateState>, private router: Router) {
+  constructor(private dialog: MatDialog, private associateStore: Store<associateEntity.AssociateState>, private router: Router) {
       const nav = this.router.getCurrentNavigation();
 
       if (nav != null) {

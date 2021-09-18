@@ -3,10 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 //import readXlsxFile from 'read-excel-file';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { Associate, Company, FormBase, IAssociate, Rater } from '@hrc/shared-feature';
+import { Associate, Company, FormBase, IAssociate, Rater, raterEntity } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { RaterState } from './+state/rater.entity';
-import { CompanyState } from '@hrc/company-feature';
 import { createRater } from './+state/rater.actions';
 
 
@@ -31,7 +29,7 @@ export class RaterImportComponent extends FormBase implements OnDestroy {
   });
 
   constructor(public dialogRef: MatDialogRef<RaterImportComponent>, @Inject(MAT_DIALOG_DATA) public data: string,
-    private raterStore: Store<RaterState>, private companyStore: Store<CompanyState>) {
+    private store: Store<raterEntity.RaterState>) {
     super();
 
     // this.associateState$ = this.associateStore.select(associateEntity.selectAll);
@@ -58,7 +56,7 @@ export class RaterImportComponent extends FormBase implements OnDestroy {
 
   onSave() {
     this.raters?.map(p => {
-     this.raterStore.dispatch(createRater({payload: p}));
+     this.store.dispatch(createRater({payload: p}));
     });
 
     this.dialogRef.close('import');

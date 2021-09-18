@@ -1,6 +1,6 @@
 
 import { createFeatureSelector } from "@ngrx/store";
-import { participantsFeatureKey, ParticipantState } from "./participant.entity";
+import { participantsFeatureKey, ParticipantState } from "./../entities/participant.entity";
 
 export const selectParticipantState = createFeatureSelector<ParticipantState>(
   participantsFeatureKey

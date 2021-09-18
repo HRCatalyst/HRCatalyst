@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User } from '@hrc/shared-feature';
+import { selectUserState, User, userEntity } from '@hrc/shared-feature';
 import { Dictionary } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { loadAllUsers } from './+state/user.actions';
-import { UserState } from './+state/user.entity';
-import { selectUserState } from './+state/user.selectors';
 
 @Component({
   selector: 'hrc-user',
@@ -26,7 +24,7 @@ export class UserComponent implements OnDestroy, OnInit {
   users?: User[];
   private onDestroy$: Subject<void> = new Subject<void>();
 
-  constructor(private store: Store<UserState>) {
+  constructor(private store: Store<userEntity.UserState>) {
     this.store.select(selectUserState)
     .pipe(takeUntil(this.onDestroy$))
     .subscribe((state) => {

@@ -1,39 +1,39 @@
-import { Associate, AssociateSearchResult } from '@hrc/shared-feature';
+import { Associate, AssociateSearchResult, associateEntity } from '@hrc/shared-feature';
 import { createReducer, on } from '@ngrx/store';
 import * as AssociateActions from './associate.actions';
-import { adapter, initialState } from './associate.entity';
+
 
 export const reducer = createReducer(
-  initialState,
+  associateEntity.initialState,
   on(AssociateActions.addAssociate,
-    (state, action) => adapter.addOne(action.associate, state)
+    (state, action) => associateEntity.adapter.addOne(action.associate, state)
   ),
   on(AssociateActions.upsertAssociate,
-    (state, action) => adapter.upsertOne(action.associate, state)
+    (state, action) => associateEntity.adapter.upsertOne(action.associate, state)
   ),
   on(AssociateActions.addAssociates,
-    (state, action) => adapter.addMany(action.associates, state)
+    (state, action) => associateEntity.adapter.addMany(action.associates, state)
   ),
   on(AssociateActions.upsertAssociates,
-    (state, action) => adapter.upsertMany(action.associates, state)
+    (state, action) => associateEntity.adapter.upsertMany(action.associates, state)
   ),
   on(AssociateActions.updateAssociateEntity,
-    (state, action) => adapter.updateOne(action.associate, state)
+    (state, action) => associateEntity.adapter.updateOne(action.associate, state)
   ),
   on(AssociateActions.updateAssociates,
-    (state, action) => adapter.updateMany(action.associates, state)
+    (state, action) => associateEntity.adapter.updateMany(action.associates, state)
   ),
   on(AssociateActions.deleteAssociateEntity,
-    (state, action) => adapter.removeOne(action.id, state)
+    (state, action) => associateEntity.adapter.removeOne(action.id, state)
   ),
   on(AssociateActions.deleteAssociates,
-    (state, action) => adapter.removeMany(action.ids, state)
+    (state, action) => associateEntity.adapter.removeMany(action.ids, state)
   ),
   on(AssociateActions.loadAssociates,
-    (state, action) => adapter.setAll(action.associates, state)
+    (state, action) => associateEntity.adapter.setAll(action.associates, state)
   ),
   on(AssociateActions.clearAssociates,
-    state => adapter.removeAll(state)
+    state => associateEntity.adapter.removeAll(state)
   ),
   on(AssociateActions.loadAssociate, state => {
     return {...state, selectedAssociate: undefined};
@@ -56,8 +56,8 @@ export const reducer = createReducer(
           id: e.id, ...e
       } as Associate;
     });
-    state = adapter.removeAll(state);
-    return adapter.addMany(associates, state);
+    state = associateEntity.adapter.removeAll(state);
+    return associateEntity.adapter.addMany(associates, state);
   }),
   on(AssociateActions.loadCompanyAssociatesFailure, (state, error) => {
     console.log(error);

@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 import * as QuestionActions from './question.actions';
-import { LoaderService, Question } from '@hrc/shared-feature';
+import { LoaderService, Question, questionEntity } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc } from '@angular/fire/firestore';
-import { QuestionState } from './question.entity';
 
 
 @Injectable()
 export class QuestionEffects {
 
   constructor(private actions$: Actions,
-    private store: Store<QuestionState>,
+    private store: Store<questionEntity.QuestionState>,
     private firestore: Firestore,
     private loader: LoaderService) {}
 

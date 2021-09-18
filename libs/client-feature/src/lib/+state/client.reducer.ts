@@ -1,40 +1,39 @@
-import { Client } from '@hrc/shared-feature';
+import { Client, clientEntity } from '@hrc/shared-feature';
 import { createReducer, on } from '@ngrx/store';
 import * as ClientActions from './client.actions';
-import { adapter, initialState } from './client.entity';
 
 
 export const reducer = createReducer(
-  initialState,
+  clientEntity.initialState,
   on(ClientActions.addClient,
-    (state, action) => adapter.addOne(action.client, state)
+    (state, action) => clientEntity.adapter.addOne(action.client, state)
   ),
   on(ClientActions.upsertClient,
-    (state, action) => adapter.upsertOne(action.client, state)
+    (state, action) => clientEntity.adapter.upsertOne(action.client, state)
   ),
   on(ClientActions.addClients,
-    (state, action) => adapter.addMany(action.clients, state)
+    (state, action) => clientEntity.adapter.addMany(action.clients, state)
   ),
   on(ClientActions.upsertClients,
-    (state, action) => adapter.upsertMany(action.clients, state)
+    (state, action) => clientEntity.adapter.upsertMany(action.clients, state)
   ),
   on(ClientActions.updateClientEntity,
-    (state, action) => adapter.updateOne(action.client, state)
+    (state, action) => clientEntity.adapter.updateOne(action.client, state)
   ),
   on(ClientActions.updateClients,
-    (state, action) => adapter.updateMany(action.clients, state)
+    (state, action) => clientEntity.adapter.updateMany(action.clients, state)
   ),
   on(ClientActions.deleteClientEntity,
-    (state, action) => adapter.removeOne(action.id, state)
+    (state, action) => clientEntity.adapter.removeOne(action.id, state)
   ),
   on(ClientActions.deleteClients,
-    (state, action) => adapter.removeMany(action.ids, state)
+    (state, action) => clientEntity.adapter.removeMany(action.ids, state)
   ),
   on(ClientActions.loadClients,
-    (state, action) => adapter.setAll(action.clients, state)
+    (state, action) => clientEntity.adapter.setAll(action.clients, state)
   ),
   on(ClientActions.clearClients,
-    state => adapter.removeAll(state)
+    state => clientEntity.adapter.removeAll(state)
   ),
   on(ClientActions.loadClient,
     state => { return state; }
@@ -51,8 +50,8 @@ export const reducer = createReducer(
           id: e.id, ...e
       } as Client;
     });
-    state = adapter.removeAll(state);
-    return adapter.addMany(clients, state);
+    state = clientEntity.adapter.removeAll(state);
+    return clientEntity.adapter.addMany(clients, state);
   }),
   on(ClientActions.loadCompanyClientsFailure,
     state => { return state; }

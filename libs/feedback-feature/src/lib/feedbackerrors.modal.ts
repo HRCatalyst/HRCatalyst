@@ -1,9 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { enumFeedbackType, Feedback, FEEDBACK_STATUS, FEEDBACK_TYPE, FormBase, Question, RELATIONSHIP_DATA } from '@hrc/shared-feature';
+import { enumFeedbackType, Feedback, FEEDBACK_STATUS, FEEDBACK_TYPE, FormBase, Question, RELATIONSHIP_DATA,
+  feedbackEntity } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { QuestionState } from '@hrc/question-feature';
+import {  } from '@hrc/shared-feature';
 
 @Component({
   selector: 'hrc-feedbackerrors.modal',
@@ -30,7 +31,7 @@ export class FeedbackErrorsModalComponent extends FormBase {
   questions?: Question[];
 
   constructor(public dialogRef: MatDialogRef<FeedbackErrorsModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Feedback, private questionStore: Store<QuestionState>) {
+    @Inject(MAT_DIALOG_DATA) public data: Feedback, private store: Store<feedbackEntity.FeedbackState>) {
       super();
 
       // this.questionState$ = this.questionStore.select(selectQuestionState);

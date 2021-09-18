@@ -3,7 +3,7 @@ import { Associate, FormBase } from '@hrc/shared-feature';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store} from '@ngrx/store';
 import { createAssociate } from './+state/associate.actions';
-import { AssociateState } from './+state/associate.entity';
+import { associateEntity } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 //import readXlsxFile from 'read-excel-file'; //'read-excel-file';
 
@@ -22,7 +22,7 @@ export class AssociateImportModalComponent extends FormBase {
   });
 
   constructor(public dialogRef: MatDialogRef<AssociateImportModalComponent>, @Inject(MAT_DIALOG_DATA) public data: string,
-    private associateStore: Store<AssociateState>) {
+    private store: Store<associateEntity.AssociateState>) {
     super();
 
   }
@@ -30,7 +30,7 @@ export class AssociateImportModalComponent extends FormBase {
   onSave() {
     this.associates?.forEach(f => {
 
-      this.associateStore?.dispatch(createAssociate({payload: f}));
+      this.store?.dispatch(createAssociate({payload: f}));
     });
 
     this.dialogRef.close('import');

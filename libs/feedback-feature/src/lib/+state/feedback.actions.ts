@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Associate, Feedback, IFeedback, SelectParticipantParams } from '@hrc/shared-feature';
+import { Associate, Feedback, IFeedback, SelectParticipantParams, SelectRaterParams } from '@hrc/shared-feature';
 
 export const loadFeedbacks = createAction(
   '[Feedback/API] Load Feedbacks',
@@ -172,3 +172,23 @@ export const changeColleagueToPeerSuccess = createAction(
 export const changeColleagueToPeerFailure = createAction(
   '[Feedback/API] CHANGE_COLLEAGUE_TO_PEER_FAILURE'
 );
+
+export const loadRaterFeedback = createAction(
+  '[Feedback/API] LOAD_RATER_FEEDBACK',
+  props<{ payload: SelectRaterParams}>()
+);
+
+export const loadRaterFeedbackInprogress = createAction(
+  '[Feedback/API] LOAD_RATER_FEEDBACK_INPROGRESS',
+);
+
+export const loadRaterFeedbackSuccess = createAction(
+  '[Feedback/API] LOAD_RATER_FEEDBACK_SUCCESS',
+  props<{ payload:  unknown}>()
+);
+
+export const loadRaterFeedbackFailure = createAction(
+  '[Feedback/API] LOAD_RATER_FEEDBACK_FAILURE',
+  props<{ error:  unknown}>()
+);
+

@@ -6,15 +6,14 @@ import * as ParticipantActions from './participant.actions';
 import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
 import { Associate, Feedback, LoaderService, Participant } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
-import { ParticipantState } from './participant.entity';
-
+import { participantEntity } from '@hrc/shared-feature';
 
 @Injectable()
 export class ParticipantEffects {
   campaignYear: string = Date.now.toString();
 
   constructor(private actions$: Actions, private firestore: Firestore,
-    private store: Store<ParticipantState>, private loader: LoaderService) {
+    private store: Store<participantEntity.ParticipantState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }
 

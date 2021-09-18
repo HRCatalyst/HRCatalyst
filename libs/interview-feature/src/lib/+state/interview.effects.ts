@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
 import * as InterviewActions from './interview.actions';
 import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
-import { Associate, Campaign, enumFeedbackType, Feedback, IAssociate, IFeedback, Interview, InterviewParticipant, LoaderService, Participant, Rater } from '@hrc/shared-feature';
+import { Associate, Campaign, enumFeedbackType, Feedback, Interview, InterviewParticipant, LoaderService, Participant, Rater,
+  interviewEntity } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
-import { createFeedback } from '@hrc/feedback-feature';
+// import { createFeedback } from '@hrc/feedback-feature';
 
 
 @Injectable()
 export class InterviewEffects {
   campaignYear: string = Date.now.toString();
 
-  constructor(private actions$: Actions, private firestore: Firestore,
-      private store: Store<IAssociate>, private feedbackStore: Store<IFeedback>, private loader: LoaderService) {
+  constructor(private actions$: Actions, private firestore: Firestore, private store: Store<interviewEntity.InterviewState>,
+      private loader: LoaderService) {
         this.campaignYear = '2021';
   }
 
@@ -249,6 +250,6 @@ export class InterviewEffects {
       feedback.question = interview.question;
       feedback.answer = interview.answer;
 
-      this.feedbackStore.dispatch(createFeedback({payload: feedback}));
+//      this.store.dispatch(createFeedback({payload: feedback}));
   }
 }

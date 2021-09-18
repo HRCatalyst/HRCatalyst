@@ -1,47 +1,46 @@
-import { Feedback } from '@hrc/shared-feature';
+import { Feedback, feedbackEntity } from '@hrc/shared-feature';
 import { createReducer, on } from '@ngrx/store';
 import * as FeedbackActions from './feedback.actions';
-import { adapter, initialState } from './feedback.entity';
 
 
 export const reducer = createReducer(
-  initialState,
+  feedbackEntity.initialState,
   on(FeedbackActions.addFeedback,
-    (state, action) => adapter.addOne(action.feedback, state)
+    (state, action) => feedbackEntity.adapter.addOne(action.feedback, state)
   ),
   on(FeedbackActions.upsertFeedback,
-    (state, action) => adapter.upsertOne(action.feedback, state)
+    (state, action) => feedbackEntity.adapter.upsertOne(action.feedback, state)
   ),
   on(FeedbackActions.addFeedbacks,
-    (state, action) => adapter.addMany(action.feedbacks, state)
+    (state, action) => feedbackEntity.adapter.addMany(action.feedbacks, state)
   ),
   on(FeedbackActions.upsertFeedbacks,
-    (state, action) => adapter.upsertMany(action.feedbacks, state)
+    (state, action) => feedbackEntity.adapter.upsertMany(action.feedbacks, state)
   ),
   on(FeedbackActions.updateFeedbackEntity,
-    (state, action) => adapter.updateOne(action.feedback, state)
+    (state, action) => feedbackEntity.adapter.updateOne(action.feedback, state)
   ),
   on(FeedbackActions.updateFeedbacks,
-    (state, action) => adapter.updateMany(action.feedbacks, state)
+    (state, action) => feedbackEntity.adapter.updateMany(action.feedbacks, state)
   ),
   on(FeedbackActions.deleteFeedbackEntity,
-    (state, action) => adapter.removeOne(action.id, state)
+    (state, action) => feedbackEntity.adapter.removeOne(action.id, state)
   ),
   on(FeedbackActions.deleteFeedbacks,
-    (state, action) => adapter.removeMany(action.ids, state)
+    (state, action) => feedbackEntity.adapter.removeMany(action.ids, state)
   ),
   on(FeedbackActions.loadFeedbacks,
-    (state, action) => adapter.setAll(action.feedbacks, state)
+    (state, action) => feedbackEntity.adapter.setAll(action.feedbacks, state)
   ),
   on(FeedbackActions.clearFeedbacks,
-    state => adapter.removeAll(state)
+    state => feedbackEntity.adapter.removeAll(state)
   ),
   on(FeedbackActions.loadFeedback,
     state => { return state; }
   ),
   on(FeedbackActions.loadFeedbackSuccess, (state, action) => {
-    state = adapter.removeAll(state);
-    return adapter.addMany(action.payload, state);
+    state =feedbackEntity.adapter.removeAll(state);
+    return feedbackEntity.adapter.addMany(action.payload, state);
   }),
   on(FeedbackActions.loadFeedbackFailure,
     state => { return state; }

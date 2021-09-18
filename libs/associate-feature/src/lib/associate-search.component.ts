@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthState, selectAuthState } from '@hrc/auth-feature';
+import { AuthState, selectAuthState } from '@hrc/shared-feature';
 import { loadCampaignYears } from '@hrc/campaign-feature';
 import { loadInterviewParticipants } from '@hrc/interview-feature';
 import { AssociateSearchResult, User } from '@hrc/shared-feature';

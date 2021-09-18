@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc } from '@angular/fire/firestore';
-import { Associate, Campaign, IImport, Import, ImportSuccessResult, LoaderService, Participant, Rater } from '@hrc/shared-feature';
+import { Associate, Campaign, IImport, Import, ImportSuccessResult, LoaderService, Participant, Rater, importEntity } from '@hrc/shared-feature';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { catchError, map, mergeMap } from 'rxjs/operators';
@@ -13,7 +13,7 @@ export class ImportEffects {
   campaignYear: string = Date.now.toString();
 
   constructor(private actions$: Actions, private firestore: Firestore,
-      private loader: LoaderService, private store: Store<IImport>) {
+      private loader: LoaderService, private store: Store<importEntity.ImportState>) {
         this.campaignYear = '2021';
   }
 

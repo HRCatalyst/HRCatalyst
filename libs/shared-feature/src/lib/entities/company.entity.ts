@@ -1,6 +1,6 @@
-import { Company } from '@hrc/shared-feature';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
+import { Company } from '../models/company.model';
 
 export const companysFeatureKey = 'companies';
 export interface CompanyState  extends EntityState<Company> {

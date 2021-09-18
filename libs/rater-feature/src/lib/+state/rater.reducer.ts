@@ -1,39 +1,39 @@
 import { createReducer, on } from '@ngrx/store';
-import { adapter, initialState } from './rater.entity';
 import * as RaterActions from './rater.actions';
+import { raterEntity } from '@hrc/shared-feature';
 
 
 export const reducer = createReducer(
-  initialState,
+  raterEntity.initialState,
   on(RaterActions.addRater,
-    (state, action) => adapter.addOne(action.rater, state)
+    (state, action) => raterEntity.adapter.addOne(action.rater, state)
   ),
   on(RaterActions.upsertRater,
-    (state, action) => adapter.upsertOne(action.rater, state)
+    (state, action) => raterEntity.adapter.upsertOne(action.rater, state)
   ),
   on(RaterActions.addRaters,
-    (state, action) => adapter.addMany(action.raters, state)
+    (state, action) => raterEntity.adapter.addMany(action.raters, state)
   ),
   on(RaterActions.upsertRaters,
-    (state, action) => adapter.upsertMany(action.raters, state)
+    (state, action) => raterEntity.adapter.upsertMany(action.raters, state)
   ),
   on(RaterActions.updateRaterEntity,
-    (state, action) => adapter.updateOne(action.rater, state)
+    (state, action) => raterEntity.adapter.updateOne(action.rater, state)
   ),
   on(RaterActions.updateRaters,
-    (state, action) => adapter.updateMany(action.raters, state)
+    (state, action) => raterEntity.adapter.updateMany(action.raters, state)
   ),
   on(RaterActions.deleteRaterEntity,
-    (state, action) => adapter.removeOne(action.id, state)
+    (state, action) => raterEntity.adapter.removeOne(action.id, state)
   ),
   on(RaterActions.deleteRaters,
-    (state, action) => adapter.removeMany(action.ids, state)
+    (state, action) => raterEntity.adapter.removeMany(action.ids, state)
   ),
   on(RaterActions.loadRaters,
-    (state, action) => adapter.setAll(action.raters, state)
+    (state, action) => raterEntity.adapter.setAll(action.raters, state)
   ),
   on(RaterActions.clearRaters,
-    state => adapter.removeAll(state)
+    state => raterEntity.adapter.removeAll(state)
   ),
   on(RaterActions.loadRater,
     state => { return state; }

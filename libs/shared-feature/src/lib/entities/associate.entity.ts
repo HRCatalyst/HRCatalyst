@@ -1,6 +1,6 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
-import { Associate, AssociateSearchResult } from '@hrc/shared-feature';
+import { Associate, AssociateSearchResult } from '../models/associate.model';
 
 export interface AssociateState  extends EntityState<Associate> {
     selectedAssociate?: Associate;

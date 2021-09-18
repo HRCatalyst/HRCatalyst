@@ -3,10 +3,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import { FormBase, Interview, InterviewEdit, IQuestion, Question } from '@hrc/shared-feature';
+import { FormBase, Interview, InterviewEdit, IQuestion, Question, questionEntity } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { loadAllQuestions, QuestionState } from '@hrc/question-feature';
-import * as questionEntity from '@hrc/question-feature';
+import { loadAllQuestions } from '@hrc/question-feature';
 
 @Component({
   selector: 'hrc-interview',
@@ -24,10 +23,10 @@ export class InterviewComponent extends FormBase implements OnDestroy, OnInit {
   ecInterview = false;
 
   constructor(public dialogRef: MatDialogRef<InterviewComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: InterviewEdit, private questionStore: Store<QuestionState>) {
+    @Inject(MAT_DIALOG_DATA) public data: InterviewEdit, private store: Store<questionEntity.QuestionState>) {
       super();
 
-      this.questionStore.select(questionEntity.selectAll)
+      this.store.select(questionEntity.selectAll)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {
         if (state.length > 0) {
@@ -51,7 +50,7 @@ export class InterviewComponent extends FormBase implements OnDestroy, OnInit {
     if (this.data != null && this.data.campaignName != null) {
       this.ecInterview = this.data.campaignName.toLowerCase().startsWith('ec');
     }
-    this.questionStore.dispatch(loadAllQuestions());
+    this.store.dispatch(loadAllQuestions());
   }
 
   ngOnDestroy() {

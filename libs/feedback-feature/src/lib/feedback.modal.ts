@@ -1,12 +1,9 @@
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { Feedback, FEEDBACK_STATUS, FEEDBACK_TYPE, FormBase, IQuestion, Question, RELATIONSHIP_DATA } from '@hrc/shared-feature';
+import { Feedback, FEEDBACK_STATUS, FEEDBACK_TYPE, FormBase, Question, RELATIONSHIP_DATA, feedbackEntity } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { QuestionState } from '@hrc/question-feature';
-import * as questionEntity from '@hrc/question-feature';
-
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'hrc-feedback-modal',
@@ -26,20 +23,21 @@ export class FeedbackModalComponent extends FormBase implements OnDestroy {
   types = FEEDBACK_TYPE;
   relationships = RELATIONSHIP_DATA;
 
-  questionState$: Observable<IQuestion[]>;
-  questionSubscription$: Subscription;
+  // questionState$: Observable<IQuestion[]>;
+  // questionSubscription$: Subscription;
   questions?: Question[];
+  private onDestroy$: Subject<void> = new Subject<void>();
 
   constructor(public dialogRef: MatDialogRef<FeedbackModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Feedback, private questionStore: Store<QuestionState>) {
+    @Inject(MAT_DIALOG_DATA) public data: Feedback, private store: Store<feedbackEntity.FeedbackState>) {
       super();
 
-      this.questionState$ = this.questionStore.select(questionEntity.selectAll);
-      this.questionSubscription$ = this.questionState$.subscribe((state) => {
-        if (state.length > 0) {
-          this.questions = state;
-        }
-      });
+      // this.questionState$ = this.questionStore.select(feedbackEntity.selectAll);
+      // this.questionSubscription$ = this.questionState$.subscribe((state) => {
+      //   if (state.length > 0) {
+      //     this.questions = state;
+      //   }
+      // });
 
       if (data !== null) {
         this.form.get('relationship')?.setValue(data.relationship);
@@ -51,9 +49,7 @@ export class FeedbackModalComponent extends FormBase implements OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.questionSubscription$ != null) {
-      this.questionSubscription$.unsubscribe();
-    }
+    this.onDestroy$.next();
   }
 
   onSubmit() {

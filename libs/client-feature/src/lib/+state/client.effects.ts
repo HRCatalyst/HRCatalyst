@@ -3,11 +3,10 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Client } from './client.model';
 import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
-import { LoaderService } from '@hrc/shared-feature';
+import { LoaderService, clientEntity } from '@hrc/shared-feature';
 import { createClient, createClientFailire, createClientSuccess, deleteClient, deleteClientFailure, deleteClientSuccess, loadCompanyClients, loadCompanyClientsFailure, loadCompanyClientsSuccess, updateClient, updateClientFailure, updateClientSuccess } from './client.actions';
-import { of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { ClientState } from './client.entity';
 
 @Injectable()
 export class ClientEffects {
@@ -15,7 +14,7 @@ export class ClientEffects {
   private onDestroy$: Subject<void> = new Subject<void>();
 
   constructor(private actions$: Actions, private firestore: Firestore,
-    private store: Store<ClientState>, private loader: LoaderService) {
+    private store: Store<clientEntity.ClientState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }
 

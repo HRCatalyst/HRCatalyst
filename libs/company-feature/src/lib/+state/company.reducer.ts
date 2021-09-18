@@ -1,40 +1,38 @@
-import { Company } from '@hrc/shared-feature';
+import { Company, companyEntity } from '@hrc/shared-feature';
 import { createReducer, on } from '@ngrx/store';
 import * as CompanyActions from './company.actions';
-import { adapter, initialState } from './company.entity';
-
 
 export const reducer = createReducer(
-  initialState,
+  companyEntity.initialState,
   on(CompanyActions.addCompany,
-    (state, action) => adapter.addOne(action.company, state)
+    (state, action) => companyEntity.adapter.addOne(action.company, state)
   ),
   on(CompanyActions.upsertCompany,
-    (state, action) => adapter.upsertOne(action.company, state)
+    (state, action) => companyEntity.adapter.upsertOne(action.company, state)
   ),
   on(CompanyActions.addCompanys,
-    (state, action) => adapter.addMany(action.companys, state)
+    (state, action) => companyEntity.adapter.addMany(action.companys, state)
   ),
   on(CompanyActions.upsertCompanys,
-    (state, action) => adapter.upsertMany(action.companys, state)
+    (state, action) => companyEntity.adapter.upsertMany(action.companys, state)
   ),
   on(CompanyActions.updateCompanyEntity,
-    (state, action) => adapter.updateOne(action.company, state)
+    (state, action) => companyEntity.adapter.updateOne(action.company, state)
   ),
   on(CompanyActions.updateCompanys,
-    (state, action) => adapter.updateMany(action.companys, state)
+    (state, action) => companyEntity.adapter.updateMany(action.companys, state)
   ),
   on(CompanyActions.deleteCompanyEntity,
-    (state, action) => adapter.removeOne(action.id, state)
+    (state, action) => companyEntity.adapter.removeOne(action.id, state)
   ),
   on(CompanyActions.deleteCompanys,
-    (state, action) => adapter.removeMany(action.ids, state)
+    (state, action) => companyEntity.adapter.removeMany(action.ids, state)
   ),
   on(CompanyActions.loadCompanys,
-    (state, action) => adapter.setAll(action.companys, state)
+    (state, action) => companyEntity.adapter.setAll(action.companys, state)
   ),
   on(CompanyActions.clearCompanys,
-    state => adapter.removeAll(state)
+    state => companyEntity.adapter.removeAll(state)
   ),
    on(CompanyActions.loadCompany,
     state => { return state; }
@@ -52,8 +50,8 @@ export const reducer = createReducer(
       ...e
       } as Company;
     });
-    state = adapter.removeAll(state);
-    return adapter.addMany(companys, state);
+    state = companyEntity.adapter.removeAll(state);
+    return companyEntity.adapter.addMany(companys, state);
   }),
   on(CompanyActions.loadAllCompanysFailure,
     state => { return state; }

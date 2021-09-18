@@ -1,6 +1,6 @@
-import { Participant } from "@hrc/shared-feature";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
+import { Participant } from "../models/participant.model";
 
 export const participantsFeatureKey = 'participants';
 

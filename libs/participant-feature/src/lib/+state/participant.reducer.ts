@@ -1,39 +1,39 @@
 import { createReducer, on } from '@ngrx/store';
 import * as ParticipantActions from './participant.actions';
-import { adapter, initialState } from './participant.entity';
+import { participantEntity } from '@hrc/shared-feature';
 
 
 export const reducer = createReducer(
-  initialState,
+  participantEntity.initialState,
   on(ParticipantActions.addParticipant,
-    (state, action) => adapter.addOne(action.participant, state)
+    (state, action) => participantEntity.adapter.addOne(action.participant, state)
   ),
   on(ParticipantActions.upsertParticipant,
-    (state, action) => adapter.upsertOne(action.participant, state)
+    (state, action) => participantEntity.adapter.upsertOne(action.participant, state)
   ),
   on(ParticipantActions.addParticipants,
-    (state, action) => adapter.addMany(action.participants, state)
+    (state, action) => participantEntity.adapter.addMany(action.participants, state)
   ),
   on(ParticipantActions.upsertParticipants,
-    (state, action) => adapter.upsertMany(action.participants, state)
+    (state, action) => participantEntity.adapter.upsertMany(action.participants, state)
   ),
   on(ParticipantActions.updateParticipantEntity,
-    (state, action) => adapter.updateOne(action.participant, state)
+    (state, action) => participantEntity.adapter.updateOne(action.participant, state)
   ),
   on(ParticipantActions.updateParticipants,
-    (state, action) => adapter.updateMany(action.participants, state)
+    (state, action) => participantEntity.adapter.updateMany(action.participants, state)
   ),
   on(ParticipantActions.deleteParticipantEntity,
-    (state, action) => adapter.removeOne(action.id, state)
+    (state, action) => participantEntity.adapter.removeOne(action.id, state)
   ),
   on(ParticipantActions.deleteParticipants,
-    (state, action) => adapter.removeMany(action.ids, state)
+    (state, action) => participantEntity.adapter.removeMany(action.ids, state)
   ),
   on(ParticipantActions.loadParticipants,
-    (state, action) => adapter.setAll(action.participants, state)
+    (state, action) => participantEntity.adapter.setAll(action.participants, state)
   ),
   on(ParticipantActions.clearParticipants,
-    state => adapter.removeAll(state)
+    state => participantEntity.adapter.removeAll(state)
   ),
   on(ParticipantActions.loadParticipant,
     state => { return state; }

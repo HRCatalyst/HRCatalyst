@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
-import { Shared } from "./shared.model";
+import { Shared } from "../+state/shared.model";
 
 export const sharedFeatureKey = 'shared';
 

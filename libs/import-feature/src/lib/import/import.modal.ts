@@ -1,16 +1,15 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 //import readXlsxFile from 'read-excel-file';
-import { Observable, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { Associate, Campaign, enumFeedbackStatus, enumRationship, Feedback, FEEDBACK_STATUS, FormBase, IImport, Import, Participant, Rater, RELATIONSHIP_DATA } from '@hrc/shared-feature';
-import { createRater, RaterState } from '@hrc/rater-feature';
-import { createParticipant, ParticipantState } from '@hrc/participant-feature';
+import { Associate, Campaign, enumFeedbackStatus, enumRationship, Feedback, FEEDBACK_STATUS, FormBase, Import, Participant, Rater, RELATIONSHIP_DATA,
+  importEntity } from '@hrc/shared-feature';
+import { createRater } from '@hrc/rater-feature';
+//import { createParticipant } from '@hrc/participant-feature';
 import { loadImport, logImportError } from '../+state/import.actions';
-import { createFeedback, FeedbackState } from '@hrc/feedback-feature';
+//import { createFeedback} from '@hrc/feedback-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ImportState } from '@hrc/import-feature';
-import * as importEntity from '@hrc/import-feature';
 
 @Component({
   selector: 'hrc-import',
@@ -21,9 +20,10 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
   files?: File | FileList;
 
   feedback?: Array<Feedback>;
+  private onDestroy$: Subject<void> = new Subject<void>();
 
-  importState$: Observable<IImport[]>;
-  importSubscription$: Subscription;
+  // importState$: Observable<IImport[]>;
+  // importSubscription$: Subscription;
   associates?: Associate[];
   participants?: Participant[];
   campaigns?: Campaign[];
@@ -34,38 +34,35 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
   });
 
   constructor(public dialogRef: MatDialogRef<ImportModalComponent>, @Inject(MAT_DIALOG_DATA) public data: string,
-    private participantStore: Store<ParticipantState>, private raterStore: Store<RaterState>,
-    private importStore: Store<ImportState>, private feedbackStore: Store<FeedbackState>) {
+    private store: Store<importEntity.ImportState>) {
     super();
 
-    this.importState$ = this.importStore.select(importEntity.selectAll);
-    this.importSubscription$ = this.importStore.pipe(select((state: any) => state)).subscribe((state) => {
-      if (state.import.associates != null) {
-          this.associates = state.import.associates;
-      }
+    // this.importState$ = this.importStore.select(importEntity.selectAll);
+    // this.importSubscription$ = this.importStore.pipe(select((state: any) => state)).subscribe((state) => {
+    //   if (state.import.associates != null) {
+    //       this.associates = state.import.associates;
+    //   }
 
-      if (state.import.participants != null) {
-          this.participants = state.import.participants;
-      }
+    //   if (state.import.participants != null) {
+    //       this.participants = state.import.participants;
+    //   }
 
-      if (state.import.campaigns != null) {
-          this.campaigns = state.import.campaigns;
-      }
+    //   if (state.import.campaigns != null) {
+    //       this.campaigns = state.import.campaigns;
+    //   }
 
-      if (state.import.raters != null) {
-          this.raters = state.import.raters;
-      }
-    });
+    //   if (state.import.raters != null) {
+    //       this.raters = state.import.raters;
+    //   }
+    // });
   }
 
   ngOnInit() {
-    this.importStore.dispatch(loadImport());
+    this.store.dispatch(loadImport());
   }
 
   ngOnDestroy() {
-    if (this.importSubscription$ != null) {
-      this.importSubscription$.unsubscribe();
-    }
+    this.onDestroy$.next();
   }
 
   onSave() {
@@ -112,7 +109,7 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
       f.status = FEEDBACK_STATUS[enumFeedbackStatus.RECEIVED].name;
 
       console.log(`FEEDBACK: ${JSON.stringify(f)}`);
-      this.feedbackStore.dispatch(createFeedback({payload: f}));
+//      this.feedbackStore.dispatch(createFeedback({payload: f}));
     });
     this.logImportMessage('Info', 'Import of ' + this.feedback?.length.toLocaleString() + ' records at ' + new Date().toLocaleString());
     this.dialogRef.close('import');
@@ -126,7 +123,7 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
     i.content = content;
     i.status = 'Open';
 
-    this.feedbackStore.dispatch(logImportError({payload: i}));
+//    this.store.dispatch(logImportError({payload: i}));
     console.log(`FEEDBACK: ${JSON.stringify(content)}`);
   }
 
@@ -141,7 +138,7 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
       const p = new Participant();
       p.campaignId = campaign?.id ?? '';
       p.associateId = x.id ?? '';
-      this.participantStore.dispatch(createParticipant({payload: p}));
+//      this.store.dispatch(createParticipant({payload: p}));
     });
   }
 
@@ -163,7 +160,7 @@ export class ImportModalComponent extends FormBase implements OnDestroy, OnInit 
         rater.associateId = r ?? '';
         rater.relationship = enumRationship.PEER;
 
-        this.raterStore.dispatch(createRater({payload: rater}));
+        this.store.dispatch(createRater({payload: rater}));
         console.log(JSON.stringify(rater));
       });
     });

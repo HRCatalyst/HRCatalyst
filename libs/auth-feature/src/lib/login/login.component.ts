@@ -1,12 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IFirebaseUser, LoginModel, User } from '@hrc/shared-feature';
+import { IFirebaseUser, LoginModel, selectAuthState, User } from '@hrc/shared-feature';
 import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { loadSettings, loginAttempt } from '../+state/auth.actions';
-import { AuthState } from '../+state/auth.entity';
-import { selectAuthState } from '../+state/auth.selectors';
+import { authEntity } from '@hrc/shared-feature';
 
 @Component({
   selector: 'hrc-login',
@@ -22,7 +21,7 @@ export class LoginComponent implements OnDestroy {
     'userName': new FormControl('', [Validators.required, Validators.minLength(4)]),
     'userPassword': new FormControl('', [Validators.required, Validators.minLength(4)])
   });
-  constructor(private store: Store<AuthState>, private router: Router) {
+  constructor(private store: Store<authEntity.AuthState>, private router: Router) {
     this.store.pipe(select(selectAuthState))
       .subscribe((state) => {
       if (state.user != null && this.currentUser !== state.user) {
@@ -31,7 +30,7 @@ export class LoginComponent implements OnDestroy {
       }
       if (state.settings != null && this.settings !== state.settings) {
         this.settings = state.settings;
-        if (state.settings.role === '1') {
+        if (state.settings.role == '1') {
           this.router.navigate(['/home']);
         } else {
           this.router.navigate(['/associate']);

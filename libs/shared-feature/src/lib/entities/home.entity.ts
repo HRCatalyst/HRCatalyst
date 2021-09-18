@@ -1,6 +1,6 @@
-import { Home } from "@hrc/shared-feature";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
+import { Home } from "../models/home.model";
 
 export const homesFeatureKey = 'homes';
 

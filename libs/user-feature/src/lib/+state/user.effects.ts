@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 import * as UserActions from './user.actions';
 import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
-import { LoaderService, User } from '@hrc/shared-feature';
+import { LoaderService, User, userEntity } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
-import { UserState } from './user.entity';
-
 
 @Injectable()
 export class UserEffects {
@@ -16,7 +13,7 @@ export class UserEffects {
       private actions$: Actions,
       private firestore: Firestore,
       private loader: LoaderService,
-      private store: Store<UserState>
+      private store: Store<userEntity.UserState>
     ) {
 
     }

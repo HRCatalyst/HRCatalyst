@@ -1,5 +1,5 @@
 import * as fromAuth from './auth.reducer';
-import { selectAuthState } from './auth.selectors';
+import { selectAuthState } from '../../../../shared-feature/src/lib/selectors/auth.selectors';
 
 describe('Auth Selectors', () => {
   it('should select the feature state', () => {

@@ -3,9 +3,9 @@ import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { RegistrationModel } from '@hrc/shared-feature';
+import { RegistrationModel, homeEntity } from '@hrc/shared-feature';
 import { registrationAttempt, SignupComponent } from '@hrc/auth-feature';
-import { CompanyState } from '@hrc/company-feature';
+//import { CompanyState } from '@hrc/company-feature';
 import { ImportModalComponent } from '@hrc/import-feature';
 
 @Component({
@@ -18,7 +18,7 @@ export class HomeComponent implements OnDestroy {
   role = 0;
 
   rootSubscription$: Subscription;
-  constructor(private dialog: MatDialog, private router: Router, private store: Store<CompanyState>) {
+  constructor(private dialog: MatDialog, private router: Router, private store: Store<homeEntity.HomeState>) {
  //   const nav = this.router.getCurrentNavigation();
 
     this.rootSubscription$ = this.store.pipe(select((state: any) => state)).subscribe((state) => {

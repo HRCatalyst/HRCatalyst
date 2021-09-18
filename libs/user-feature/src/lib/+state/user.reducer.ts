@@ -1,39 +1,39 @@
 import { createReducer, on } from '@ngrx/store';
 import * as UserActions from './user.actions';
-import { adapter, initialState } from './user.entity';
+import { userEntity } from '@hrc/shared-feature';
 
 
 export const reducer = createReducer(
-  initialState,
+  userEntity.initialState,
   on(UserActions.addUser,
-    (state, action) => adapter.addOne(action.user, state)
+    (state, action) => userEntity.adapter.addOne(action.user, state)
   ),
   on(UserActions.upsertUser,
-    (state, action) => adapter.upsertOne(action.user, state)
+    (state, action) => userEntity.adapter.upsertOne(action.user, state)
   ),
   on(UserActions.addUsers,
-    (state, action) => adapter.addMany(action.users, state)
+    (state, action) => userEntity.adapter.addMany(action.users, state)
   ),
   on(UserActions.upsertUsers,
-    (state, action) => adapter.upsertMany(action.users, state)
+    (state, action) => userEntity.adapter.upsertMany(action.users, state)
   ),
   on(UserActions.updateUserEntity,
-    (state, action) => adapter.updateOne(action.user, state)
+    (state, action) => userEntity.adapter.updateOne(action.user, state)
   ),
   on(UserActions.updateUsers,
-    (state, action) => adapter.updateMany(action.users, state)
+    (state, action) => userEntity.adapter.updateMany(action.users, state)
   ),
   on(UserActions.deleteUserEntity,
-    (state, action) => adapter.removeOne(action.id, state)
+    (state, action) => userEntity.adapter.removeOne(action.id, state)
   ),
   on(UserActions.deleteUsers,
-    (state, action) => adapter.removeMany(action.ids, state)
+    (state, action) => userEntity.adapter.removeMany(action.ids, state)
   ),
   on(UserActions.loadUsers,
-    (state, action) => adapter.setAll(action.users, state)
+    (state, action) => userEntity.adapter.setAll(action.users, state)
   ),
   on(UserActions.clearUsers,
-    state => adapter.removeAll(state)
+    state => userEntity.adapter.removeAll(state)
   ),
   on(UserActions.loadAllUsers,
     state => { return state; }

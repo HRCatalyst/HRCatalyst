@@ -1,6 +1,8 @@
-import { Associate, Campaign, Feedback } from "@hrc/shared-feature";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
+import { Associate } from "../models/associate.model";
+import { Campaign } from "../models/campaign.model";
+import { Feedback } from "../models/feedback.model";
 
 export const feedbacksFeatureKey = 'feedbacks';
 

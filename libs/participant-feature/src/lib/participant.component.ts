@@ -5,11 +5,10 @@ import { Router } from '@angular/router';
 import { ParticipantModalComponent } from './participant.modal';
 
 import { ParticipantImportComponent } from './participant.import';
-import { Associate, Campaign, CampaignParticipantsParams, Client, Company, ConfirmationComponent, IAssociate, IParticipant, Participant, SelectParticipantParams } from '@hrc/shared-feature';
+import { Associate, Campaign, CampaignParticipantsParams, Client, Company, ConfirmationComponent, IAssociate, IParticipant, Participant, SelectParticipantParams,
+  participantEntity } from '@hrc/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
-import { ParticipantState } from './+state/participant.entity';
 import { createParticipant, deleteParticipant, loadCampaignParticipants, selectParticipant, updateParticipant } from './+state/participant.actions';
-import * as participantEntity from './+state/participant.entity';
 
 @Component({
   selector: 'hrc-participant',
@@ -41,7 +40,7 @@ export class ParticipantComponent implements OnDestroy {
   associateSubscription$: Subscription;
   associates?: Array<any>;
 
-  constructor(private dialog: MatDialog, private participantStore: Store<ParticipantState>, private router: Router) {
+  constructor(private dialog: MatDialog, private store: Store<participantEntity.ParticipantState>, private router: Router) {
       const xtra = this.router.getCurrentNavigation()?.extras.state;
 
       if (xtra != null) {
@@ -49,16 +48,16 @@ export class ParticipantComponent implements OnDestroy {
         this.selectedClient = xtra.client;
         this.selectedCampaign = xtra.campaign;
 
-        this.participantStore.dispatch(loadCampaignParticipants({payload: new
+        this.store.dispatch(loadCampaignParticipants({payload: new
             CampaignParticipantsParams(this.selectedCompany?.id ?? '', this.selectedCampaign?.id ?? '')}));
       }
 
-      this.participantState$ = this.participantStore.select(participantEntity.selectAll);
+      this.participantState$ = this.store.select(participantEntity.selectAll);
       this.participantSubscription$ = this.participantState$.subscribe((state) => {
           this.participants = state;
       });
 
-      this.associateSubscription$ = this.participantStore.pipe(select((state: any) => state)).subscribe((state) => {
+      this.associateSubscription$ = this.store.pipe(select((state: any) => state)).subscribe((state) => {
         if (state.participant.associates != null) {
             this.associates = state.participant.associates;
         }
@@ -92,9 +91,9 @@ export class ParticipantComponent implements OnDestroy {
         console.log('The participant dialog was closed');
         if (result instanceof Participant) {
           if (result.id !== undefined) {
-            this.participantStore.dispatch(updateParticipant({payload: result}));
+            this.store.dispatch(updateParticipant({payload: result}));
           } else {
-            this.participantStore.dispatch(createParticipant({payload: result}));
+            this.store.dispatch(createParticipant({payload: result}));
           }
         }
       });
@@ -110,7 +109,7 @@ export class ParticipantComponent implements OnDestroy {
         console.log('The confirmation dialog was closed');
         if (result === true) {
           const selectedRows = this.gridApi.getSelectedRows();
-          this.participantStore.dispatch(deleteParticipant({payload: selectedRows[0]}));
+          this.store.dispatch(deleteParticipant({payload: selectedRows[0]}));
         }
       });
     }
@@ -161,7 +160,7 @@ export class ParticipantComponent implements OnDestroy {
         const params = selectParticipant({payload: new SelectParticipantParams(
           this.selectedCampaign, this.selectedParticipant, this.selectedAssociate)});
 
-        this.participantStore.dispatch(params);
+        this.store.dispatch(params);
       }
 
 

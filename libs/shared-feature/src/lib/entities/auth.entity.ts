@@ -1,6 +1,8 @@
-import { Auth, IFirebaseUser, User } from "@hrc/shared-feature";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
+import { Auth } from "../models/auth.model";
+import { IFirebaseUser } from "../models/firebase.user";
+import { User } from "../models/user.model";
 
 export const authFeatureKey = 'auth';
 

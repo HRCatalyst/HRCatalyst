@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { Store} from '@ngrx/store';
 import { ClientModalComponent } from './client.modal';
 import { Router } from '@angular/router';
-import { Client, Company, ConfirmationComponent } from '@hrc/shared-feature';
-import { createClient, deleteClient, selectClient, updateClient } from './+state/client.actions';
-import { ClientState } from './+state/client.entity';
+import { Client, Company, ConfirmationComponent, clientEntity } from '@hrc/shared-feature';
+import { createClient, deleteClient, selectClient, updateClient, } from './+state/client.actions';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -27,7 +26,7 @@ export class ClientComponent {
   // clientSubscription$: Subscription;
   clients?: Client[];
 
-  constructor(private dialog: MatDialog, private clientStore: Store<ClientState>, private router: Router) {
+  constructor(private dialog: MatDialog, private clientStore: Store<clientEntity.ClientState>, private router: Router) {
       const xtra = this.router.getCurrentNavigation()?.extras.state;
 
       // if (xtra != null) {

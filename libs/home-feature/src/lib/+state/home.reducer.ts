@@ -1,38 +1,38 @@
 import { createReducer, on } from '@ngrx/store';
 import * as HomeActions from './home.actions';
-import { adapter, initialState } from './home.entity';
+import { homeEntity } from '@hrc/shared-feature';
 
 export const reducer = createReducer(
-  initialState,
+  homeEntity.initialState,
   on(HomeActions.addHome,
-    (state, action) => adapter.addOne(action.home, state)
+    (state, action) => homeEntity.adapter.addOne(action.home, state)
   ),
   on(HomeActions.upsertHome,
-    (state, action) => adapter.upsertOne(action.home, state)
+    (state, action) =>homeEntity.adapter.upsertOne(action.home, state)
   ),
   on(HomeActions.addHomes,
-    (state, action) => adapter.addMany(action.homes, state)
+    (state, action) => homeEntity.adapter.addMany(action.homes, state)
   ),
   on(HomeActions.upsertHomes,
-    (state, action) => adapter.upsertMany(action.homes, state)
+    (state, action) => homeEntity.adapter.upsertMany(action.homes, state)
   ),
   on(HomeActions.updateHome,
-    (state, action) => adapter.updateOne(action.home, state)
+    (state, action) => homeEntity.adapter.updateOne(action.home, state)
   ),
   on(HomeActions.updateHomes,
-    (state, action) => adapter.updateMany(action.homes, state)
+    (state, action) => homeEntity.adapter.updateMany(action.homes, state)
   ),
   on(HomeActions.deleteHome,
-    (state, action) => adapter.removeOne(action.id, state)
+    (state, action) => homeEntity.adapter.removeOne(action.id, state)
   ),
   on(HomeActions.deleteHomes,
-    (state, action) => adapter.removeMany(action.ids, state)
+    (state, action) => homeEntity.adapter.removeMany(action.ids, state)
   ),
   on(HomeActions.loadHomes,
-    (state, action) => adapter.setAll(action.homes, state)
+    (state, action) => homeEntity.adapter.setAll(action.homes, state)
   ),
   on(HomeActions.clearHomes,
-    state => adapter.removeAll(state)
+    state => homeEntity.adapter.removeAll(state)
   ),
 );
 

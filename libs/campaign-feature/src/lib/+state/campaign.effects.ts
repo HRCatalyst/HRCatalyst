@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import * as CampaignActions from './campaign.actions';
 import { Campaign, CampaignYear, LoaderService } from '@hrc/shared-feature';
 import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
@@ -27,7 +27,7 @@ import { createCampaign,
           updateCampaignYearFailure,
           updateCampaignYearSuccess } from './campaign.actions';
 import { Store } from '@ngrx/store';
-import { CampaignState } from './campaign.entity';
+import { campaignEntity } from '@hrc/shared-feature';
 
 @Injectable()
 export class CampaignEffects {
@@ -35,7 +35,7 @@ export class CampaignEffects {
   private onDestroy$: Subject<void> = new Subject<void>();
 
   constructor(private actions$: Actions, private firestore: Firestore,
-    private store: Store<CampaignState>, private loader: LoaderService) {
+    private store: Store<campaignEntity.CampaignState>, private loader: LoaderService) {
     this.campaignYear = '2021';
   }
 

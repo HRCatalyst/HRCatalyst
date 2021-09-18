@@ -6,7 +6,7 @@ import * as RaterActions from './rater.actions';
 import { Store } from '@ngrx/store';
 import { Associate, Feedback, LoaderService, Rater, SelectRaterParams } from '@hrc/shared-feature';
 import { addDoc, collection, collectionChanges, CollectionReference, deleteDoc, doc, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
-import { RaterState } from './rater.entity';
+import { raterEntity } from '@hrc/shared-feature';
 
 @Injectable()
 export class RaterEffects {
@@ -16,7 +16,7 @@ export class RaterEffects {
     private actions$: Actions,
     private firestore: Firestore,
     private loader: LoaderService,
-    private store: Store<RaterState>
+    private store: Store<raterEntity.RaterState>
   ) {
     this.campaignYear = '2021';
   }

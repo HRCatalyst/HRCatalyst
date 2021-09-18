@@ -4,16 +4,15 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 import { collection, collectionChanges, CollectionReference, Firestore, query, where } from '@angular/fire/firestore';
 import * as AuthActions from './auth.actions';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { IFirebaseUser, LoaderService, User } from '@hrc/shared-feature';
+import { IFirebaseUser, LoaderService, User, authEntity } from '@hrc/shared-feature';
 import { Store } from '@ngrx/store';
 import { loginFailure, loginSuccess,loginInprogress } from './auth.actions';
 import { of } from 'rxjs';
-import { AuthState } from './auth.entity';
 
 @Injectable()
 export class AuthEffects {
 
-  constructor(private store: Store<AuthState>, private firestore: Firestore,
+  constructor(private store: Store<authEntity.AuthState>, private firestore: Firestore,
     private loader: LoaderService, private actions$: Actions) {
   }
 

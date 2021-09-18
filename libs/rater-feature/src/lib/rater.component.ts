@@ -3,12 +3,10 @@ import { RaterModalComponent } from './rater.modal';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { RaterImportComponent } from './rater.import';
-import { Subscription } from 'rxjs';
-import { Associate, Campaign, Client, Company, ConfirmationComponent, Participant, Rater, SelectRaterParams } from '@hrc/shared-feature';
+import { Associate, Campaign, Client, Company, ConfirmationComponent, Participant, Rater, SelectRaterParams, raterEntity } from '@hrc/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
-import { RaterState } from './+state/rater.entity';
 import { createRater, deleteRater, selectRater, updateRater } from './+state/rater.actions';
-//import { FeedbackState } from '@hrc/feedback-feature';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'hrc-rater',
@@ -24,6 +22,8 @@ export class RaterComponent implements OnDestroy {
     { headerName: 'Notes', field: 'notes', sortable: true }
   ];
 
+  private onDestroy$: Subject<void> = new Subject<void>();
+
   selectedCompany?: Company;
   selectedClient?: Client;
   selectedCampaign?: Campaign;
@@ -34,10 +34,10 @@ export class RaterComponent implements OnDestroy {
 
   private gridApi: any;
 
-  raterSubscription$: Subscription;
+  //raterSubscription$: Subscription;
   raters: Array<Associate> = new Array<Associate>();
 
-  constructor(private dialog: MatDialog, private router: Router, private raterStore: Store<RaterState>,
+  constructor(private dialog: MatDialog, private router: Router, private store: Store<raterEntity.RaterState>,
    ) {
       const xtra = this.router.getCurrentNavigation()?.extras.state;
 
@@ -58,17 +58,15 @@ export class RaterComponent implements OnDestroy {
 
       }
 
-      this.raterSubscription$ = this.raterStore.pipe(select((state: any) => state)).subscribe((state) => {
-        if (state.rater.associates != null) {
-          this.raters = state.rater.associates;
-        }
-      });
+      // this.raterSubscription$ = this.raterStore.pipe(select((state: any) => state)).subscribe((state) => {
+      //   if (state.rater.associates != null) {
+      //     this.raters = state.rater.associates;
+      //   }
+      // });
     }
 
     ngOnDestroy() {
-      if (this.raterSubscription$ != undefined) {
-        this.raterSubscription$.unsubscribe();
-      }
+      this.onDestroy$.next();
     }
 
     onReset() {
@@ -95,9 +93,9 @@ export class RaterComponent implements OnDestroy {
 
         if (result instanceof Rater) {
           if (result.id !== undefined) {
-            this.raterStore.dispatch(updateRater({payload: result}));
+            this.store.dispatch(updateRater({payload: result}));
           } else {
-            this.raterStore.dispatch(createRater({payload: result}));
+            this.store.dispatch(createRater({payload: result}));
           }
         }
       });
@@ -113,7 +111,7 @@ export class RaterComponent implements OnDestroy {
         console.log('The confirmation dialog was closed');
         if (result === true) {
           const selectedRows = this.gridApi.getSelectedRows();
-          this.raterStore.dispatch(deleteRater({payload: selectedRows[0]}));
+          this.store.dispatch(deleteRater({payload: selectedRows[0]}));
         }
       });
     }
@@ -161,7 +159,7 @@ export class RaterComponent implements OnDestroy {
       this.selectedRater = row.data;
 
       if (this.selectedCampaign && this.selectedAssociate &&this.selectedRater) {
-        this.raterStore.dispatch(selectRater({payload: new SelectRaterParams(
+        this.store.dispatch(selectRater({payload: new SelectRaterParams(
           this.selectedCampaign, this.selectedAssociate, this.selectedRater)}));
 
           this.router.navigate(['/feedback'], { state: {

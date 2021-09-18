@@ -1,6 +1,6 @@
-import { Client } from '@hrc/shared-feature';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
+import { Client } from '../models/client.model';
 
 export const clientsFeatureKey = 'clients';
 

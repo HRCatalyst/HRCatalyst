@@ -2,9 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 //import readXlsxFile from 'read-excel-file';
 import { Store } from '@ngrx/store';
-import { FormBase, Participant } from '@hrc/shared-feature';
+import { FormBase, Participant, participantEntity } from '@hrc/shared-feature';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ParticipantState } from './+state/participant.entity';
 import { createParticipant } from './+state/participant.actions';
 
 @Component({
@@ -30,7 +29,7 @@ export class ParticipantImportComponent extends FormBase {
   });
 
   constructor(public dialogRef: MatDialogRef<ParticipantImportComponent>, @Inject(MAT_DIALOG_DATA) public data: string,
-    private participantStore: Store<ParticipantState>) {
+    private store: Store<participantEntity.ParticipantState>) {
     super();
 
     // this.associateState$ = this.associateStore.select(associateEntity.selectAll);
@@ -59,7 +58,7 @@ export class ParticipantImportComponent extends FormBase {
 
   onSave() {
     this.participants?.forEach(p => {
-      this.participantStore.dispatch(createParticipant({payload: p}));
+      this.store.dispatch(createParticipant({payload: p}));
     });
 
     this.dialogRef.close('import');

@@ -1,6 +1,6 @@
-import { Interview } from "@hrc/shared-feature";
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
+import { Interview } from "../models/interview.model";
 
 export const interviewsFeatureKey = 'interviews';
 
