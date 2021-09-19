@@ -14,7 +14,7 @@ export class ParticipantEffects {
 
   constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<participantEntity.ParticipantState>, private loader: LoaderService) {
-    this.campaignYear = '2021';
+    this.campaignYear = '2020';
   }
 
   loadCampaigns$ = createEffect(() => {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Associate, Company, selectCompanyAssociates } from '@hrc/shared-feature';
 import { select, Store } from '@ngrx/store';

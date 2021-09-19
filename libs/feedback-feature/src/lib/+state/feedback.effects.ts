@@ -12,7 +12,7 @@ export class FeedbackEffects {
 
   constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<feedbackEntity.FeedbackState>, private loader: LoaderService) {
-    this.campaignYear = '2021';
+    this.campaignYear = '2020';
   }
 
   loadFeedback$ = createEffect(() => {

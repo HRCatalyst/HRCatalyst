@@ -15,7 +15,7 @@ export class CompanyEffects {
 
   constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<companyEntity.CompanyState>, private loader: LoaderService) {
-    this.campaignYear = '2021';
+    this.campaignYear = '2020';
   }
 
   load$ = createEffect(() => {

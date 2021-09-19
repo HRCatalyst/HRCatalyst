@@ -14,7 +14,7 @@ export class ImportEffects {
 
   constructor(private actions$: Actions, private firestore: Firestore,
       private loader: LoaderService, private store: Store<importEntity.ImportState>) {
-        this.campaignYear = '2021';
+        this.campaignYear = '2020';
   }
 
   loadDependencies$ = createEffect(() => {

@@ -17,7 +17,7 @@ export class AssociateEffects {
               private store: Store<associateEntity.AssociateState>,
               private firestore: Firestore,
               private loader: LoaderService) {
-      this.campaignYear = '2021';
+      this.campaignYear = '2020';
   };
 
   loadAssociate$ = createEffect(() => {

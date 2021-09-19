@@ -36,7 +36,7 @@ export class CampaignEffects {
 
   constructor(private actions$: Actions, private firestore: Firestore,
     private store: Store<campaignEntity.CampaignState>, private loader: LoaderService) {
-    this.campaignYear = '2021';
+    this.campaignYear = '2020';
   }
 
   loadCampaign$ = createEffect(() => {

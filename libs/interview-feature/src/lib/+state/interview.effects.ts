@@ -16,7 +16,7 @@ export class InterviewEffects {
 
   constructor(private actions$: Actions, private firestore: Firestore, private store: Store<interviewEntity.InterviewState>,
       private loader: LoaderService) {
-        this.campaignYear = '2021';
+        this.campaignYear = '2020';
   }
 
   loadParticipants$ = createEffect(() => {

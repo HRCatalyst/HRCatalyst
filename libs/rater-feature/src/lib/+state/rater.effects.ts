@@ -18,7 +18,7 @@ export class RaterEffects {
     private loader: LoaderService,
     private store: Store<raterEntity.RaterState>
   ) {
-    this.campaignYear = '2021';
+    this.campaignYear = '2020';
   }
 
   load$ = createEffect(() => {
