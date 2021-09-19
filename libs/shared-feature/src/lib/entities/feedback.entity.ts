@@ -4,7 +4,7 @@ import { Associate } from "../models/associate.model";
 import { Campaign } from "../models/campaign.model";
 import { Feedback } from "../models/feedback.model";
 
-export const feedbacksFeatureKey = 'feedbacks';
+export const feedbacksFeatureKey = 'feedback';
 
 export interface FeedbackState  extends EntityState<Feedback> {
   selectedCampaign?: Campaign;

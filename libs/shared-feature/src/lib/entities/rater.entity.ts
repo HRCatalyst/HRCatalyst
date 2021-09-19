@@ -2,7 +2,7 @@ import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
 import { Rater } from "../models/rater.model";
 
-export const ratersFeatureKey = 'raters';
+export const ratersFeatureKey = 'rater';
 
 export interface RaterState  extends EntityState<Rater> {
   selectedRater?: Rater;

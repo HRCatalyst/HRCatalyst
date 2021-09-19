@@ -6,7 +6,7 @@ import { Import } from "../models/import.model";
 import { Participant } from "../models/participant.model";
 import { Rater } from "../models/rater.model";
 
-export const importsFeatureKey = 'imports';
+export const importsFeatureKey = 'import';
 
 export interface ImportState  extends EntityState<Import> {
   associates?: Associate[];

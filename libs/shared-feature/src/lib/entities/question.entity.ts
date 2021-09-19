@@ -2,7 +2,7 @@ import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
 import { Question } from "../models/question.model";
 
-export const questionsFeatureKey = 'questions';
+export const questionsFeatureKey = 'question';
 
 export interface QuestionState  extends EntityState<Question> {
   selectedQuestion?: Question;

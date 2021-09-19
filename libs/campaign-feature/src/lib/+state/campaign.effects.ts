@@ -81,6 +81,35 @@ export class CampaignEffects {
       })
   )});
 
+  loadYears$ = createEffect(() => {
+    return this.actions$.pipe(
+    ofType(CampaignActions.loadCampaignYears),
+    mergeMap(() => {
+      this.loader.isLoading.next(true);
+      return this.getYears().pipe(
+        map(Years => {
+          this.loader.isLoading.next(false);
+          const result = new Array<CampaignYear>();
+          Years.forEach(d => result.push({ ...d.doc.data(), id: d.doc.id }));
+
+          const active = Years.filter(c => c.doc.data().active === true);
+
+          if (active.length > 0) {
+            const year = {id: active[0].doc.id, ...active[0].doc.data()};
+            this.store.dispatch(setActiveCampaign({payload: year}));
+          }
+
+          return loadCampaignYearsSuccess({payload: result});
+        }),
+        catchError((err, caught) => {
+          this.store.dispatch(loadCampaignYearsFailure({error: err}));
+          this.loader.isLoading.next(false);
+          return caught;
+        })
+      )})
+    )
+  });
+
   loadCampaigns$ = createEffect(() => {
     return this.actions$.pipe(
     ofType(CampaignActions.loadClientCampaigns),
@@ -156,32 +185,32 @@ export class CampaignEffects {
     })
   )});
 
-  loadYears$ = createEffect(() => {
-    return this.actions$.pipe(
-    ofType(loadCampaignYears),
-    mergeMap(() => {
-      this.loader.isLoading.next(true);
-      return this.getYears()
-      .pipe(
-        map(Years => {
-          this.loader.isLoading.next(false);
-          const active = Years.filter(c => c.doc.data().active === true);
-          if (active.length > 0) {
-            const year = {id: active[0].doc.id, ...active[0].doc.data()};
-            this.store.dispatch(setActiveCampaign({payload: year}));
-          }
-          const result = new Array<CampaignYear>();
-          Years.forEach(d => result.push({ ...d.doc.data(), id: d.doc.id }));
-          return loadCampaignYearsSuccess({payload: result});
-        }),
-        catchError((err, caught) => {
-          this.store.dispatch(loadCampaignYearsFailure({error: err}));
-          this.loader.isLoading.next(false);
-          return caught;
-        })
-      )
-    })
-  )});
+  // loadYears$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //   ofType(loadCampaignYears),
+  //   mergeMap(() => {
+  //     this.loader.isLoading.next(true);
+  //     return this.getYears()
+  //     .pipe(
+  //       map(Years => {
+  //         this.loader.isLoading.next(false);
+  //         const active = Years.filter(c => c.doc.data().active === true);
+  //         if (active.length > 0) {
+  //           const year = {id: active[0].doc.id, ...active[0].doc.data()};
+  //           this.store.dispatch(setActiveCampaign({payload: year}));
+  //         }
+  //         const result = new Array<CampaignYear>();
+  //         Years.forEach(d => result.push({ ...d.doc.data(), id: d.doc.id }));
+  //         return loadCampaignYearsSuccess({payload: result});
+  //       }),
+  //       catchError((err, caught) => {
+  //         this.store.dispatch(loadCampaignYearsFailure({error: err}));
+  //         this.loader.isLoading.next(false);
+  //         return caught;
+  //       })
+  //     )
+  //   })
+  // )});
 
   createYear$ = createEffect(() => {
     return this.actions$.pipe(

@@ -3,12 +3,10 @@ import { select, Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CampaignYearModalComponent } from './campaign.year.modal';
-import { CampaignYear, ConfirmationComponent } from '@hrc/shared-feature';
+import { CampaignYear, ConfirmationComponent, selectCampaignState } from '@hrc/shared-feature';
 import { createCampaignYear, deleteCampaignYear, loadCampaignYears, updateCampaignYear } from './+state/campaign.actions';
 import { MatDialog } from '@angular/material/dialog';
-import { CampaignState } from './+state/campaign.entity';
-import { selectCampaignState } from '..';
-
+import { campaignEntity } from '@hrc/shared-feature';
 
 @Component({
   selector: 'hrc-campaign-year',
@@ -31,18 +29,18 @@ export class CampaignYearComponent implements OnDestroy, OnInit {
 
   years?: CampaignYear[];
 
-  constructor(private dialog: MatDialog, private campaignStore: Store<CampaignState>) {
-    this.campaignStore.pipe(select(selectCampaignState))
+  constructor(private dialog: MatDialog, private store: Store<campaignEntity.CampaignState>) {
+    this.store.pipe(select(selectCampaignState))
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((state) => {
-        if (state.campaignYears != null) {
+        if (state?.campaignYears != undefined) {
           this.years = state.campaignYears;
         }
     });
   }
 
   ngOnInit() {
-    this.campaignStore.dispatch(loadCampaignYears());
+    this.store.dispatch(loadCampaignYears());
   }
 
   ngOnDestroy() {
@@ -59,9 +57,9 @@ export class CampaignYearComponent implements OnDestroy, OnInit {
       console.log('The campaign year dialog was closed');
       if (result instanceof CampaignYear) {
         if (result.id !== undefined) {
-          this.campaignStore.dispatch(updateCampaignYear({payload: result}));
+          this.store.dispatch(updateCampaignYear({payload: result}));
         } else {
-          this.campaignStore.dispatch(createCampaignYear({payload: result}));
+          this.store.dispatch(createCampaignYear({payload: result}));
         }
       }
     });
@@ -77,7 +75,7 @@ export class CampaignYearComponent implements OnDestroy, OnInit {
       console.log('The confirmation dialog was closed');
       if (result === true) {
         const selectedRows = this.gridApi.getSelectedRows();
-        this.campaignStore.dispatch(deleteCampaignYear({payload: selectedRows[0]}));
+        this.store.dispatch(deleteCampaignYear({payload: selectedRows[0]}));
       }
     });
   }
@@ -111,10 +109,11 @@ export class CampaignYearComponent implements OnDestroy, OnInit {
     }
   }
 
-  $event) {
-    const selectedRows = this.gridApi.getSelectedRows();
-
-    this.hasYear = selectedRows.length > 0;
+  onSelectionChanged($event) {
+    console.log(`onSelectionChanged ${$event} `);
   }
 
+  onRowDoubleClicked($event) {
+    console.log(`onRowDoubleClicked ${$event} `);
+  }
 }

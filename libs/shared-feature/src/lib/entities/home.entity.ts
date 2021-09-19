@@ -2,7 +2,7 @@ import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
 import { createFeatureSelector } from "@ngrx/store";
 import { Home } from "../models/home.model";
 
-export const homesFeatureKey = 'homes';
+export const homesFeatureKey = 'home';
 
 export interface HomeState  extends EntityState<Home> {
   selectedHome?: Home;

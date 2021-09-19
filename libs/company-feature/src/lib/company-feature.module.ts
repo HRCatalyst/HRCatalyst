@@ -9,6 +9,9 @@ import { CompanyComponent } from './company.component';
 import { FirestoreModule } from '@angular/fire/firestore';
 import { SharedFeatureModule } from '@hrc/shared-feature';
 import { CompanyModalComponent } from './company.modal';
+import { CompanyListComponent } from './company.list';
+import { ClientFeatureModule } from '@hrc/client-feature';
+import { CompanyAssociateComponent } from './company-associate/company-associate.component';
 
 @NgModule({
   imports: [
@@ -21,18 +24,22 @@ import { CompanyModalComponent } from './company.modal';
     ]),
     FirestoreModule,
     SharedFeatureModule,
+    ClientFeatureModule,
     StoreModule.forFeature('company', reducer),
     EffectsModule.forFeature([CompanyEffects]),
   ],
   declarations: [
     CompanyComponent,
-    CompanyModalComponent
+    CompanyListComponent,
+    CompanyModalComponent,
+    CompanyAssociateComponent
   ],
   entryComponents: [
     CompanyModalComponent
   ],
   exports: [
-    CompanyComponent
+    CompanyComponent,
+    CompanyListComponent
   ],
   providers: [
   ]

@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { Company } from '@hrc/shared-feature';
+import { Associate, Company } from '@hrc/shared-feature';
 
 export const loadCompanys = createAction(
   '[Company/API] Load Companys',
@@ -118,3 +118,18 @@ export const deleteCompanyFailure = createAction(
   '[Company/API] Delete Company Failure',
     props<{ error: unknown }>()
 );
+export const loadCompanyAssociates = createAction(
+  '[Company/API] Load Company Associates',
+  props<{ payload: string }>()
+);
+
+export const loadCompanyAssociatesSuccess = createAction(
+  '[Company/API] Load Company Associate Success',
+  props<{ payload: Associate[] }>()
+);
+
+export const loadCompanyAssociatesFailure = createAction(
+  '[Company/API] Load Company Associate Failure',
+  props<{ error: string }>()
+);
+

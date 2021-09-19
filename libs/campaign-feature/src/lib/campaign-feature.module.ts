@@ -14,6 +14,7 @@ import { ImportFeatureModule } from '@hrc/import-feature';
 import { SharedFeatureModule } from '@hrc/shared-feature';
 import { CampaignModalComponent } from './campaign.modal';
 import { CampaignYearModalComponent } from './campaign.year.modal';
+import { CampaignYearComponent } from './campaign.year.component';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { CampaignYearModalComponent } from './campaign.year.modal';
   declarations: [
     CampaignComponent,
     CampaignModalComponent,
+    CampaignYearComponent,
     CampaignYearModalComponent
   ],
   entryComponents: [
@@ -43,7 +45,8 @@ import { CampaignYearModalComponent } from './campaign.year.modal';
     CampaignYearModalComponent
   ],
   exports: [
-    CampaignComponent
+    CampaignComponent,
+    CampaignYearComponent
   ],
   providers: [
   ]

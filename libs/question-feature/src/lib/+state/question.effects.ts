@@ -22,9 +22,13 @@ export class QuestionEffects {
       this.loader.isLoading.next(true);
       return this.get()
       .pipe(
-        map(Questions => {
+        map(data => {
           this.loader.isLoading.next(false);
-          return QuestionActions.loadAllQuestionsSuccess({payload: Questions});
+          const result = new Array<Question>();
+          data.forEach(x => {
+            return result.push({...x.doc.data(), id: x.doc.id});
+          });
+          return QuestionActions.loadAllQuestionsSuccess({payload: result});
         }),
         catchError((err, caught) => {
           this.store.dispatch(QuestionActions.loadAllQuestionsFailure({error: err}));

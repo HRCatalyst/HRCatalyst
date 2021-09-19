@@ -17,7 +17,7 @@ export const adapter: EntityAdapter<Associate> = createEntityAdapter<Associate>(
     sortComparer: sortByName,
 });
 
-export const associatesFeatureKey = 'associates';
+export const associatesFeatureKey = 'associate';
 
 export function sortByName(a: Associate, b: Associate): number {
   return (a.lastName + a.firstName).localeCompare(b.lastName + a.firstName);

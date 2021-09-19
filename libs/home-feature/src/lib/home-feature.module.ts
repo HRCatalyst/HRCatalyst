@@ -10,6 +10,8 @@ import { FirestoreModule } from '@angular/fire/firestore';
 import { ImportFeatureModule } from '@hrc/import-feature';
 import { SharedFeatureModule } from '@hrc/shared-feature';
 import { QuestionFeatureModule } from '@hrc/question-feature';
+import { CompanyFeatureModule } from '@hrc/company-feature';
+import { CampaignFeatureModule } from '@hrc/campaign-feature';
 
 @NgModule({
   imports: [
@@ -23,6 +25,8 @@ import { QuestionFeatureModule } from '@hrc/question-feature';
     FirestoreModule,
     ImportFeatureModule,
     QuestionFeatureModule,
+    CompanyFeatureModule,
+    CampaignFeatureModule,
     SharedFeatureModule,
     StoreModule.forFeature('home', reducer),
     EffectsModule.forFeature([HomeEffects]),

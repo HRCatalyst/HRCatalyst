@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { QuestionModalComponent } from './question.modal';
-import { ConfirmationComponent, Question, questionEntity } from '@hrc/shared-feature';
+import { ConfirmationComponent, Question, questionEntity, selectQuestionState } from '@hrc/shared-feature';
 import { MatDialog } from '@angular/material/dialog';
 import { createQuestion, deleteQuestion, loadAllQuestions } from './+state/question.actions';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'hrc-question',
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css']
 })
-export class QuestionComponent implements OnInit {
+export class QuestionComponent implements OnInit, OnDestroy {
+  private onDestroy$: Subject<void> = new Subject<void>();
   questionsDefs = [
     { headerName: 'Reference', field: 'reference', sortable: true },
     { headerName: 'Content', field: 'content', sortable: true },
@@ -19,30 +21,27 @@ export class QuestionComponent implements OnInit {
 
   private gridApi: any;
 
-  // questionState$: Observable<IQuestion[]>;
-  // questionSubscription$: Subscription;
   questions?: Question[];
   welcomeUser = '';
   hasQuestion = false;
 
   constructor(private dialog: MatDialog, private store: Store<questionEntity.QuestionState>, private router: Router) {
-    // this.questionState$ = this.store.select(selectQuestionState);
-    // this.questionSubscription$ = this.questionState$.subscribe((state) => {
-    //   if (state.length > 0) {
-    //     this.questions = state;
-    //   }
-    // });
+    this.store.pipe(select(questionEntity.selectAll))
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((state) => {
+      if (state) {
+        this.questions = state;
+      }
+    });
   }
 
   ngOnInit() {
     this.store.dispatch(loadAllQuestions());
   }
 
-  // ngOnDestroy() {
-  //   if (this.questionSubscription$ != null) {
-  //     this.questionSubscription$.unsubscribe();
-  //   }
-  // }
+  ngOnDestroy() {
+    this.onDestroy$.next();
+  }
 
   openQuestionModal(question: Question) {
     const dialogRef = this.dialog.open(QuestionModalComponent, {

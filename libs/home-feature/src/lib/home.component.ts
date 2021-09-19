@@ -1,12 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { RegistrationModel, homeEntity } from '@hrc/shared-feature';
 import { registrationAttempt, SignupComponent } from '@hrc/auth-feature';
-//import { CompanyState } from '@hrc/company-feature';
 import { ImportModalComponent } from '@hrc/import-feature';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'hrc-home',
@@ -14,14 +13,14 @@ import { ImportModalComponent } from '@hrc/import-feature';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnDestroy {
+  private onDestroy$: Subject<void> = new Subject<void>();
   welcomeUser = '';
   role = 0;
 
-  rootSubscription$: Subscription;
   constructor(private dialog: MatDialog, private router: Router, private store: Store<homeEntity.HomeState>) {
- //   const nav = this.router.getCurrentNavigation();
-
-    this.rootSubscription$ = this.store.pipe(select((state: any) => state)).subscribe((state) => {
+    this.store.pipe(select((state: any) => state))
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((state) => {
         if (state.auth.settings != null) {
           this.welcomeUser = 'Welcome back ' + state.auth.settings.first_name + '!';
           this.role = state.auth.settings.role;
@@ -30,9 +29,7 @@ export class HomeComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.rootSubscription$ != null) {
-      this.rootSubscription$.unsubscribe();
-    }
+    this.onDestroy$.next();
   }
 
   onUpload() {

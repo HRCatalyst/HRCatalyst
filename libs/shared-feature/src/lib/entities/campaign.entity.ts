@@ -2,7 +2,7 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
 import { Campaign, CampaignYear } from '../models/campaign.model';
 
-export const campaignsFeatureKey = 'campaigns';
+export const campaignsFeatureKey = 'campaign';
 export interface CampaignState  extends EntityState<Campaign> {
     selectedCampaign?: Campaign;
     campaignYears?: CampaignYear[];

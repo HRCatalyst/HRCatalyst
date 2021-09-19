@@ -1,4 +1,4 @@
-import { Company, companyEntity } from '@hrc/shared-feature';
+import { Associate, Company, companyEntity } from '@hrc/shared-feature';
 import { createReducer, on } from '@ngrx/store';
 import * as CompanyActions from './company.actions';
 
@@ -56,6 +56,17 @@ export const reducer = createReducer(
   on(CompanyActions.loadAllCompanysFailure,
     state => { return state; }
   ),
+  on(CompanyActions.loadCompanyAssociates, state => {
+    return state;
+  }),
+  on(CompanyActions.loadCompanyAssociatesSuccess, (state, action) => {
+    return {...state, associates: action.payload};
+  }),
+  on(CompanyActions.loadCompanyAssociatesFailure, (state, error) => {
+    console.log(error);
+    return state;
+  }),
+
   on(CompanyActions.createCompany,
     state => { return state; }
   ),

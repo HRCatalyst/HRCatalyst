@@ -30,7 +30,7 @@ export class ClientEffects {
             return result.push({...x.doc.data(), id: x.doc.id});
           });
 
-          this.store.dispatch(loadCompanyClientsSuccess({payload: result}));
+          //this.store.dispatch(loadCompanyClientsSuccess({payload: result}));
           this.loader.isLoading.next(false);
           return loadCompanyClientsSuccess({payload: result});
         }),
@@ -102,7 +102,8 @@ export class ClientEffects {
   }
 
   getClients(id: string) {
-    return collectionChanges<Client>(query(collection(this.firestore, 'clients') as CollectionReference<Client>, where('id', '==', id)));
+    return collectionChanges<Client>(query(collection(this.firestore, 'clients') as CollectionReference<Client>,
+    where('companyId', '==', id)));
   }
 
   create(client: Client) {

@@ -66,7 +66,7 @@ export const loadAllQuestions = createAction(
 
 export const loadAllQuestionsSuccess = createAction(
   '[Question/API] LOAD_ALL_QUESTIONS_SUCCESS',
-  props<{ payload: unknown}>()
+  props<{ payload: Question[]}>()
 );
 
 export const loadAllQuestionsFailure = createAction(

@@ -44,11 +44,11 @@ export const reducer = createReducer(
   on(QuestionActions.loadAllQuestions,
     state => { return state; }
   ),
-  on(QuestionActions.loadAllQuestionsSuccess,
-    state => { return state; }
-  ),
+  on(QuestionActions.loadAllQuestionsSuccess, (state, action) => {
+   return questionEntity.adapter.setAll(action.payload, state);
+  }),
   on(QuestionActions.loadAllQuestionsFailure,
-    state => { return state; }
+    state => { return state;  }
   ),
   on(QuestionActions.createQuestion,
     state => { return state; }

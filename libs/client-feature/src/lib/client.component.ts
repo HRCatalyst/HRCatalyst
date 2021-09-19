@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
-import { Store} from '@ngrx/store';
+import { Component, OnDestroy } from '@angular/core';
+import { select, Store} from '@ngrx/store';
 import { ClientModalComponent } from './client.modal';
 import { Router } from '@angular/router';
 import { Client, Company, ConfirmationComponent, clientEntity } from '@hrc/shared-feature';
-import { createClient, deleteClient, selectClient, updateClient, } from './+state/client.actions';
+import { createClient, deleteClient, loadCompanyClients, selectClient, updateClient, } from './+state/client.actions';
 import { MatDialog } from '@angular/material/dialog';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'hrc-client',
   templateUrl: './client.component.html',
   styleUrls: ['./client.component.css']
 })
-export class ClientComponent {
+export class ClientComponent implements OnDestroy{
+  private onDestroy$: Subject<void> = new Subject<void>();
   clientsDefs = [
     { headerName: 'Client Name', field: 'name', sortable: true }
   ];
@@ -22,29 +24,26 @@ export class ClientComponent {
 
   private gridApi?: any;
 
-  // clientState$: Observable<IClient[]>;
-  // clientSubscription$: Subscription;
   clients?: Client[];
 
   constructor(private dialog: MatDialog, private clientStore: Store<clientEntity.ClientState>, private router: Router) {
       const xtra = this.router.getCurrentNavigation()?.extras.state;
 
-      // if (xtra != null) {
-      //   this.selectedCompany = xtra.payload;
-      //   this.clientStore.dispatch(loadCompanyClients({id: this.selectedCompany?.id ?? ''}));
-      // }
+      if (xtra != null) {
+        this.selectedCompany = xtra.payload;
+        this.clientStore.dispatch(loadCompanyClients({ids: this.selectedCompany?.id ?? ''}));
+      }
 
-      // this.clientState$ = this.clientStore.select(clientEntity.selectAll);
-      // this.clientSubscription$ = this.clientState$.subscribe((state) => {
-      //     this.clients = state;
-      // });
+      this.clientStore.pipe(select(clientEntity.selectAll))
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe((state) => {
+            this.clients = state;
+        });
   }
 
-  // ngOnDestroy() {
-  //   if (this.clientSubscription$ != null) {
-  //     this.clientSubscription$.unsubscribe();
-  //   }
-  // }
+  ngOnDestroy() {
+    this.onDestroy$.next();
+  }
 
   onReset() {
     this.selectedCompany = undefined;
